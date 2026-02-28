@@ -84,6 +84,4 @@ This will generate a `dist` folder containing the minified and optimized assets 
    - Place your profile photo in the `public` folder and name it `profile.jpg`.
    - Place your resume in the `public` folder and name it `resume.pdf`.
 
-## 📄 License
 
-This project is open-source and available under the [MIT License](LICENSE).
