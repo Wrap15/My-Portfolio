@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "ContactMessage": {
+      "title": "Contact Message",
+      "description": "Messages sent through the contact form",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Sender's name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Sender's email"
+        },
+        "message": {
+          "type": "string",
+          "description": "The message text"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Submission timestamp"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "message",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/contactMessages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Public contact form submissions"
+    }
+  }
+}

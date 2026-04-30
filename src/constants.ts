@@ -18,12 +18,21 @@ export interface Education {
 
 export interface Skill {
   name: string;
-  category: 'Frontend' | 'Backend' | 'Tools' | 'Other';
+  category: 'Frontend' | 'Backend' | 'Tools' | 'Soft Skills' | 'Other';
 }
 
 export const PROJECTS: Project[] = [
   {
     id: '1',
+    title: 'Shreeji Furniture',
+    date: 'April 2025',
+    description: 'An elegant furniture showcase website with a focus on interior design and craftsmanship. Features a interactive product catalog and responsive layout.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS'],
+    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop',
+    link: 'https://shreeji-furniture-bay.vercel.app/'
+  },
+  {
+    id: '2',
     title: 'IMDB Clone',
     date: 'March 2025',
     description: 'Designed and implemented a IMDB Clone using HTML, CSS, JavaScript and Tailwind CSS. Uses OMDB API to fetch movie details and allows users to search and save to favorites.',
@@ -32,7 +41,7 @@ export const PROJECTS: Project[] = [
     link: 'https://vishaal98.github.io/IMDBClone/'
   },
   {
-    id: '2',
+    id: '3',
     title: 'BuyBusy E-Commerce App',
     date: 'January 2025',
     description: 'A React-based e-commerce platform with Firebase integration for CRUD operations on cart items. Features a well-organized folder structure for scalability.',
@@ -41,21 +50,21 @@ export const PROJECTS: Project[] = [
     link: 'https://tangerine-gingersnap-3c8b63.netlify.app/'
   },
   {
-    id: '3',
-    title: 'Music Player App',
-    date: 'December 2024',
-    description: 'A robust music player system to manage songs with functionalities like play, pause, update, and search. Includes a dark/light mode toggle.',
-    tags: ['HTML', 'CSS', 'JavaScript', 'API Integration'],
-    image: 'https://files.codingninjas.in/music-player-29857.gif',
-    link: 'https://unrivaled-croissant-a85fe9.netlify.app/'
-  },
-  {
     id: '4',
     title: 'Stock Market Analysis',
     date: 'November 2024',
     description: 'A web application that displays available stocks in a portfolio and their data over different time ranges using fetch API and dynamic charts.',
     tags: ['HTML', 'CSS', 'JavaScript', 'Fetch API'],
     image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Funrivaled-croissant-a85fe9.netlify.app%2F?w=800&h=600',
+    link: 'https://unrivaled-croissant-a85fe9.netlify.app/'
+  },
+  {
+    id: '5',
+    title: 'Music Player App',
+    date: 'December 2024',
+    description: 'A robust music player system to manage songs with functionalities like play, pause, update, and search. Includes a dark/light mode toggle.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'API Integration'],
+    image: 'https://files.codingninjas.in/music-player-29857.gif',
     link: 'https://unrivaled-croissant-a85fe9.netlify.app/'
   }
 ];
@@ -94,4 +103,7 @@ export const SKILLS: Skill[] = [
   { name: 'GitHub', category: 'Tools' },
   { name: 'DSA', category: 'Other' },
   { name: 'OOPS', category: 'Other' },
+  { name: 'Detail-Oriented', category: 'Soft Skills' },
+  { name: 'Quick-learner', category: 'Soft Skills' },
+  { name: 'Work Ethic', category: 'Soft Skills' },
 ];
