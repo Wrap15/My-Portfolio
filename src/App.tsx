@@ -14,16 +14,33 @@ import {
   Menu,
   X,
   MessageCircle,
+  ArrowUp,
   Gauge,
   Laptop,
   Lightbulb,
-  Rocket
+  Rocket,
+  Sun,
+  Moon,
+  Atom,
+  Globe,
+  Cpu,
+  Database,
+  Layers,
+  Terminal,
+  Settings,
+  Users,
+  Zap,
+  Wind,
+  Monitor,
+  CheckCircle2,
+  Trello,
+  Server
 } from 'lucide-react';
 import { PROJECTS, EDUCATION, SKILLS } from './constants';
 import { cn } from './lib/utils';
 import { submitContactForm } from './firebase';
 
-const Navbar = () => {
+const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -44,13 +61,15 @@ const Navbar = () => {
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
-      isScrolled ? "bg-neutral-950/80 backdrop-blur-md border-b border-white/5 py-3" : "bg-transparent"
+      isScrolled 
+        ? "bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/5 py-3" 
+        : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-xl font-serif italic font-bold tracking-tight"
+          className="text-xl font-serif italic font-bold tracking-tight text-neutral-950 dark:text-white"
         >
           Dhaval<span className="text-emerald-500">.</span>
         </motion.div>
@@ -64,11 +83,20 @@ const Navbar = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="text-sm font-medium text-neutral-400 hover:text-white transition-colors"
+              className="text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"
             >
               {link.name}
             </motion.a>
           ))}
+          
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all shadow-sm border border-neutral-200 dark:border-white/10"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
           <motion.a
             href="https://drive.google.com/file/d/1JSKxzXl2HKSGffpkCo5HuOnyy8Mnoeyt/view?usp=drive_link"
             download="Dhaval_Panchal_Resume.pdf"
@@ -76,19 +104,27 @@ const Navbar = () => {
             rel="noopener noreferrer"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="px-5 py-2 rounded-full bg-emerald-500 text-neutral-950 text-sm font-bold hover:bg-emerald-400 transition-colors cursor-pointer"
+            className="px-5 py-2 rounded-full bg-emerald-500 text-neutral-950 text-sm font-bold hover:bg-emerald-400 transition-colors cursor-pointer shadow-lg shadow-emerald-500/20"
           >
             Resume
           </motion.a>
         </div>
 
         {/* Mobile Toggle */}
-        <button 
-          className="md:hidden text-neutral-400 hover:text-white"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-4 md:hidden">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          <button 
+            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -98,7 +134,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-neutral-900 border-b border-white/10 overflow-hidden"
+            className="md:hidden bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-white/10 overflow-hidden"
           >
             <div className="flex flex-col gap-4 p-6">
               {navLinks.map((link) => (
@@ -106,7 +142,7 @@ const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium text-neutral-400 hover:text-white"
+                  className="text-lg font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
                 >
                   {link.name}
                 </a>
@@ -140,25 +176,25 @@ const Hero = () => {
             Available for new projects
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-serif font-bold leading-[0.9] mb-8">
+          <h1 className="text-6xl md:text-8xl font-serif font-bold leading-[0.9] mb-8 text-neutral-950 dark:text-white">
             Dhaval 
             <span className="block text-gradient italic">Panchal</span>
           </h1>
           
-          <p className="text-lg text-neutral-400 max-w-lg mb-10 leading-relaxed">
-            Proficient <span className="text-white font-medium">Front-end Developer</span> skilled in building responsive UIs with HTML, CSS, Bootstrap, and React.js. Dedicated to effective problem solving and crafting digital experiences.
+          <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-lg mb-10 leading-relaxed">
+            Proficient <span className="text-neutral-950 dark:text-white font-medium">Front-end Developer</span> skilled in building responsive UIs with HTML, CSS, Bootstrap, and React.js. Dedicated to effective problem solving and crafting digital experiences.
           </p>
           
           <div className="flex flex-wrap gap-4">
-            <a href="#projects" className="px-8 py-4 rounded-full bg-white text-neutral-950 font-bold hover:bg-neutral-200 transition-all flex items-center gap-2 group">
+            <a href="#projects" className="px-8 py-4 rounded-full bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-bold hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all flex items-center gap-2 group">
               View Projects
               <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </a>
             <div className="flex items-center gap-4 px-4">
-              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-white transition-colors"><Github size={24} /></a>
-              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-white transition-colors"><MessageCircle size={24} /></a>
-              <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-400 hover:text-white transition-colors"><Mail size={24} /></a>
+              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Github size={24} /></a>
+              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Linkedin size={24} /></a>
+              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><MessageCircle size={24} /></a>
+              <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Mail size={24} /></a>
             </div>
           </div>
         </motion.div>
@@ -211,9 +247,9 @@ const SectionHeader = ({ title, subtitle, icon: Icon, centered = false }: { titl
       {Icon && <Icon size={20} />}
       <span className="text-sm font-bold uppercase tracking-[0.2em]">{title}</span>
     </div>
-    <h2 className="text-4xl md:text-5xl font-serif font-bold relative inline-block">
+    <h2 className="text-4xl md:text-5xl font-serif font-bold relative inline-block text-neutral-950 dark:text-white">
       {subtitle}
-      {centered && <div className="mt-4 h-1 w-24 bg-white mx-auto rounded-full" />}
+      {centered && <div className="mt-4 h-1 w-24 bg-neutral-950 dark:bg-white mx-auto rounded-full" />}
     </h2>
   </motion.div>
 );
@@ -279,7 +315,7 @@ const Projects = () => {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map(tag => (
-                    <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-white/5 border border-white/10 text-neutral-400">
+                    <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400">
                       {tag}
                     </span>
                   ))}
@@ -287,10 +323,10 @@ const Projects = () => {
                 <span className="text-[10px] font-mono text-neutral-500">{project.date}</span>
               </div>
               
-              <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">
+              <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">
                 {project.title}
               </h3>
-              <p className="text-neutral-400 text-sm leading-relaxed">
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
                 {project.description}
               </p>
             </motion.div>
@@ -303,7 +339,7 @@ const Projects = () => {
 
 const Education = () => {
   return (
-    <section id="education" className="py-32 px-6 bg-neutral-900/30">
+    <section id="education" className="py-32 px-6 bg-neutral-50 dark:bg-neutral-900/30">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Academic" 
@@ -319,19 +355,19 @@ const Education = () => {
               whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
-              className="relative pl-8 border-l border-white/10"
+              className="relative pl-8 border-l border-neutral-200 dark:border-white/10"
             >
               <div className="absolute -left-[5px] top-0 w-[9px] h-[9px] rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                 <div>
                   <h3 className="text-2xl font-bold">{edu.institution}</h3>
-                  <p className="text-emerald-400 font-medium">{edu.degree}</p>
+                  <p className="text-emerald-500 font-medium">{edu.degree}</p>
                 </div>
-                <div className="text-sm font-mono text-neutral-500 bg-white/5 px-3 py-1 rounded-full border border-white/10 self-start md:self-center">
+                <div className="text-sm font-mono text-neutral-500 bg-neutral-100 dark:bg-white/5 px-3 py-1 rounded-full border border-neutral-200 dark:border-white/10 self-start md:self-center">
                   {edu.period}
                 </div>
               </div>
-              <p className="text-neutral-400 max-w-3xl leading-relaxed">
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
                 {edu.description}
               </p>
             </motion.div>
@@ -344,6 +380,34 @@ const Education = () => {
 
 const Skills = () => {
   const categories = ['Frontend', 'Backend', 'Tools', 'Soft Skills', 'Other'];
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+
+  const categoryDescriptions: Record<string, string> = {
+    'Frontend': 'Interfaces and user experience using modern frameworks.',
+    'Backend': 'Server-side logic, APIs, and database management.',
+    'Tools': 'Development environment and utility software.',
+    'Soft Skills': 'Professional communication and analytical thinking.',
+    'Other': 'Algorithms, architecture, and core computer science.'
+  };
+  
+  const getIcon = (name: string) => {
+    const n = name.toLowerCase();
+    if (n.includes('react')) return Atom;
+    if (n.includes('javascript')) return Code2;
+    if (n.includes('html') || n.includes('css')) return Globe;
+    if (n.includes('tailwind')) return Wind;
+    if (n.includes('bootstrap')) return Trello;
+    if (n.includes('node') || n.includes('express')) return Server;
+    if (n.includes('python')) return Terminal;
+    if (n.includes('mongo') || n.includes('mysql') || n.includes('firebase')) return Database;
+    if (n.includes('github')) return Github;
+    if (n.includes('postman')) return Settings;
+    if (n.includes('vscode')) return Monitor;
+    if (n.includes('dsa')) return Cpu;
+    if (n.includes('oops')) return Layers;
+    if (n.includes('learner') || n.includes('ethic') || n.includes('oriented')) return CheckCircle2;
+    return Zap;
+  };
   
   return (
     <section id="skills" className="py-32 px-6">
@@ -362,34 +426,67 @@ const Skills = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: catIndex * 0.1 }}
+              className="relative"
             >
-              <h3 className="text-xl font-bold mb-8 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                {cat}
-              </h3>
+              <div className="relative inline-block mb-8">
+                <h3 
+                  className="text-xl font-bold flex items-center gap-2 cursor-help group"
+                  onMouseEnter={() => setHoveredCategory(cat)}
+                  onMouseLeave={() => setHoveredCategory(null)}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform" />
+                  {cat}
+                </h3>
+                
+                <AnimatePresence>
+                  {hoveredCategory === cat && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute z-20 left-0 top-full mt-2 w-48 p-3 rounded-lg bg-white dark:bg-neutral-800 shadow-xl border border-neutral-200 dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 pointer-events-none"
+                    >
+                      <div className="absolute -top-1 left-4 w-2 h-2 bg-white dark:bg-neutral-800 border-t border-l border-neutral-200 dark:border-white/10 rotate-45" />
+                      {categoryDescriptions[cat]}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               <div className="flex flex-wrap gap-3">
-                {SKILLS.filter(s => s.category === cat).map((skill, i) => (
-                  <motion.div
-                    key={skill.name}
-                    initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                    whileHover={{ 
-                      scale: 1.05, 
-                      backgroundColor: "rgba(16, 185, 129, 0.1)",
-                      borderColor: "rgba(16, 185, 129, 0.3)" 
-                    }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 20,
-                      delay: (catIndex * 0.1) + (i * 0.03) 
-                    }}
-                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium transition-colors cursor-default"
-                  >
-                    {skill.name}
-                  </motion.div>
-                ))}
+                {SKILLS.filter(s => s.category === cat).map((skill, i) => {
+                  const Icon = getIcon(skill.name);
+                  return (
+                    <motion.div
+                      key={skill.name}
+                      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                      whileHover={{ 
+                        scale: 1.05, 
+                        backgroundColor: "rgba(16, 185, 129, 0.1)",
+                        borderColor: "rgba(16, 185, 129, 0.3)",
+                        y: -5
+                      }}
+                      viewport={{ once: true }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                        delay: (catIndex * 0.1) + (i * 0.03) 
+                      }}
+                      className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-white transition-all cursor-default"
+                    >
+                      <motion.div
+                        whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-emerald-500 group-hover:text-emerald-400 pb-0.5"
+                      >
+                        <Icon size={14} />
+                      </motion.div>
+                      {skill.name}
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           ))}
@@ -455,14 +552,14 @@ const Contact = () => {
 
       <div className="max-w-4xl mx-auto relative z-10">
         <SectionHeader 
-           
+          
           subtitle="CONTACT" 
           centered 
         />
         
         <div className="text-center mb-12">
-          <p className="text-emerald-400 font-medium mb-2">Please provide your feedback</p>
-          <p className="text-neutral-400 max-w-2xl mx-auto">
+          <p className="text-emerald-500 font-medium mb-2">Please provide your feedback</p>
+          <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
             Have a project for me? I'd love to hear from you, give me a shout by email or by using the form below.
           </p>
         </div>
@@ -488,9 +585,9 @@ const Contact = () => {
                   <MessageCircle size={40} className="text-emerald-500" />
                 </motion.div>
               </div>
-              <h3 className="text-3xl font-serif font-bold text-white mb-4">Message Sent!</h3>
-              <p className="text-neutral-300 mb-8 max-w-md mx-auto">
-                Thanks for reaching out, <span className="text-emerald-400 font-bold">Dhaval</span> has received your message and will get back to you within 24 hours.
+              <h3 className="text-3xl font-serif font-bold text-neutral-900 dark:text-white mb-4">Message Sent!</h3>
+              <p className="text-neutral-600 dark:text-neutral-300 mb-8 max-w-md mx-auto">
+                Thanks for reaching out, <span className="text-emerald-500 font-bold">Dhaval</span> has received your message and will get back to you within 24 hours.
               </p>
               <button 
                 onClick={() => setStatus('idle')}
@@ -506,7 +603,7 @@ const Contact = () => {
                   type="text"
                   id="name"
                   required
-                  className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl hover:border-white/40"
+                  className="w-full bg-transparent border border-neutral-200 dark:border-white/20 px-6 py-4 text-neutral-950 dark:text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl hover:border-neutral-950/20 dark:hover:border-white/40"
                   placeholder="Your Name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -518,7 +615,7 @@ const Contact = () => {
                   type="email"
                   id="email"
                   required
-                  className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl hover:border-white/40"
+                  className="w-full bg-transparent border border-neutral-200 dark:border-white/20 px-6 py-4 text-neutral-950 dark:text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl hover:border-neutral-950/20 dark:hover:border-white/40"
                   placeholder="Enter email address"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -530,7 +627,7 @@ const Contact = () => {
                   id="message"
                   required
                   rows={6}
-                  className="w-full bg-transparent border border-white/20 px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl hover:border-white/40 resize-none"
+                  className="w-full bg-transparent border border-neutral-200 dark:border-white/20 px-6 py-4 text-neutral-950 dark:text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl hover:border-neutral-950/20 dark:hover:border-white/40 resize-none"
                   placeholder="Your Message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -572,20 +669,20 @@ const Contact = () => {
           )}
         </motion.div>
 
-        <div className="mt-20 pt-10 border-t border-white/10 flex flex-col items-center gap-8">
-          <div className="flex flex-wrap justify-center gap-8 px-6 py-4 glass rounded-full border border-white/5">
-            <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-400 hover:text-white transition-colors flex items-center gap-2 group">
+        <div className="mt-20 pt-10 border-t border-neutral-200 dark:border-white/10 flex flex-col items-center gap-8">
+          <div className="flex flex-wrap justify-center gap-8 px-6 py-4 glass rounded-full border border-neutral-200 dark:border-white/5 bg-white/50 dark:bg-black/20">
+            <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-2 group">
               <Mail size={20} />
-              <span className="text-sm font-medium group-hover:text-emerald-400 transition-colors">work.dhaval72@gmail.com</span>
+              <span className="text-sm font-medium group-hover:text-emerald-500 transition-colors">work.dhaval72@gmail.com</span>
             </a>
             <div className="flex items-center gap-6">
-              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-white transition-colors"><Github size={24} /></a>
-              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-400 hover:text-white transition-colors"><MessageCircle size={24} /></a>
+              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Github size={24} /></a>
+              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Linkedin size={24} /></a>
+              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><MessageCircle size={24} /></a>
             </div>
           </div>
           
-          <footer className="text-neutral-500 text-xs tracking-widest uppercase pb-10 font-bold">
+          <footer className="text-neutral-500 text-[10px] tracking-widest uppercase pb-10 font-bold">
             © {new Date().getFullYear()} Dhaval Panchal. All rights reserved.
           </footer>
         </div>
@@ -630,7 +727,7 @@ const Features = () => {
           className="mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">My Websites are</h2>
-          <div className="h-1.5 w-32 bg-white mx-auto rounded-full" />
+          <div className="h-1.5 w-32 bg-neutral-950 dark:bg-white mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mt-16">
@@ -651,8 +748,8 @@ const Features = () => {
               >
                 <feature.icon size={40} className="text-black" />
               </div>
-              <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-neutral-400 text-sm leading-relaxed max-w-[200px]">
+              <h3 className="text-2xl font-bold mb-3 text-neutral-900 dark:text-white">{feature.title}</h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-[200px]">
                 {feature.description}
               </p>
             </motion.div>
@@ -663,7 +760,73 @@ const Features = () => {
   );
 };
 
+const ScrollToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 200) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.5, y: 20 }}
+          whileHover={{ scale: 1.1, backgroundColor: '#10b981' }}
+          whileTap={{ scale: 0.9 }}
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-neutral-900 dark:bg-emerald-500 text-white shadow-2xl border border-white/10 dark:border-none flex items-center justify-center transition-colors group"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={24} className="group-hover:animate-bounce" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'dark';
+    }
+    return 'dark';
+  });
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.style.colorScheme = 'dark';
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.style.colorScheme = 'light';
+    }
+  }, [theme]);
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -672,14 +835,15 @@ export default function App() {
   });
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
+    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300">
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
       <Hero />
       <Features />
       <Projects />
       <Education />
       <Skills />
       <Contact />
+      <ScrollToTop />
       
       {/* Scroll Progress Bar */}
       <motion.div

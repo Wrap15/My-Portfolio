@@ -25,9 +25,9 @@ export const PROJECTS: Project[] = [
   {
     id: '1',
     title: 'Shreeji Furniture',
-    date: 'April 2025',
+    date: 'April 2026',
     description: 'An elegant furniture showcase website with a focus on interior design and craftsmanship. Features a interactive product catalog and responsive layout.',
-    tags: ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS'],
+    tags: ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS','React 18 (Vite)','TypeScript','Framer Motion','Lucide React' ],
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop',
     link: 'https://shreeji-furniture-bay.vercel.app/'
   },
