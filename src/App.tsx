@@ -157,76 +157,118 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
 
 const Hero = () => {
   return (
-    <section id="about" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]" />
+    <section id="about" className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
+      {/* Background Decorative Grid and Glow Elements */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_30%_50%,#000_75%,transparent_100%)] pointer-events-none" />
+      <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/[0.06] dark:bg-blue-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 w-full relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
+          className="flex flex-col items-start text-left max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6">
+          {/* Subtle upper micro-tag */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            Available for new projects
+            Available for new opportunities
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-serif font-bold leading-[0.9] mb-8 text-neutral-950 dark:text-white">
+          <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight">
             Dhaval 
-            <span className="block text-gradient italic">Panchal</span>
+            <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
           </h1>
+
+          {/* Premium Compact Slab for modern multi-role representation - ultra compact on mobile */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="mb-8 w-full"
+          >
+            <div className="flex flex-wrap gap-2 md:gap-1.5 p-1 md:p-1.5 rounded-2xl md:rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 inline-flex items-center shadow-sm max-w-full">
+              
+              {/* Full Stack Dev with hover/transition */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full hover:bg-neutral-200/30 dark:hover:bg-white/5 transition-all"
+              >
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <Code2 size={11} className="md:size-[14px]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-[6px] md:text-[8px] text-neutral-400 dark:text-neutral-500 font-extrabold uppercase tracking-widest leading-none">Architecting</p>
+                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Full Stack Dev</p>
+                </div>
+              </motion.div>
+
+              {/* Small elegant dot or line divider for responsive viewports */}
+              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+
+              {/* Vibe Coder with hover/transition */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full hover:bg-neutral-200/30 dark:hover:bg-white/5 transition-all"
+              >
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                  <Rocket size={11} className="md:size-[14px] animate-pulse" />
+                </div>
+                <div className="text-left">
+                  <p className="text-[6px] md:text-[8px] text-neutral-400 dark:text-neutral-500 font-extrabold uppercase tracking-widest leading-none">Designing</p>
+                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
+                </div>
+              </motion.div>
+
+              {/* Small elegant dot or line divider for responsive viewports */}
+              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+
+              {/* Open to Work with hover/transition */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full hover:bg-neutral-200/30 dark:hover:bg-white/5 transition-all"
+              >
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-blue-500"></span>
+                  </span>
+                </div>
+                <div className="text-left">
+                  <p className="text-[6px] md:text-[8px] text-neutral-400 dark:text-neutral-500 font-extrabold uppercase tracking-widest leading-none">Status</p>
+                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Open to Work</p>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
           
-          <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-lg mb-10 leading-relaxed">
+          <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 leading-relaxed text-left">
             Proficient <span className="text-neutral-950 dark:text-white font-medium">Front-end Developer</span> skilled in building responsive UIs with HTML, CSS, Bootstrap, and React.js. Dedicated to effective problem solving and crafting digital experiences.
           </p>
           
-          <div className="flex flex-wrap gap-4">
-            <a href="#projects" className="px-8 py-4 rounded-full bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-bold hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all flex items-center gap-2 group">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-5 w-full">
+            <motion.a 
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              href="#projects" 
+              className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center"
+            >
               View Projects
               <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            </a>
-            <div className="flex items-center gap-4 px-4">
-              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Github size={24} /></a>
-              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Linkedin size={24} /></a>
-              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><MessageCircle size={24} /></a>
-              <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Mail size={24} /></a>
-            </div>
-          </div>
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="relative hidden lg:block"
-        >
-          <div className="aspect-square rounded-3xl overflow-hidden border border-white/10 glass p-4">
-            <img 
-              src="/profile.jpg" 
-              alt="Dhaval Panchal" 
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "https://plus.unsplash.com/premium_vector-1728553012443-3cf619e7579d?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-              }}
-              className="w-full h-full object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          {/* Floating Badge */}
-          <div className="absolute -bottom-6 -left-6 glass p-6 rounded-2xl border border-white/10 shadow-2xl">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-neutral-950">
-                <Code2 size={24} />
-              </div>
-              <div>
-                <p className="text-xs text-neutral-400 uppercase font-bold tracking-widest">Experience</p>
-                <p className="text-xl font-bold">2+ Years</p>
-              </div>
+            </motion.a>
+            
+            <div className="flex items-center justify-center gap-5 bg-neutral-100/50 dark:bg-neutral-900/25 px-5 py-3 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-sm">
+              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="GitHub"><Github size={22} /></a>
+              <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
+              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="LinkedIn"><Linkedin size={22} /></a>
+              <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
+              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="WhatsApp"><MessageCircle size={22} /></a>
+              <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
+              <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="Email"><Mail size={22} /></a>
             </div>
           </div>
         </motion.div>
@@ -254,7 +296,68 @@ const SectionHeader = ({ title, subtitle, icon: Icon, centered = false }: { titl
   </motion.div>
 );
 
+const Shimmer = () => (
+  <motion.div
+    initial={{ x: "-100%" }}
+    animate={{ x: "100%" }}
+    transition={{
+      repeat: Infinity,
+      duration: 1.6,
+      ease: "linear",
+    }}
+    className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-200/50 dark:via-white/5 to-transparent"
+  />
+);
+
+const ProjectSkeleton = () => (
+  <div className="w-full relative overflow-hidden rounded-2xl">
+    {/* Image container skeleton */}
+    <div className="relative aspect-[4/3] rounded-2xl bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden mb-6 border border-neutral-200/20 dark:border-white/5">
+      <Shimmer />
+    </div>
+    
+    {/* Tags & Date line skeleton */}
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex gap-2">
+        <div className="relative w-12 h-5 rounded bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden border border-neutral-200/20 dark:border-white/5">
+          <Shimmer />
+        </div>
+        <div className="relative w-16 h-5 rounded bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden border border-neutral-200/20 dark:border-white/5">
+          <Shimmer />
+        </div>
+      </div>
+      <div className="relative w-16 h-4 rounded bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden">
+        <Shimmer />
+      </div>
+    </div>
+
+    {/* Title skeleton */}
+    <div className="relative h-7 w-2/3 bg-neutral-100/60 dark:bg-neutral-900/40 rounded mb-3 overflow-hidden">
+      <Shimmer />
+    </div>
+
+    {/* Description skeleton */}
+    <div className="space-y-2">
+      <div className="relative h-4 w-full bg-neutral-100/60 dark:bg-neutral-900/40 rounded overflow-hidden">
+        <Shimmer />
+      </div>
+      <div className="relative h-4 w-5/6 bg-neutral-100/60 dark:bg-neutral-900/40 rounded overflow-hidden">
+        <Shimmer />
+      </div>
+    </div>
+  </div>
+);
+
 const Projects = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section id="projects" className="py-32 px-6">
       <div className="max-w-7xl mx-auto">
@@ -264,74 +367,96 @@ const Projects = () => {
           icon={Briefcase} 
         />
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROJECTS.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
-              className="group relative"
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <motion.div 
+              key="projects-skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-neutral-950/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
-                  <div className="space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                    <h3 className="text-lg font-bold text-white">
-                      {project.title}
-                    </h3>
-                    <p className="text-xs text-neutral-300 line-clamp-5 leading-relaxed">
-                      {project.description}
-                    </p>
+              {[1, 2, 3].map((n) => (
+                <ProjectSkeleton key={n} />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="projects-content"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {PROJECTS.map((project, i) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+                  className="group relative"
+                >
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 bg-neutral-950/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
+                      <div className="space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                        <h3 className="text-lg font-bold text-white">
+                          {project.title}
+                        </h3>
+                        <p className="text-xs text-neutral-300 line-clamp-5 leading-relaxed">
+                          {project.description}
+                        </p>
+                      </div>
+                      
+                      <div className="flex gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                        <a 
+                          href={project.link} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="w-10 h-10 rounded-full bg-emerald-500 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform"
+                        >
+                          <ExternalLink size={18} />
+                        </a>
+                        <a 
+                          href="https://github.com/Wrap15" 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="w-10 h-10 rounded-full bg-white text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform"
+                        >
+                          <Github size={18} />
+                        </a>
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="flex gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                    <a 
-                      href={project.link} 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="w-10 h-10 rounded-full bg-emerald-500 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform"
-                    >
-                      <ExternalLink size={18} />
-                    </a>
-                    <a 
-                      href="https://github.com/Wrap15" 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="w-10 h-10 rounded-full bg-white text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform"
-                    >
-                      <Github size={18} />
-                    </a>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-[10px] font-mono text-neutral-500">{project.date}</span>
                   </div>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <span className="text-[10px] font-mono text-neutral-500">{project.date}</span>
-              </div>
-              
-              <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">
-                {project.title}
-              </h3>
-              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                {project.description}
-              </p>
+                  
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                    {project.description}
+                  </p>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
@@ -378,9 +503,35 @@ const Education = () => {
   );
 };
 
+const SkillGroupSkeleton = () => (
+  <div className="relative w-full">
+    {/* Category header skeleton */}
+    <div className="relative h-6 w-32 bg-neutral-100/60 dark:bg-neutral-900/40 rounded-lg mb-8 overflow-hidden border border-neutral-200/20 dark:border-white/5">
+      <Shimmer />
+    </div>
+    
+    {/* Tags wrapper skeleton */}
+    <div className="flex flex-wrap gap-3">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="relative h-9 w-24 rounded-xl bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden border border-neutral-200/20 dark:border-white/5">
+          <Shimmer />
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const Skills = () => {
   const categories = ['Frontend', 'Backend', 'Tools', 'Soft Skills', 'Other'];
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const categoryDescriptions: Record<string, string> = {
     'Frontend': 'Interfaces and user experience using modern frameworks.',
@@ -418,79 +569,102 @@ const Skills = () => {
           icon={Code2} 
         />
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10">
-          {categories.map((cat, catIndex) => (
+        <AnimatePresence mode="wait">
+          {isLoading ? (
             <motion.div 
-              key={cat}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: catIndex * 0.1 }}
-              className="relative"
+              key="skills-skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10"
             >
-              <div className="relative inline-block mb-8">
-                <h3 
-                  className="text-xl font-bold flex items-center gap-2 cursor-help group"
-                  onMouseEnter={() => setHoveredCategory(cat)}
-                  onMouseLeave={() => setHoveredCategory(null)}
-                >
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform" />
-                  {cat}
-                </h3>
-                
-                <AnimatePresence>
-                  {hoveredCategory === cat && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute z-20 left-0 top-full mt-2 w-48 p-3 rounded-lg bg-white dark:bg-neutral-800 shadow-xl border border-neutral-200 dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 pointer-events-none"
-                    >
-                      <div className="absolute -top-1 left-4 w-2 h-2 bg-white dark:bg-neutral-800 border-t border-l border-neutral-200 dark:border-white/10 rotate-45" />
-                      {categoryDescriptions[cat]}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {SKILLS.filter(s => s.category === cat).map((skill, i) => {
-                  const Icon = getIcon(skill.name);
-                  return (
-                    <motion.div
-                      key={skill.name}
-                      initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                      whileHover={{ 
-                        scale: 1.05, 
-                        backgroundColor: "rgba(16, 185, 129, 0.1)",
-                        borderColor: "rgba(16, 185, 129, 0.3)",
-                        y: -5
-                      }}
-                      viewport={{ once: true }}
-                      transition={{ 
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                        delay: (catIndex * 0.1) + (i * 0.03) 
-                      }}
-                      className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-white transition-all cursor-default"
-                    >
-                      <motion.div
-                        whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-emerald-500 group-hover:text-emerald-400 pb-0.5"
-                      >
-                        <Icon size={14} />
-                      </motion.div>
-                      {skill.name}
-                    </motion.div>
-                  );
-                })}
-              </div>
+              {categories.map((cat) => (
+                <SkillGroupSkeleton key={cat} />
+              ))}
             </motion.div>
-          ))}
-        </div>
+          ) : (
+            <motion.div 
+              key="skills-content"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10"
+            >
+              {categories.map((cat, catIndex) => (
+                <motion.div 
+                  key={cat}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: catIndex * 0.1 }}
+                  className="relative"
+                >
+                  <div className="relative inline-block mb-8">
+                    <h3 
+                      className="text-xl font-bold flex items-center gap-2 cursor-help group"
+                      onMouseEnter={() => setHoveredCategory(cat)}
+                      onMouseLeave={() => setHoveredCategory(null)}
+                    >
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform" />
+                      {cat}
+                    </h3>
+                    
+                    <AnimatePresence>
+                      {hoveredCategory === cat && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute z-20 left-0 top-full mt-2 w-48 p-3 rounded-lg bg-white dark:bg-neutral-800 shadow-xl border border-neutral-200 dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 pointer-events-none"
+                        >
+                          <div className="absolute -top-1 left-4 w-2 h-2 bg-white dark:bg-neutral-800 border-t border-l border-neutral-200 dark:border-white/10 rotate-45" />
+                          {categoryDescriptions[cat]}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3">
+                    {SKILLS.filter(s => s.category === cat).map((skill, i) => {
+                      const Icon = getIcon(skill.name);
+                      return (
+                        <motion.div
+                          key={skill.name}
+                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                          whileHover={{ 
+                            scale: 1.05, 
+                            backgroundColor: "rgba(16, 185, 129, 0.1)",
+                            borderColor: "rgba(16, 185, 129, 0.3)",
+                            y: -5
+                          }}
+                          viewport={{ once: true }}
+                          transition={{ 
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 20,
+                            delay: (catIndex * 0.1) + (i * 0.03) 
+                          }}
+                          className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-white transition-all cursor-default"
+                        >
+                          <motion.div
+                            whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-emerald-500 group-hover:text-emerald-400 pb-0.5"
+                          >
+                            <Icon size={14} />
+                          </motion.div>
+                          {skill.name}
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
@@ -552,7 +726,7 @@ const Contact = () => {
 
       <div className="max-w-4xl mx-auto relative z-10">
         <SectionHeader 
-          
+          title="Connect" 
           subtitle="CONTACT" 
           centered 
         />
