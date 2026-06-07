@@ -30,6 +30,7 @@ import {
   Twitter
 } from 'lucide-react';
 import { Project } from '../constants';
+import { HoverPreviewTooltip } from './HoverPreviewTooltip';
 
 interface ProjectDetailPanelProps {
   project: Project;
@@ -404,28 +405,32 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({ project,
           
           <div className="flex items-center gap-3 w-full md:w-auto flex-1 justify-end">
             {project.githubLink && (
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 sm:flex-initial py-3 px-4 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-white/5 dark:hover:bg-white/10 text-neutral-900 dark:text-white text-xs font-bold font-sans flex items-center justify-center gap-2 border border-neutral-200/40 dark:border-white/10 active:scale-95 transition-all cursor-pointer shadow-sm text-center"
-                id="project-drawer-github"
-              >
-                <Github size={15} />
-                Browse Code
-              </a>
+              <HoverPreviewTooltip project={project} isGithub={true}>
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 sm:flex-initial py-3 px-4 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-white/5 dark:hover:bg-white/10 text-neutral-900 dark:text-white text-xs font-bold font-sans flex items-center justify-center gap-2 border border-neutral-200/40 dark:border-white/10 active:scale-95 transition-all cursor-pointer shadow-sm text-center"
+                  id="project-drawer-github"
+                >
+                  <Github size={15} />
+                  Browse Code
+                </a>
+              </HoverPreviewTooltip>
             )}
             {project.link && (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 sm:flex-initial py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-neutral-950 dark:text-white text-xs font-bold font-sans flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-md shadow-emerald-500/10 dark:shadow-none text-center"
-                id="project-drawer-live"
-              >
-                <span>Visit Website</span>
-                <ExternalLink size={15} />
-              </a>
+              <HoverPreviewTooltip project={project}>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 sm:flex-initial py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-neutral-950 dark:text-white text-xs font-bold font-sans flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-md shadow-emerald-500/10 dark:shadow-none text-center"
+                  id="project-drawer-live"
+                >
+                  <span>Visit Website</span>
+                  <ExternalLink size={15} />
+                </a>
+              </HoverPreviewTooltip>
             )}
           </div>
         </div>

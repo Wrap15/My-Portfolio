@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import { 
   Github, 
@@ -42,6 +42,8 @@ import { PROJECTS, EDUCATION, SKILLS, Project } from './constants';
 import { cn } from './lib/utils';
 import { submitContactForm } from './firebase';
 import { ProjectDetailPanel } from './components/ProjectDetailPanel';
+import { ProjectCard } from './components/ProjectCard';
+import { HoverPreviewTooltip } from './components/HoverPreviewTooltip';
 
 const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -72,7 +74,17 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-xl font-serif italic font-bold tracking-tight text-neutral-950 dark:text-white"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            const element = document.getElementById('about');
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+          className="text-xl font-serif italic font-bold tracking-tight text-neutral-950 dark:text-white cursor-pointer select-none"
         >
           Dhaval<span className="text-emerald-500">.</span>
         </motion.div>
@@ -188,6 +200,23 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
 };
 
 const Hero = () => {
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    // Subtle magnetic attraction force
+    const x = (clientX - centerX) * 0.35;
+    const y = (clientY - centerY) * 0.35;
+    setCoords({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setCoords({ x: 0, y: 0 });
+  };
+
   return (
     <section id="about" className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
       {/* Background Decorative Grid and Glow Elements */}
@@ -207,16 +236,16 @@ const Hero = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[9px] font-extrabold uppercase tracking-widest mb-6"
+            className="inline-flex items-center gap-1 sm:gap-2 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[7px] min-[360px]:text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider min-[360px]:tracking-widest mb-4 sm:mb-6 select-none"
           >
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-1 w-1 sm:h-2 sm:w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 bg-emerald-500"></span>
             </span>
             Open to Full-Time Roles &amp; Freelance Projects
           </motion.div>
           
-          <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight">
+          <h1 className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight">
             Dhaval 
             <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
           </h1>
@@ -237,7 +266,7 @@ const Hero = () => {
             }}
             className="mb-8 w-full"
           >
-            <div className="flex flex-wrap gap-1.5 md:gap-1 p-1 md:p-1.5 rounded-2xl md:rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 items-center justify-start sm:justify-start shadow-sm w-full sm:w-auto sm:inline-flex max-w-full">
+            <div className="flex flex-wrap gap-0.5 p-0.5 rounded-lg sm:rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 items-center justify-start shadow-xs w-auto inline-flex max-w-full">
               
               {/* FullStack Developer with hover/transition */}
               <motion.div 
@@ -247,23 +276,23 @@ const Hero = () => {
                 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 whileHover={{ 
-                  scale: 1.04, 
+                  scale: 1.02, 
                   backgroundColor: "rgba(16, 185, 129, 0.08)",
                   borderColor: "rgba(16, 185, 129, 0.25)"
                 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
               >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
-                  <Code2 size={11} className="md:size-[14px]" />
+                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
+                  <Code2 className="size-[6px] sm:size-[8.5px] md:size-[10px]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
-                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
+                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
+                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
                 </div>
               </motion.div>
 
               {/* Small elegant line divider */}
-              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+              <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
 
               {/* React Specialist with hover/transition */}
               <motion.div 
@@ -273,23 +302,23 @@ const Hero = () => {
                 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 whileHover={{ 
-                  scale: 1.04, 
+                  scale: 1.02, 
                   backgroundColor: "rgba(14, 165, 233, 0.08)",
                   borderColor: "rgba(14, 165, 233, 0.25)"
                 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
               >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
-                  <Atom size={11} className="md:size-[14px] animate-[spin_6s_linear_infinite]" />
+                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
+                  <Atom className="size-[6px] sm:size-[8.5px] md:size-[10px] animate-[spin_6s_linear_infinite]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
-                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
+                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
+                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
                 </div>
               </motion.div>
 
               {/* Small elegant line divider */}
-              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+              <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
 
               {/* GenAI Integrator with hover/transition */}
               <motion.div 
@@ -299,23 +328,23 @@ const Hero = () => {
                 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 whileHover={{ 
-                  scale: 1.04, 
+                  scale: 1.02, 
                   backgroundColor: "rgba(168, 85, 247, 0.08)",
                   borderColor: "rgba(168, 85, 247, 0.25)"
                 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
               >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
-                  <Sparkles size={11} className="md:size-[14px] animate-pulse" />
+                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
+                  <Sparkles className="size-[6px] sm:size-[8.5px] md:size-[10px] animate-pulse" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
-                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
+                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
+                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
                 </div>
               </motion.div>
 
               {/* Small elegant line divider */}
-              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+              <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
 
               {/* Vibe Coder with hover/transition */}
               <motion.div 
@@ -325,33 +354,39 @@ const Hero = () => {
                 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 whileHover={{ 
-                  scale: 1.04, 
+                  scale: 1.02, 
                   backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
                   borderColor: "rgba(236, 72, 153, 0.25)"
                 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
               >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
-                  <Rocket size={11} className="md:size-[14px] animate-[bounce_1.5s_infinite]" />
+                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
+                  <Rocket className="size-[6px] sm:size-[8.5px] md:size-[10px] animate-[bounce_1.5s_infinite]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
-                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
+                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
+                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
                 </div>
               </motion.div>
             </div>
           </motion.div>
           
           <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 leading-relaxed text-left">
-            Proficient <span className="text-neutral-950 dark:text-white font-medium">Front-end Developer</span> skilled in building responsive UIs with HTML, CSS, Bootstrap, and React.js. Dedicated to effective problem solving and crafting digital experiences.
+            <span className="text-neutral-950 dark:text-white font-semibold block mb-1">
+              Frontend-Focused Full Stack Developer specializing in React
+            </span>
+            Building high-performance web apps with seamless UX and AI integrations
           </p>
           
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-5 w-full">
             <motion.a 
-              whileHover={{ scale: 1.02, y: -2 }}
+              animate={{ x: coords.x, y: coords.y }}
+              transition={{ type: "spring", stiffness: 120, damping: 10, mass: 0.8 }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
               whileTap={{ scale: 0.98 }}
               href="#projects" 
-              className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center"
+              className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center cursor-pointer"
             >
               View Projects
               <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -375,10 +410,10 @@ const Hero = () => {
 
 const SectionHeader = ({ title, subtitle, icon: Icon, centered = false }: { title: string, subtitle: string, icon?: any, centered?: boolean }) => (
   <motion.div 
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
+    initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.6, ease: "easeOut" }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
     className={cn("mb-16", centered && "text-center flex flex-col items-center")}
   >
     <div className={cn("flex items-center gap-3 text-emerald-500 mb-4", centered && "justify-center")}>
@@ -447,6 +482,7 @@ const ProjectSkeleton = () => (
 const Projects = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeCategory, setActiveCategory] = useState<'All' | 'Web' | 'Mobile' | 'AI'>('All');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -455,8 +491,29 @@ const Projects = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const getProjectCategories = (project: Project): string[] => {
+    const cats = ['All', 'Web'];
+    if (['3', '5'].includes(project.id)) {
+      cats.push('Mobile');
+    }
+    if (['6'].includes(project.id)) {
+      cats.push('AI');
+    }
+    return cats;
+  };
+
   const featuredProjects = PROJECTS.filter(project => project.id !== '4');
   const archivedProjects = PROJECTS.filter(project => project.id === '4');
+
+  const filteredFeatured = featuredProjects.filter(project => {
+    if (activeCategory === 'All') return true;
+    return getProjectCategories(project).includes(activeCategory);
+  });
+
+  const filteredArchived = archivedProjects.filter(project => {
+    if (activeCategory === 'All') return true;
+    return getProjectCategories(project).includes(activeCategory);
+  });
 
   return (
     <section id="projects" className="py-16 md:py-32 px-4 sm:px-6">
@@ -467,6 +524,35 @@ const Projects = () => {
           icon={Briefcase} 
         />
         
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap items-center justify-start gap-1 p-0.5 rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 w-fit mb-10 shadow-xs">
+          {(['All', 'Web', 'Mobile', 'AI'] as const).map((category) => {
+            const isActive = activeCategory === category;
+            return (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={cn(
+                  "relative px-4 py-1.5 text-xs font-semibold rounded-full transition-colors duration-300 cursor-pointer",
+                  isActive
+                    ? "text-neutral-900 dark:text-white font-bold"
+                    : "text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white"
+                )}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="active-category-pill"
+                    className="absolute inset-0 bg-white dark:bg-neutral-800 shadow-xs border border-neutral-200/60 dark:border-white/10 rounded-full"
+                    style={{ zIndex: 0 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 26 }}
+                  />
+                )}
+                <span className="relative z-10">{category}</span>
+              </button>
+            );
+          })}
+        </div>
+
         <AnimatePresence mode="wait">
           {isLoading ? (
             <motion.div 
@@ -483,100 +569,27 @@ const Projects = () => {
             </motion.div>
           ) : (
             <motion.div 
-              key="projects-content"
+              key={`projects-content-${activeCategory}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {featuredProjects.map((project, i) => (
-                <motion.div
+              {filteredFeatured.map((project, i) => (
+                <ProjectCard 
                   key={project.id}
-                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+                  project={project}
+                  index={i}
                   onClick={() => setSelectedProject(project)}
-                  className="group relative cursor-pointer bg-white dark:bg-neutral-900/10 p-4 rounded-3xl border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 transition-all shadow-sm hover:shadow-md hover:bg-neutral-50/50 dark:hover:bg-neutral-900/30"
-                  id={`project-card-${project.id}`}
-                >
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-white/5">
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-neutral-950/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
-                      <div className="space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-emerald-400">Architecture Specs Included</span>
-                        <h3 className="text-lg font-bold text-white leading-tight">
-                          {project.title}
-                        </h3>
-                        <p className="text-xs text-neutral-300 line-clamp-5 leading-relaxed">
-                          {project.description}
-                        </p>
-                      </div>
-                      
-                      <div className="flex justify-end items-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                        <div className="flex gap-2.5" onClick={(e) => e.stopPropagation()}>
-                          <a 
-                            href={project.link} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            className="w-9 h-9 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                            title="Open live website"
-                          >
-                            <ExternalLink size={16} />
-                          </a>
-                          <a 
-                            href={project.githubLink || "https://github.com/Wrap15"} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            className="w-9 h-9 rounded-full bg-white hover:bg-neutral-200 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                            title="Open repository code"
-                          >
-                            <Github size={16} />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.slice(0, 3).map(tag => (
-                        <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400">
-                          {tag}
-                        </span>
-                      ))}
-                      {project.tags.length > 3 && (
-                        <span className="text-[10px] font-bold tracking-wider px-2 py-1 rounded-md bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
-                          +{project.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[10px] font-mono text-neutral-500 shrink-0">{project.date}</span>
-                  </div>
-                  
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="text-xl font-bold group-hover:text-emerald-500 transition-colors">
-                      {project.title}
-                    </h3>
-                    <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 group-hover:text-emerald-500 transition-colors shrink-0 flex items-center gap-1 pt-1">
-                      More info &rarr;
-                    </span>
-                  </div>
-                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-2">
-                    {project.description}
-                  </p>
-                </motion.div>
+                />
               ))}
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Older & Archived Projects Area */}
-        {!isLoading && archivedProjects.length > 0 && (
+        {!isLoading && filteredArchived.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -591,67 +604,68 @@ const Projects = () => {
             </div>
             
             <div className="grid gap-4">
-              {archivedProjects.map((project) => (
-                <div 
-                  key={project.id}
-                  onClick={() => setSelectedProject(project)}
-                  className="group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30 transition-all cursor-pointer shadow-sm"
-                  id={`archived-project-row-${project.id}`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
-                      <img 
-                        src={project.image} 
-                        alt={project.title}
-                        className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                          {project.title}
-                        </h4>
-                        <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
-                          {project.date}
-                        </span>
+              {filteredArchived.map((project) => (
+                <HoverPreviewTooltip key={project.id} project={project} className="w-full block">
+                  <div 
+                    onClick={() => setSelectedProject(project)}
+                    className="group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30 transition-all cursor-pointer shadow-sm"
+                    id={`archived-project-row-${project.id}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
+                          referrerPolicy="no-referrer"
+                        />
                       </div>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
-                        {project.description}
-                      </p>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                            {project.title}
+                          </h4>
+                          <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
+                            {project.date}
+                          </span>
+                        </div>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
+                          {project.description}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                        <a 
+                          href={project.link} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                          title="Open archived live demo"
+                        >
+                          <ExternalLink size={15} />
+                        </a>
+                        <a 
+                          href={project.githubLink || "https://github.com/Wrap15"} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                          title="Open repository code"
+                        >
+                          <Github size={15} />
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                      <a 
-                        href={project.link} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
-                        title="Open archived live demo"
-                      >
-                        <ExternalLink size={15} />
-                      </a>
-                      <a 
-                        href={project.githubLink || "https://github.com/Wrap15"} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
-                        title="Open repository code"
-                      >
-                        <Github size={15} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                </HoverPreviewTooltip>
               ))}
             </div>
           </motion.div>
@@ -735,6 +749,31 @@ const Skills = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.05
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, filter: "blur(3px)" },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: "blur(0px)",
+      transition: { 
+        type: "spring" as const, 
+        stiffness: 100, 
+        damping: 15 
+      } 
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -795,18 +834,16 @@ const Skills = () => {
           ) : (
             <motion.div 
               key="skills-content"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
               className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10"
             >
               {categories.map((cat, catIndex) => (
                 <motion.div 
                   key={cat}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: catIndex * 0.1 }}
+                  variants={cardVariants}
                   className="relative"
                 >
                   <div className="relative inline-block mb-8">
@@ -1097,28 +1134,93 @@ const Contact = () => {
           )}
         </motion.div>
 
-        <div className="mt-20 pt-10 border-t border-neutral-200 dark:border-white/10 flex flex-col items-center gap-8">
-          <div className="flex flex-wrap justify-center gap-8 px-6 py-4 glass rounded-full border border-neutral-200 dark:border-white/5 bg-white/50 dark:bg-black/20">
-            <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-2 group">
-              <Mail size={20} />
-              <span className="text-sm font-medium group-hover:text-emerald-500 transition-colors">work.dhaval72@gmail.com</span>
-            </a>
-            <div className="flex items-center gap-6">
-              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Github size={24} /></a>
-              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><Linkedin size={24} /></a>
-              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"><MessageCircle size={24} /></a>
+        <div className="mt-24 pt-16 border-t border-neutral-200/60 dark:border-white/10 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-12 w-full text-left">
+            {/* Column 1: Brand & Status ticker */}
+            <div className="md:col-span-8 flex flex-col gap-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <span 
+                  className="text-2xl font-serif italic font-bold tracking-tight text-neutral-950 dark:text-white cursor-pointer hover:opacity-85 transition-opacity"
+                  onClick={() => {
+                    const element = document.getElementById('about');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Dhaval<span className="text-emerald-500">.</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-full border border-emerald-500/10">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-[ping_1.5s_infinite]"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                  </span>
+                  Available For Projects
+                </span>
+              </div>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-xl leading-relaxed">
+                Frontend-Focused Full Stack Developer specializing in React &amp; performance optimization<br />
+                Crafting modern, high-performance web apps with seamless UX and AI-powered experiences
+              </p>
+            </div>
+
+            {/* Column 2: Contact details & Socials */}
+            <div className="md:col-span-4 flex flex-col gap-4">
+              <h4 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Get In Touch</h4>
+              <div className="flex items-center gap-3 mt-1">
+                {[
+                  {
+                    label: 'Gmail',
+                    url: 'mailto:work.dhaval72@gmail.com',
+                    customSvg: (
+                      <svg 
+                        className="size-[18px] shrink-0 transition-transform duration-300 group-hover:scale-110" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect x="3" y="5" width="18" height="14" rx="1.5" className="fill-neutral-200 dark:fill-neutral-800" />
+                        <path d="M3 7V18C3 18.55 3.45 19 4 19H7V9.5L3 7Z" fill="#4285F4" />
+                        <path d="M17 9.5V19H20C20.55 19 21 18.55 21 18V7L17 9.5Z" fill="#34A853" />
+                        <path d="M12 13L7 9.5V19H17V9.5L12 13Z" fill="#FBBC05" />
+                        <path d="M3 7L12 13L21 7V5.5L12 11.5L3 5.5V7Z" fill="#EA4335" />
+                      </svg>
+                    )
+                  },
+                  { icon: Github, url: 'https://github.com/Wrap15', label: 'GitHub' },
+                  { icon: Linkedin, url: 'https://www.linkedin.com/in/dhaval-panchal-726a0625b/', label: 'LinkedIn' },
+                  { icon: MessageCircle, url: 'https://wa.me/919875161613', label: 'WhatsApp' }
+                ].map((social) => (
+                  <a 
+                    key={social.label}
+                    href={social.url} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="p-2 sm:p-2.5 rounded-full border border-neutral-200 dark:border-white/5 bg-neutral-100/35 dark:bg-neutral-900/35 text-neutral-600 dark:text-neutral-400 hover:text-white hover:bg-emerald-500 hover:border-emerald-500 dark:hover:bg-emerald-500 dark:hover:text-emerald-500 transition-all duration-300 shadow-xs flex items-center justify-center group"
+                    aria-label={social.label}
+                  >
+                    {social.customSvg ? (
+                      social.customSvg
+                    ) : (
+                      social.icon && <social.icon size={18} className="group-hover:scale-110 transition-transform duration-300" />
+                    )}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-          
-          <footer className="text-neutral-500 text-[10px] tracking-widest uppercase pb-10 font-bold flex flex-col items-center gap-2 text-center">
-            <div className="flex items-center justify-center gap-1.5 flex-wrap">
-              Designed &amp; Built with passion by <span className="text-neutral-800 dark:text-neutral-100 font-extrabold">DHAVAL PANCHAL</span>
-              <span className="inline-block animate-[pulse_1s_infinite] text-purple-500 text-[14px] leading-none">💜</span>
+
+          {/* Sub Footer row */}
+          <div className="pt-8 border-t border-neutral-200/50 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 pb-10">
+            <div className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 flex-wrap justify-center text-center">
+              Designed &amp; Built with <span className="inline-block animate-[pulse_1.5s_infinite] text-purple-500 text-[13px]">💜</span> by <span className="text-neutral-800 dark:text-neutral-100 font-extrabold">DHAVAL PANCHAL</span>
             </div>
-            <div className="text-neutral-400 dark:text-neutral-600 font-medium">
+            <div className="text-[11px] font-bold text-neutral-400 dark:text-neutral-600 uppercase tracking-widest text-center">
               © {new Date().getFullYear()} All rights reserved.
             </div>
-          </footer>
+          </div>
         </div>
       </div>
     </section>
