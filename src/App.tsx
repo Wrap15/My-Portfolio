@@ -266,7 +266,7 @@ const Hero = () => {
             }}
             className="mb-8 w-full"
           >
-            <div className="flex flex-wrap gap-0.5 p-0.5 rounded-lg sm:rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 items-center justify-start shadow-xs w-auto inline-flex max-w-full">
+            <div className="flex flex-wrap gap-2.5 sm:gap-0.5 p-1 sm:p-0.5 rounded-2xl sm:rounded-full bg-transparent sm:bg-neutral-100/50 sm:dark:bg-neutral-900/30 backdrop-blur-md sm:border sm:border-neutral-200/40 sm:dark:border-white/5 items-center justify-start sm:shadow-xs w-full sm:w-auto inline-flex max-w-full">
               
               {/* FullStack Developer with hover/transition */}
               <motion.div 
@@ -280,14 +280,14 @@ const Hero = () => {
                   backgroundColor: "rgba(16, 185, 129, 0.08)",
                   borderColor: "rgba(16, 185, 129, 0.25)"
                 }}
-                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-emerald-500/15 sm:border-transparent bg-emerald-500/5 dark:bg-emerald-500/[0.03] sm:bg-transparent transition-colors cursor-default"
               >
-                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
-                  <Code2 className="size-[6px] sm:size-[8.5px] md:size-[10px]" />
+                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
+                  <Code2 className="size-[8px] sm:size-[8.5px] md:size-[10px]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
-                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
+                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
+                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
                 </div>
               </motion.div>
 
@@ -306,14 +306,14 @@ const Hero = () => {
                   backgroundColor: "rgba(14, 165, 233, 0.08)",
                   borderColor: "rgba(14, 165, 233, 0.25)"
                 }}
-                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-sky-500/15 sm:border-transparent bg-sky-500/5 dark:bg-sky-500/[0.03] sm:bg-transparent transition-colors cursor-default"
               >
-                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
-                  <Atom className="size-[6px] sm:size-[8.5px] md:size-[10px] animate-[spin_6s_linear_infinite]" />
+                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
+                  <Atom className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[spin_6s_linear_infinite]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
-                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
+                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
+                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
                 </div>
               </motion.div>
 
@@ -332,14 +332,14 @@ const Hero = () => {
                   backgroundColor: "rgba(168, 85, 247, 0.08)",
                   borderColor: "rgba(168, 85, 247, 0.25)"
                 }}
-                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-purple-500/15 sm:border-transparent bg-purple-500/5 dark:bg-purple-500/[0.03] sm:bg-transparent transition-colors cursor-default"
               >
-                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
-                  <Sparkles className="size-[6px] sm:size-[8.5px] md:size-[10px] animate-pulse" />
+                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
+                  <Sparkles className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-pulse" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
-                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
+                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
+                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
                 </div>
               </motion.div>
 
@@ -358,14 +358,14 @@ const Hero = () => {
                   backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
                   borderColor: "rgba(236, 72, 153, 0.25)"
                 }}
-                className="flex items-center gap-1 px-1.5 py-0.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-md sm:rounded-full border border-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/15 sm:border-transparent bg-pink-500/5 dark:bg-pink-500/[0.03] sm:bg-transparent transition-colors cursor-default"
               >
-                <div className="w-3 h-3 min-[360px]:w-3.5 min-[360px]:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
-                  <Rocket className="size-[6px] sm:size-[8.5px] md:size-[10px] animate-[bounce_1.5s_infinite]" />
+                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
+                  <Rocket className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[bounce_1.5s_infinite]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[3.2px] min-[360px]:text-[4px] sm:text-[5.5px] md:text-[6.5px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
-                  <p className="text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
+                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
+                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
                 </div>
               </motion.div>
             </div>
@@ -1301,7 +1301,18 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 200) {
+      const projectsEl = document.getElementById('projects');
+      let isOverlappingProjects = false;
+      if (projectsEl) {
+        const rect = projectsEl.getBoundingClientRect();
+        // Hide scroll to top button if any part of the projects section is actively in view
+        const isProjectsInView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isProjectsInView) {
+          isOverlappingProjects = true;
+        }
+      }
+
+      if (window.scrollY > 200 && !isOverlappingProjects) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -1309,6 +1320,8 @@ const ScrollToTop = () => {
     };
 
     window.addEventListener('scroll', toggleVisibility);
+    // Execute a quick check coordinates immediately
+    toggleVisibility();
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 

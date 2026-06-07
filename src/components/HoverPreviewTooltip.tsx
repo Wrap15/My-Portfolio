@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Project } from '../constants';
 import { cn } from '../lib/utils';
@@ -59,9 +59,25 @@ export const HoverPreviewTooltip: React.FC<HoverPreviewTooltipProps> = ({
 }) => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [isHoverable, setIsHoverable] = useState(true);
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(hover: hover)');
+      setIsHoverable(mediaQuery.matches);
+      
+      const listener = (e: MediaQueryListEvent) => {
+        setIsHoverable(e.matches);
+      };
+      
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isHoverable) return;
     // Tooltip offset: slightly above and to the right of the cursor
     let x = e.clientX + 16;
     let y = e.clientY - 186;
@@ -79,6 +95,7 @@ export const HoverPreviewTooltip: React.FC<HoverPreviewTooltipProps> = ({
   };
 
   const handleMouseEnter = (e: React.MouseEvent) => {
+    if (!isHoverable) return;
     handleMouseMove(e);
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
     
