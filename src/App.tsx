@@ -34,18 +34,21 @@ import {
   Monitor,
   CheckCircle2,
   Trello,
-  Server
+  Server,
+  Sparkles,
+  Play
 } from 'lucide-react';
-import { PROJECTS, EDUCATION, SKILLS } from './constants';
+import { PROJECTS, EDUCATION, SKILLS, Project } from './constants';
 import { cn } from './lib/utils';
 import { submitContactForm } from './firebase';
+import { ProjectDetailPanel } from './components/ProjectDetailPanel';
 
 const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -60,9 +63,9 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
 
   return (
     <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 py-4",
       isScrolled 
-        ? "bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/5 py-3" 
+        ? "bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200/50 dark:border-white/5 py-3" 
         : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -83,7 +86,7 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"
+              className="text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors animate-fade-in"
             >
               {link.name}
             </motion.a>
@@ -111,42 +114,71 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
         </div>
 
         {/* Mobile Toggle */}
-        <div className="flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-2 md:hidden">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+            className="p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 active:scale-95 transition-all border border-neutral-200/40 dark:border-white/5"
+            aria-label="Toggle theme mobile"
           >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <button 
-            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+            className="p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 active:scale-95 transition-all border border-neutral-200/40 dark:border-white/5"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile navigation menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Dropdown with Full Utility Suit & Backdrop Blur */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-white/10 overflow-hidden"
+            initial={{ opacity: 0, height: 0, y: -10 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -10 }}
+            className="md:hidden absolute top-[calc(100%-8px)] left-4 right-4 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-lg border border-neutral-200/50 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden z-40 mt-2"
           >
-            <div className="flex flex-col gap-4 p-6">
-              {navLinks.map((link) => (
-                <a
+            <div className="flex flex-col gap-3 p-5">
+              {navLinks.map((link, idx) => (
+                <motion.a
                   key={link.name}
                   href={link.href}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+                  className="text-base font-bold text-neutral-700 dark:text-neutral-300 hover:text-emerald-500 dark:hover:text-emerald-400 py-1.5 transition-colors border-b border-neutral-100 dark:border-white/5 flex items-center justify-between"
                 >
-                  {link.name}
-                </a>
+                  <span>{link.name}</span>
+                  <ChevronRight size={14} className="text-neutral-400" />
+                </motion.a>
               ))}
+              
+              <div className="pt-2 flex flex-col gap-3">
+                {/* Mobile resume quick link */}
+                <a
+                  href="https://drive.google.com/file/d/1JSKxzXl2HKSGffpkCo5HuOnyy8Mnoeyt/view?usp=drive_link"
+                  download="Dhaval_Panchal_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full text-center py-3 rounded-xl bg-emerald-500 text-neutral-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-500/10 cursor-pointer active:scale-98 transition-transform"
+                >
+                  <GraduationCap size={16} />
+                  Download Resume
+                </a>
+                
+                {/* Quick Social Contacts in mobile panel */}
+                <div className="flex items-center justify-center gap-5 pt-3 border-t border-neutral-100 dark:border-white/5 text-neutral-500 dark:text-neutral-400 text-xs font-mono font-bold uppercase tracking-wider">
+                  <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="hover:text-emerald-500 transition-colors">GitHub</a>
+                  <span className="text-neutral-300 dark:text-white/10">•</span>
+                  <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="hover:text-emerald-500 transition-colors">LinkedIn</a>
+                  <span className="text-neutral-300 dark:text-white/10">•</span>
+                  <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="hover:text-emerald-500 transition-colors">WhatsApp</a>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -171,13 +203,18 @@ const Hero = () => {
           className="flex flex-col items-start text-left max-w-3xl"
         >
           {/* Subtle upper micro-tag */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[9px] font-extrabold uppercase tracking-widest mb-6"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            Available for new opportunities
-          </div>
+            Open to Full-Time Roles &amp; Freelance Projects
+          </motion.div>
           
           <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight">
             Dhaval 
@@ -186,61 +223,120 @@ const Hero = () => {
 
           {/* Premium Compact Slab for modern multi-role representation - ultra compact on mobile */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
+                  delayChildren: 0.1
+                }
+              }
+            }}
             className="mb-8 w-full"
           >
-            <div className="flex flex-wrap gap-2 md:gap-1.5 p-1 md:p-1.5 rounded-2xl md:rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 inline-flex items-center shadow-sm max-w-full">
+            <div className="flex flex-wrap gap-1.5 md:gap-1 p-1 md:p-1.5 rounded-2xl md:rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 items-center justify-start sm:justify-start shadow-sm w-full sm:w-auto sm:inline-flex max-w-full">
               
-              {/* Full Stack Dev with hover/transition */}
+              {/* FullStack Developer with hover/transition */}
               <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full hover:bg-neutral-200/30 dark:hover:bg-white/5 transition-all"
+                variants={{
+                  hidden: { opacity: 0, y: 15, scale: 0.95 },
+                  visible: { opacity: 1, y: 0, scale: 1 }
+                }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                whileHover={{ 
+                  scale: 1.04, 
+                  backgroundColor: "rgba(16, 185, 129, 0.08)",
+                  borderColor: "rgba(16, 185, 129, 0.25)"
+                }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
               >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
                   <Code2 size={11} className="md:size-[14px]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-neutral-400 dark:text-neutral-500 font-extrabold uppercase tracking-widest leading-none">Architecting</p>
-                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Full Stack Dev</p>
+                  <p className="text-[6px] md:text-[8px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
+                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
                 </div>
               </motion.div>
 
-              {/* Small elegant dot or line divider for responsive viewports */}
+              {/* Small elegant line divider */}
+              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+
+              {/* React Specialist with hover/transition */}
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, y: 15, scale: 0.95 },
+                  visible: { opacity: 1, y: 0, scale: 1 }
+                }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                whileHover={{ 
+                  scale: 1.04, 
+                  backgroundColor: "rgba(14, 165, 233, 0.08)",
+                  borderColor: "rgba(14, 165, 233, 0.25)"
+                }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
+              >
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
+                  <Atom size={11} className="md:size-[14px] animate-[spin_6s_linear_infinite]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-[6px] md:text-[8px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
+                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
+                </div>
+              </motion.div>
+
+              {/* Small elegant line divider */}
+              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
+
+              {/* GenAI Integrator with hover/transition */}
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, y: 15, scale: 0.95 },
+                  visible: { opacity: 1, y: 0, scale: 1 }
+                }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                whileHover={{ 
+                  scale: 1.04, 
+                  backgroundColor: "rgba(168, 85, 247, 0.08)",
+                  borderColor: "rgba(168, 85, 247, 0.25)"
+                }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
+              >
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
+                  <Sparkles size={11} className="md:size-[14px] animate-pulse" />
+                </div>
+                <div className="text-left">
+                  <p className="text-[6px] md:text-[8px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
+                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
+                </div>
+              </motion.div>
+
+              {/* Small elegant line divider */}
               <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
 
               {/* Vibe Coder with hover/transition */}
               <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full hover:bg-neutral-200/30 dark:hover:bg-white/5 transition-all"
+                variants={{
+                  hidden: { opacity: 0, y: 15, scale: 0.95 },
+                  visible: { opacity: 1, y: 0, scale: 1 }
+                }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                whileHover={{ 
+                  scale: 1.04, 
+                  backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
+                  borderColor: "rgba(236, 72, 153, 0.25)"
+                }}
+                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full border border-transparent transition-colors cursor-default"
               >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-                  <Rocket size={11} className="md:size-[14px] animate-pulse" />
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
+                  <Rocket size={11} className="md:size-[14px] animate-[bounce_1.5s_infinite]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-neutral-400 dark:text-neutral-500 font-extrabold uppercase tracking-widest leading-none">Designing</p>
+                  <p className="text-[6px] md:text-[8px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
                   <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
-                </div>
-              </motion.div>
-
-              {/* Small elegant dot or line divider for responsive viewports */}
-              <div className="hidden sm:block w-px h-4 md:h-6 bg-neutral-300 dark:bg-white/10" />
-
-              {/* Open to Work with hover/transition */}
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="flex items-center gap-1.5 md:gap-2.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full hover:bg-neutral-200/30 dark:hover:bg-white/5 transition-all"
-              >
-                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                  <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-blue-500"></span>
-                  </span>
-                </div>
-                <div className="text-left">
-                  <p className="text-[6px] md:text-[8px] text-neutral-400 dark:text-neutral-500 font-extrabold uppercase tracking-widest leading-none">Status</p>
-                  <p className="text-[10px] md:text-xs font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Open to Work</p>
                 </div>
               </motion.div>
             </div>
@@ -350,6 +446,7 @@ const ProjectSkeleton = () => (
 
 const Projects = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -358,8 +455,11 @@ const Projects = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const featuredProjects = PROJECTS.filter(project => project.id !== '4');
+  const archivedProjects = PROJECTS.filter(project => project.id === '4');
+
   return (
-    <section id="projects" className="py-32 px-6">
+    <section id="projects" className="py-16 md:py-32 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Portfolio" 
@@ -389,24 +489,27 @@ const Projects = () => {
               transition={{ duration: 0.5 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {PROJECTS.map((project, i) => (
+              {featuredProjects.map((project, i) => (
                 <motion.div
                   key={project.id}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
-                  className="group relative"
+                  onClick={() => setSelectedProject(project)}
+                  className="group relative cursor-pointer bg-white dark:bg-neutral-900/10 p-4 rounded-3xl border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 transition-all shadow-sm hover:shadow-md hover:bg-neutral-50/50 dark:hover:bg-neutral-900/30"
+                  id={`project-card-${project.id}`}
                 >
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-white/5">
                     <img 
                       src={project.image} 
                       alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute inset-0 bg-neutral-950/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-6">
                       <div className="space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                        <h3 className="text-lg font-bold text-white">
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-emerald-400">Architecture Specs Included</span>
+                        <h3 className="text-lg font-bold text-white leading-tight">
                           {project.title}
                         </h3>
                         <p className="text-xs text-neutral-300 line-clamp-5 leading-relaxed">
@@ -414,47 +517,153 @@ const Projects = () => {
                         </p>
                       </div>
                       
-                      <div className="flex gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-                        <a 
-                          href={project.link} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="w-10 h-10 rounded-full bg-emerald-500 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform"
-                        >
-                          <ExternalLink size={18} />
-                        </a>
-                        <a 
-                          href="https://github.com/Wrap15" 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="w-10 h-10 rounded-full bg-white text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform"
-                        >
-                          <Github size={18} />
-                        </a>
+                      <div className="flex justify-end items-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+                        <div className="flex gap-2.5" onClick={(e) => e.stopPropagation()}>
+                          <a 
+                            href={project.link} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="w-9 h-9 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                            title="Open live website"
+                          >
+                            <ExternalLink size={16} />
+                          </a>
+                          <a 
+                            href={project.githubLink || "https://github.com/Wrap15"} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="w-9 h-9 rounded-full bg-white hover:bg-neutral-200 text-neutral-950 flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                            title="Open repository code"
+                          >
+                            <Github size={16} />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex flex-wrap gap-2">
-                      {project.tags.map(tag => (
+                      {project.tags.slice(0, 3).map(tag => (
                         <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400">
                           {tag}
                         </span>
                       ))}
+                      {project.tags.length > 3 && (
+                        <span className="text-[10px] font-bold tracking-wider px-2 py-1 rounded-md bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
+                          +{project.tags.length - 3}
+                        </span>
+                      )}
                     </div>
-                    <span className="text-[10px] font-mono text-neutral-500">{project.date}</span>
+                    <span className="text-[10px] font-mono text-neutral-500 shrink-0">{project.date}</span>
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h3 className="text-xl font-bold group-hover:text-emerald-500 transition-colors">
+                      {project.title}
+                    </h3>
+                    <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 group-hover:text-emerald-500 transition-colors shrink-0 flex items-center gap-1 pt-1">
+                      More info &rarr;
+                    </span>
+                  </div>
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed line-clamp-2">
                     {project.description}
                   </p>
                 </motion.div>
               ))}
             </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Older & Archived Projects Area */}
+        {!isLoading && archivedProjects.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-16 pt-12 border-t border-neutral-100 dark:border-white/[0.04]"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+              <div>
+                <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">Historical & Older Work</h3>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">A collection of early software experiments and archived builds.</p>
+              </div>
+            </div>
+            
+            <div className="grid gap-4">
+              {archivedProjects.map((project) => (
+                <div 
+                  key={project.id}
+                  onClick={() => setSelectedProject(project)}
+                  className="group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30 transition-all cursor-pointer shadow-sm"
+                  id={`archived-project-row-${project.id}`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                          {project.title}
+                        </h4>
+                        <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
+                          {project.date}
+                        </span>
+                      </div>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
+                        {project.description}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                      <a 
+                        href={project.link} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                        title="Open archived live demo"
+                      >
+                        <ExternalLink size={15} />
+                      </a>
+                      <a 
+                        href={project.githubLink || "https://github.com/Wrap15"} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                        title="Open repository code"
+                      >
+                        <Github size={15} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Sliding Technical Case Detail Panel */}
+        <AnimatePresence>
+          {selectedProject && (
+            <ProjectDetailPanel 
+              project={selectedProject} 
+              onClose={() => setSelectedProject(null)} 
+            />
           )}
         </AnimatePresence>
       </div>
@@ -464,7 +673,7 @@ const Projects = () => {
 
 const Education = () => {
   return (
-    <section id="education" className="py-32 px-6 bg-neutral-50 dark:bg-neutral-900/30">
+    <section id="education" className="py-16 md:py-32 px-4 sm:px-6 bg-neutral-50 dark:bg-neutral-900/30">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Academic" 
@@ -561,7 +770,7 @@ const Skills = () => {
   };
   
   return (
-    <section id="skills" className="py-32 px-6">
+    <section id="skills" className="py-16 md:py-32 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Expertise" 
@@ -605,6 +814,7 @@ const Skills = () => {
                       className="text-xl font-bold flex items-center gap-2 cursor-help group"
                       onMouseEnter={() => setHoveredCategory(cat)}
                       onMouseLeave={() => setHoveredCategory(null)}
+                      onClick={() => setHoveredCategory(hoveredCategory === cat ? null : cat)}
                     >
                       <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform" />
                       {cat}
@@ -625,33 +835,77 @@ const Skills = () => {
                     </AnimatePresence>
                   </div>
 
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-3 animate-fade-in">
                     {SKILLS.filter(s => s.category === cat).map((skill, i) => {
                       const Icon = getIcon(skill.name);
+                      
+                      // Define interactive premium dynamic color maps per category type
+                      const catColors: Record<string, { bg: string; border: string; text: string; shadow: string; hoverText: string }> = {
+                        'Frontend': {
+                          bg: "rgba(16, 185, 129, 0.08)", // emerald
+                          border: "rgba(16, 185, 129, 0.35)",
+                          text: "text-emerald-500 dark:text-emerald-400",
+                          shadow: "0 10px 20px -8px rgba(16, 185, 129, 0.3)",
+                          hoverText: "group-hover:text-emerald-400"
+                        },
+                        'Backend': {
+                          bg: "rgba(99, 102, 241, 0.08)", // indigo
+                          border: "rgba(99, 102, 241, 0.35)",
+                          text: "text-indigo-500 dark:text-indigo-400",
+                          shadow: "0 10px 20px -8px rgba(99, 102, 241, 0.3)",
+                          hoverText: "group-hover:text-indigo-400"
+                        },
+                        'Tools': {
+                          bg: "rgba(14, 165, 233, 0.08)", // sky
+                          border: "rgba(14, 165, 233, 0.35)",
+                          text: "text-sky-500 dark:text-sky-400",
+                          shadow: "0 10px 20px -8px rgba(14, 165, 233, 0.3)",
+                          hoverText: "group-hover:text-sky-400"
+                        },
+                        'Soft Skills': {
+                          bg: "rgba(244, 63, 94, 0.08)", // rose
+                          border: "rgba(244, 63, 94, 0.35)",
+                          text: "text-rose-500 dark:text-rose-400",
+                          shadow: "0 10px 20px -8px rgba(244, 63, 94, 0.3)",
+                          hoverText: "group-hover:text-rose-400"
+                        },
+                        'Other': {
+                          bg: "rgba(245, 158, 11, 0.08)", // amber
+                          border: "rgba(245, 158, 11, 0.35)",
+                          text: "text-amber-500 dark:text-amber-400",
+                          shadow: "0 10px 20px -8px rgba(245, 158, 11, 0.3)",
+                          hoverText: "group-hover:text-amber-400"
+                        }
+                      };
+
+                      const colors = catColors[cat] || catColors['Other'];
+
                       return (
                         <motion.div
                           key={skill.name}
                           initial={{ opacity: 0, scale: 0.8, y: 10 }}
                           whileInView={{ opacity: 1, scale: 1, y: 0 }}
                           whileHover={{ 
-                            scale: 1.05, 
-                            backgroundColor: "rgba(16, 185, 129, 0.1)",
-                            borderColor: "rgba(16, 185, 129, 0.3)",
-                            y: -5
+                            scale: 1.08, 
+                            rotate: i % 2 === 0 ? 3 : -3,
+                            y: -5,
+                            backgroundColor: colors.bg,
+                            borderColor: colors.border,
+                            boxShadow: colors.shadow
                           }}
                           viewport={{ once: true }}
                           transition={{ 
                             type: "spring",
-                            stiffness: 300,
-                            damping: 20,
-                            delay: (catIndex * 0.1) + (i * 0.03) 
+                            stiffness: 260,
+                            damping: 18,
+                            delay: (catIndex * 0.08) + (i * 0.02) 
                           }}
-                          className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-white transition-all cursor-default"
+                          className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-neutral-200 transition-all cursor-default shadow-sm hover:z-10"
                         >
                           <motion.div
-                            whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
-                            transition={{ duration: 0.5 }}
-                            className="text-emerald-500 group-hover:text-emerald-400 pb-0.5"
+                            whileHover={{ rotate: [0, -15, 15, -10, 0], scale: 1.25 }}
+                            transition={{ duration: 0.4 }}
+                            className={`${colors.text} ${colors.hoverText} pb-0.5 transition-colors`}
                           >
                             <Icon size={14} />
                           </motion.div>
@@ -697,7 +951,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 relative overflow-hidden">
+    <section id="contact" className="py-16 md:py-32 px-4 sm:px-6 relative overflow-hidden">
       {/* Animated background particles effect */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
         {[...Array(20)].map((_, i) => (
@@ -856,8 +1110,14 @@ const Contact = () => {
             </div>
           </div>
           
-          <footer className="text-neutral-500 text-[10px] tracking-widest uppercase pb-10 font-bold">
-            © {new Date().getFullYear()} Dhaval Panchal. All rights reserved.
+          <footer className="text-neutral-500 text-[10px] tracking-widest uppercase pb-10 font-bold flex flex-col items-center gap-2 text-center">
+            <div className="flex items-center justify-center gap-1.5 flex-wrap">
+              Designed &amp; Built with passion by <span className="text-neutral-800 dark:text-neutral-100 font-extrabold">DHAVAL PANCHAL</span>
+              <span className="inline-block animate-[pulse_1s_infinite] text-purple-500 text-[14px] leading-none">💜</span>
+            </div>
+            <div className="text-neutral-400 dark:text-neutral-600 font-medium">
+              © {new Date().getFullYear()} All rights reserved.
+            </div>
           </footer>
         </div>
       </div>
@@ -890,7 +1150,7 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-24 px-6 relative">
+    <section className="py-16 md:py-24 px-4 sm:px-6 relative">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-5 pointer-events-none" />
       
       <div className="max-w-7xl mx-auto relative z-10 text-center">
