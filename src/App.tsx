@@ -36,7 +36,8 @@ import {
   Trello,
   Server,
   Sparkles,
-  Play
+  Play,
+  Info
 } from 'lucide-react';
 import { PROJECTS, EDUCATION, SKILLS, Project } from './constants';
 import { cn } from './lib/utils';
@@ -266,7 +267,7 @@ const Hero = () => {
             }}
             className="mb-8 w-full"
           >
-            <div className="flex flex-wrap gap-2.5 sm:gap-0.5 p-1 sm:p-0.5 rounded-2xl sm:rounded-full bg-transparent sm:bg-neutral-100/50 sm:dark:bg-neutral-900/30 backdrop-blur-md sm:border sm:border-neutral-200/40 sm:dark:border-white/5 items-center justify-start sm:shadow-xs w-full sm:w-auto inline-flex max-w-full">
+            <div className="flex flex-wrap gap-y-3.5 gap-x-3 sm:gap-0.5 p-1 sm:p-0.5 rounded-2xl sm:rounded-full bg-transparent sm:bg-neutral-100/50 sm:dark:bg-neutral-900/30 backdrop-blur-md sm:border sm:border-neutral-200/40 sm:dark:border-white/5 items-center justify-start sm:shadow-xs w-full sm:w-auto inline-flex max-w-full">
               
               {/* FullStack Developer with hover/transition */}
               <motion.div 
@@ -280,7 +281,7 @@ const Hero = () => {
                   backgroundColor: "rgba(16, 185, 129, 0.08)",
                   borderColor: "rgba(16, 185, 129, 0.25)"
                 }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-emerald-500/15 sm:border-transparent bg-emerald-500/5 dark:bg-emerald-500/[0.03] sm:bg-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-emerald-500/20 dark:border-emerald-500/30 bg-emerald-500/8 dark:bg-emerald-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
               >
                 <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
                   <Code2 className="size-[8px] sm:size-[8.5px] md:size-[10px]" />
@@ -306,7 +307,7 @@ const Hero = () => {
                   backgroundColor: "rgba(14, 165, 233, 0.08)",
                   borderColor: "rgba(14, 165, 233, 0.25)"
                 }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-sky-500/15 sm:border-transparent bg-sky-500/5 dark:bg-sky-500/[0.03] sm:bg-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-sky-500/20 dark:border-sky-500/30 bg-sky-500/8 dark:bg-sky-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
               >
                 <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
                   <Atom className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[spin_6s_linear_infinite]" />
@@ -332,7 +333,7 @@ const Hero = () => {
                   backgroundColor: "rgba(168, 85, 247, 0.08)",
                   borderColor: "rgba(168, 85, 247, 0.25)"
                 }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-purple-500/15 sm:border-transparent bg-purple-500/5 dark:bg-purple-500/[0.03] sm:bg-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-purple-500/20 dark:border-purple-500/30 bg-purple-500/8 dark:bg-purple-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
               >
                 <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
                   <Sparkles className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-pulse" />
@@ -358,7 +359,7 @@ const Hero = () => {
                   backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
                   borderColor: "rgba(236, 72, 153, 0.25)"
                 }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/15 sm:border-transparent bg-pink-500/5 dark:bg-pink-500/[0.03] sm:bg-transparent transition-colors cursor-default"
+                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/20 dark:border-pink-500/30 bg-pink-500/8 dark:bg-pink-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
               >
                 <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
                   <Rocket className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[bounce_1.5s_infinite]" />
@@ -482,7 +483,6 @@ const ProjectSkeleton = () => (
 const Projects = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeCategory, setActiveCategory] = useState<'All' | 'Web' | 'Mobile' | 'AI'>('All');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -491,29 +491,8 @@ const Projects = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const getProjectCategories = (project: Project): string[] => {
-    const cats = ['All', 'Web'];
-    if (['3', '5'].includes(project.id)) {
-      cats.push('Mobile');
-    }
-    if (['6'].includes(project.id)) {
-      cats.push('AI');
-    }
-    return cats;
-  };
-
   const featuredProjects = PROJECTS.filter(project => project.id !== '4');
   const archivedProjects = PROJECTS.filter(project => project.id === '4');
-
-  const filteredFeatured = featuredProjects.filter(project => {
-    if (activeCategory === 'All') return true;
-    return getProjectCategories(project).includes(activeCategory);
-  });
-
-  const filteredArchived = archivedProjects.filter(project => {
-    if (activeCategory === 'All') return true;
-    return getProjectCategories(project).includes(activeCategory);
-  });
 
   return (
     <section id="projects" className="py-16 md:py-32 px-4 sm:px-6">
@@ -523,153 +502,127 @@ const Projects = () => {
           subtitle="Selected Projects" 
           icon={Briefcase} 
         />
-        
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center justify-start gap-1 p-0.5 rounded-full bg-neutral-100/50 dark:bg-neutral-900/30 backdrop-blur-md border border-neutral-200/40 dark:border-white/5 w-fit mb-10 shadow-xs">
-          {(['All', 'Web', 'Mobile', 'AI'] as const).map((category) => {
-            const isActive = activeCategory === category;
-            return (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={cn(
-                  "relative px-4 py-1.5 text-xs font-semibold rounded-full transition-colors duration-300 cursor-pointer",
-                  isActive
-                    ? "text-neutral-900 dark:text-white font-bold"
-                    : "text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white"
-                )}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="active-category-pill"
-                    className="absolute inset-0 bg-white dark:bg-neutral-800 shadow-xs border border-neutral-200/60 dark:border-white/10 rounded-full"
-                    style={{ zIndex: 0 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 26 }}
-                  />
-                )}
-                <span className="relative z-10">{category}</span>
-              </button>
-            );
-          })}
-        </div>
 
-        <AnimatePresence mode="wait">
-          {isLoading ? (
+        <div className="space-y-16 w-full">
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div 
+                key="projects-skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              >
+                {[1, 2, 3].map((n) => (
+                  <ProjectSkeleton key={n} />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="projects-content"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.15 }}
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              >
+                {featuredProjects.map((project, i) => (
+                  <ProjectCard 
+                    key={project.id}
+                    project={project}
+                    index={i}
+                    onClick={() => setSelectedProject(project)}
+                  />
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Older & Archived Projects Area */}
+          {!isLoading && archivedProjects.length > 0 && (
             <motion.div 
-              key="projects-skeleton"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {[1, 2, 3].map((n) => (
-                <ProjectSkeleton key={n} />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div 
-              key={`projects-content-${activeCategory}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.3 }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="pt-12 border-t border-neutral-100 dark:border-white/[0.04]"
             >
-              {filteredFeatured.map((project, i) => (
-                <ProjectCard 
-                  key={project.id}
-                  project={project}
-                  index={i}
-                  onClick={() => setSelectedProject(project)}
-                />
-              ))}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div>
+                  <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">Historical & Older Work</h3>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">A collection of early software experiments and archived builds.</p>
+                </div>
+              </div>
+              
+              <div className="grid gap-4">
+                {archivedProjects.map((project) => (
+                  <HoverPreviewTooltip key={project.id} project={project} className="w-full block">
+                    <div 
+                      onClick={() => setSelectedProject(project)}
+                      className="group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30 transition-all cursor-pointer shadow-sm"
+                      id={`archived-project-row-${project.id}`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
+                          <img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                              {project.title}
+                            </h4>
+                            <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
+                              {project.date}
+                            </span>
+                          </div>
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
+                            {project.description}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.tags.map(tag => (
+                            <span key={tag} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <a 
+                            href={project.link} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                            title="Open archived live demo"
+                          >
+                            <ExternalLink size={15} />
+                          </a>
+                          <a 
+                            href={project.githubLink || "https://github.com/Wrap15"} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                            title="Open repository code"
+                          >
+                            <Github size={15} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </HoverPreviewTooltip>
+                ))}
+              </div>
             </motion.div>
           )}
-        </AnimatePresence>
 
-        {/* Older & Archived Projects Area */}
-        {!isLoading && filteredArchived.length > 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-16 pt-12 border-t border-neutral-100 dark:border-white/[0.04]"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-              <div>
-                <h3 className="text-lg font-bold text-neutral-800 dark:text-neutral-200">Historical & Older Work</h3>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">A collection of early software experiments and archived builds.</p>
-              </div>
-            </div>
-            
-            <div className="grid gap-4">
-              {filteredArchived.map((project) => (
-                <HoverPreviewTooltip key={project.id} project={project} className="w-full block">
-                  <div 
-                    onClick={() => setSelectedProject(project)}
-                    className="group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30 transition-all cursor-pointer shadow-sm"
-                    id={`archived-project-row-${project.id}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
-                        <img 
-                          src={project.image} 
-                          alt={project.title}
-                          className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                            {project.title}
-                          </h4>
-                          <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
-                            {project.date}
-                          </span>
-                        </div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
-                          {project.description}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.tags.map(tag => (
-                          <span key={tag} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                        <a 
-                          href={project.link} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
-                          title="Open archived live demo"
-                        >
-                          <ExternalLink size={15} />
-                        </a>
-                        <a 
-                          href={project.githubLink || "https://github.com/Wrap15"} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
-                          title="Open repository code"
-                        >
-                          <Github size={15} />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </HoverPreviewTooltip>
-              ))}
-            </div>
-          </motion.div>
-        )}
+        </div>
 
         {/* Sliding Technical Case Detail Panel */}
         <AnimatePresence>
@@ -685,7 +638,43 @@ const Projects = () => {
   );
 };
 
+const EducationItemSkeleton = () => (
+  <div className="relative pl-8 border-l border-neutral-200 dark:border-white/10">
+    <div className="absolute -left-[5px] top-0 w-[9px] h-[9px] rounded-full bg-neutral-200 dark:bg-neutral-800" />
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+      <div className="space-y-2 w-full md:w-2/3">
+        <div className="relative h-7 w-1/2 bg-neutral-150 dark:bg-neutral-900/40 rounded overflow-hidden">
+          <Shimmer />
+        </div>
+        <div className="relative h-5 w-1/3 bg-neutral-150 dark:bg-neutral-900/40 rounded overflow-hidden">
+          <Shimmer />
+        </div>
+      </div>
+      <div className="relative h-7 w-24 rounded-full bg-neutral-150 dark:bg-neutral-900/40 overflow-hidden border border-neutral-200/20 dark:border-white/5 self-start md:self-center">
+        <Shimmer />
+      </div>
+    </div>
+    <div className="space-y-2">
+      <div className="relative h-4 w-full bg-neutral-150 dark:bg-neutral-900/40 rounded overflow-hidden">
+        <Shimmer />
+      </div>
+      <div className="relative h-4 w-5/6 bg-neutral-150 dark:bg-neutral-900/40 rounded overflow-hidden">
+        <Shimmer />
+      </div>
+    </div>
+  </div>
+);
+
 const Education = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section id="education" className="py-16 md:py-32 px-4 sm:px-6 bg-neutral-50 dark:bg-neutral-900/30">
       <div className="max-w-7xl mx-auto">
@@ -696,30 +685,56 @@ const Education = () => {
         />
         
         <div className="space-y-12">
-          {EDUCATION.map((edu, i) => (
-            <motion.div
-              key={edu.id}
-              initial={{ opacity: 0, x: -30, filter: "blur(5px)" }}
-              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
-              className="relative pl-8 border-l border-neutral-200 dark:border-white/10"
-            >
-              <div className="absolute -left-[5px] top-0 w-[9px] h-[9px] rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                <div>
-                  <h3 className="text-2xl font-bold">{edu.institution}</h3>
-                  <p className="text-emerald-500 font-medium">{edu.degree}</p>
-                </div>
-                <div className="text-sm font-mono text-neutral-500 bg-neutral-100 dark:bg-white/5 px-3 py-1 rounded-full border border-neutral-200 dark:border-white/10 self-start md:self-center">
-                  {edu.period}
-                </div>
-              </div>
-              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                {edu.description}
-              </p>
-            </motion.div>
-          ))}
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div
+                key="education-skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-12"
+              >
+                {[1, 2].map((n) => (
+                  <EducationItemSkeleton key={n} />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="education-content"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-12"
+              >
+                {EDUCATION.map((edu, i) => (
+                  <motion.div
+                    key={edu.id}
+                    initial={{ opacity: 0, x: -30, filter: "blur(5px)" }}
+                    whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                    className="relative pl-8 border-l border-neutral-200 dark:border-white/10"
+                  >
+                    <div className="absolute -left-[5px] top-0 w-[9px] h-[9px] rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                      <div>
+                        <h3 className="text-2xl font-bold">{edu.institution}</h3>
+                        <p className="text-emerald-500 font-medium">{edu.degree}</p>
+                      </div>
+                      <div className="text-sm font-mono text-neutral-500 bg-neutral-100 dark:bg-white/5 px-3 py-1 rounded-full border border-neutral-200 dark:border-white/10 self-start md:self-center">
+                        {edu.period}
+                      </div>
+                    </div>
+                    <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                      {edu.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>
@@ -748,6 +763,47 @@ const Skills = () => {
   const categories = ['Frontend', 'Backend', 'Tools', 'Soft Skills', 'Other'];
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasHover, setHasHover] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: hover)');
+    setHasHover(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setHasHover(e.matches);
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+    } else {
+      mediaQuery.addListener(handleChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.skills-category-header')) {
+        setHoveredCategory(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+    };
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -846,15 +902,16 @@ const Skills = () => {
                   variants={cardVariants}
                   className="relative"
                 >
-                  <div className="relative inline-block mb-8">
+                  <div className="relative inline-block mb-8 skills-category-header">
                     <h3 
-                      className="text-xl font-bold flex items-center gap-2 cursor-help group"
-                      onMouseEnter={() => setHoveredCategory(cat)}
-                      onMouseLeave={() => setHoveredCategory(null)}
+                      className="text-xl font-bold flex items-center gap-2 cursor-help group select-none"
+                      onMouseEnter={() => hasHover && setHoveredCategory(cat)}
+                      onMouseLeave={() => hasHover && setHoveredCategory(null)}
                       onClick={() => setHoveredCategory(hoveredCategory === cat ? null : cat)}
                     >
                       <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform" />
                       {cat}
+                      <Info size={14} className="text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 transition-colors opacity-60 group-hover:opacity-100 shrink-0 ml-0.5" />
                     </h3>
                     
                     <AnimatePresence>
@@ -922,14 +979,15 @@ const Skills = () => {
                           key={skill.name}
                           initial={{ opacity: 0, scale: 0.8, y: 10 }}
                           whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                          whileHover={{ 
+                          whileHover={hasHover ? { 
                             scale: 1.08, 
                             rotate: i % 2 === 0 ? 3 : -3,
                             y: -5,
                             backgroundColor: colors.bg,
                             borderColor: colors.border,
                             boxShadow: colors.shadow
-                          }}
+                          } : {}}
+                          whileTap={{ scale: 0.95 }}
                           viewport={{ once: true }}
                           transition={{ 
                             type: "spring",
@@ -937,10 +995,10 @@ const Skills = () => {
                             damping: 18,
                             delay: (catIndex * 0.08) + (i * 0.02) 
                           }}
-                          className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-neutral-200 transition-all cursor-default shadow-sm hover:z-10"
+                          className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer select-none shadow-sm hover:z-10"
                         >
                           <motion.div
-                            whileHover={{ rotate: [0, -15, 15, -10, 0], scale: 1.25 }}
+                            whileHover={hasHover ? { rotate: [0, -15, 15, -10, 0], scale: 1.25 } : {}}
                             transition={{ duration: 0.4 }}
                             className={`${colors.text} ${colors.hoverText} pb-0.5 transition-colors`}
                           >
@@ -960,6 +1018,96 @@ const Skills = () => {
     </section>
   );
 };
+
+const TECH_ITEMS = [
+  {
+    name: "React",
+    icon: (
+      <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-6 h-6 stroke-[#61DAFB]" fill="none" strokeWidth="1.2">
+        <circle cx="0" cy="0" r="2.05" fill="#61DAFB" />
+        <ellipse rx="11" ry="4.2" />
+        <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+        <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+      </svg>
+    )
+  },
+  {
+    name: "Tailwind CSS",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#06B6D4">
+        <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.91.23 1.57.9 2.29 1.62C13.7 10.6 15.3 12 18.5 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.91-.23-1.57-.9-2.29-1.62-1.21-1.21-2.8-2.58-6-2.58zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.91.23 1.57.9 2.29 1.62 1.21 1.21 2.8 2.61 6 2.61 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.91-.23-1.57-.9-2.29-1.62-1.21-1.22-2.8-2.61-6-2.61z" />
+      </svg>
+    )
+  },
+  {
+    name: "Firebase",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none">
+        <path d="M3.89 15.55L11.52 2.22c.24-.42.85-.42 1.09 0l2.36 4.13" stroke="#FFCA28" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M20.07 15.55L12.45 2.22c-.24-.42-.85-.42-1.09 0L8.99 6.35" stroke="#F57C00" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M3 17.5h18" stroke="#FF7043" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M12 3v13.5" stroke="#FFA000" strokeWidth="2.2" strokeLinecap="round" />
+      </svg>
+    )
+  },
+  {
+    name: "TypeScript",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6">
+        <rect width="24" height="24" rx="4.5" fill="#3178C6" />
+        <text x="12" y="16.5" fill="white" fontSize="11" fontWeight="bold" fontFamily="system-ui, -apple-system, sans-serif" textAnchor="middle">TS</text>
+      </svg>
+    )
+  },
+  {
+    name: "Node.js",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="#339933" strokeWidth="2">
+        <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" strokeLinejoin="round" />
+        <path d="M12 7l4 2.5v5L12 17l-4-2.5v-5L12 7z" fill="#339933" fillOpacity="0.2" />
+      </svg>
+    )
+  },
+  {
+    name: "Next.js",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
+        <path d="M8 15V9h2.5l3.5 4.5V9h1.5v6h-2.5L10 10.5V15H8z" />
+      </svg>
+    )
+  },
+  {
+    name: "Vite",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none">
+        <path d="M12 2L2 21h20L12 2z" stroke="#646CFF" strokeWidth="2" fill="#646CFF" fillOpacity="0.1" />
+        <path d="M12 2l4 7-6 1 4 11-10-8 6-1-4-10z" fill="#FFD600" />
+      </svg>
+    )
+  },
+  {
+    name: "Framer Motion",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+        <path d="M0 0h12l12 12H12L0 0zm0 12h12l12 12H12L0 12z" fill="#F43F5E" />
+      </svg>
+    )
+  },
+  {
+    name: "Git",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="#F05032" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22l10-10L12 2 2 12z" />
+        <circle cx="12" cy="12" r="1.5" fill="#F05032" />
+        <circle cx="12" cy="8" r="1.5" fill="#F05032" />
+        <circle cx="8" cy="12" r="1.5" fill="#F05032" />
+        <path d="M12 9.5v5" />
+        <path d="M9.5 12h5" />
+      </svg>
+    )
+  }
+];
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -1212,6 +1360,49 @@ const Contact = () => {
             </div>
           </div>
 
+          {/* Tech Stack Marquee Carousel */}
+          <div className="mt-12 pt-8 pb-4 border-t border-neutral-200/40 dark:border-white/[0.04] w-full overflow-hidden">
+            <h4 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500 mb-6 text-center">
+              CORE TECHNOLOGIES &amp; TOOLKIT
+            </h4>
+            
+            <div className="relative w-full overflow-hidden">
+              {/* Fade out masks on the sides */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white dark:from-neutral-950 to-transparent z-10" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white dark:from-neutral-950 to-transparent z-10" />
+              
+              <style>{`
+                @keyframes marquee {
+                  0% { transform: translateX(0%); }
+                  100% { transform: translateX(-50%); }
+                }
+                .animate-marquee {
+                  animation: marquee 30s linear infinite;
+                }
+                .animate-marquee:hover {
+                  animation-play-state: paused;
+                }
+              `}</style>
+              
+              <div className="flex w-max animate-marquee gap-6 py-2 select-none">
+                {/* First cycle and second cycle for seamless seamless loops */}
+                {[...TECH_ITEMS, ...TECH_ITEMS].map((tech, idx) => (
+                  <div 
+                    key={`tech-item-${idx}`}
+                    className="group/tech flex items-center gap-2.5 px-4.5 py-2.5 rounded-2xl border border-neutral-100 dark:border-white/[0.03] bg-neutral-50/40 dark:bg-neutral-900/5 hover:bg-white dark:hover:bg-neutral-900/30 hover:border-neutral-200 dark:hover:border-white/10 hover:shadow-xs transition-all duration-300 cursor-default"
+                  >
+                    <div className="transition-all duration-300 filter grayscale opacity-45 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 group-hover/tech:scale-105 flex items-center justify-center">
+                      {tech.icon}
+                    </div>
+                    <span className="text-xs font-bold text-neutral-400 group-hover/tech:text-neutral-800 dark:group-hover/tech:text-neutral-200 transition-colors">
+                      {tech.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Sub Footer row */}
           <div className="pt-8 border-t border-neutral-200/50 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 pb-10">
             <div className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 flex-wrap justify-center text-center">
@@ -1305,8 +1496,9 @@ const ScrollToTop = () => {
       let isOverlappingProjects = false;
       if (projectsEl) {
         const rect = projectsEl.getBoundingClientRect();
-        // Hide scroll to top button if any part of the projects section is actively in view
-        const isProjectsInView = rect.top < window.innerHeight && rect.bottom > 0;
+        // Include a buffer area (e.g., 80px) to prevent button from clipping or overlapping card edges
+        const BUFFER_PX = 80;
+        const isProjectsInView = rect.top < (window.innerHeight - BUFFER_PX) && rect.bottom > BUFFER_PX;
         if (isProjectsInView) {
           isOverlappingProjects = true;
         }

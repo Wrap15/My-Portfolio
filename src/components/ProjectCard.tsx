@@ -80,7 +80,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
     mouseX.set(event.clientX - rect.left);
     mouseY.set(event.clientY - rect.top);
 
-    smoothScale.set(1.02);
+    smoothScale.set(1.035);
+  };
+
+  const handleMouseEnter = () => {
+    playHoverSound();
+    smoothScale.set(1.035);
   };
 
   const handleMouseLeave = () => {
@@ -104,10 +109,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
         perspective: '1000px',
       }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={playHoverSound}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      className="group relative cursor-pointer bg-white dark:bg-neutral-900/10 p-4 rounded-3xl border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 transition-all shadow-sm hover:shadow-md hover:bg-neutral-50/50 dark:hover:bg-neutral-900/30 select-none will-change-transform overflow-hidden"
+      className="group relative cursor-pointer bg-white dark:bg-neutral-900/10 p-4 rounded-3xl border border-neutral-100 dark:border-white/[0.02] hover:border-emerald-500/20 dark:hover:border-emerald-500/15 transition-all duration-300 shadow-sm hover:shadow-[0_20px_48px_-12px_rgba(16,185,129,0.08)] dark:hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.5)] dark:hover:bg-neutral-900/40 select-none will-change-transform overflow-hidden"
       id={`project-card-${project.id}`}
     >
       {/* Spotlight glow layer */}
