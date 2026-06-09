@@ -45,6 +45,7 @@ import { submitContactForm } from './firebase';
 import { ProjectDetailPanel } from './components/ProjectDetailPanel';
 import { ProjectCard } from './components/ProjectCard';
 import { HoverPreviewTooltip } from './components/HoverPreviewTooltip';
+import { playNavClickSound, playResumeChime } from './lib/sounds';
 
 const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -99,6 +100,7 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
+              onClick={playNavClickSound}
               className="text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors animate-fade-in"
             >
               {link.name}
@@ -106,7 +108,10 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
           ))}
           
           <button
-            onClick={toggleTheme}
+            onClick={() => {
+              playNavClickSound();
+              toggleTheme();
+            }}
             className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all shadow-sm border border-neutral-200 dark:border-white/10"
             aria-label="Toggle theme"
           >
@@ -120,6 +125,7 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
             rel="noopener noreferrer"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
+            onClick={playResumeChime}
             className="px-5 py-2 rounded-full bg-emerald-500 text-neutral-950 text-sm font-bold hover:bg-emerald-400 transition-colors cursor-pointer shadow-lg shadow-emerald-500/20"
           >
             Resume
@@ -162,7 +168,10 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    playNavClickSound();
+                    setIsMobileMenuOpen(false);
+                  }}
                   className="text-base font-bold text-neutral-700 dark:text-neutral-300 hover:text-emerald-500 dark:hover:text-emerald-400 py-1.5 transition-colors border-b border-neutral-100 dark:border-white/5 flex items-center justify-between"
                 >
                   <span>{link.name}</span>
@@ -177,6 +186,7 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
                   download="Dhaval_Panchal_Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={playResumeChime}
                   className="w-full text-center py-3 rounded-xl bg-emerald-500 text-neutral-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-500/10 cursor-pointer active:scale-98 transition-transform"
                 >
                   <GraduationCap size={16} />
@@ -218,6 +228,26 @@ const Hero = () => {
     setCoords({ x: 0, y: 0 });
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
+
   return (
     <section id="about" className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
       {/* Background Decorative Grid and Glow Elements */}
@@ -225,185 +255,277 @@ const Hero = () => {
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/[0.06] dark:bg-blue-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
       
-      <div className="max-w-5xl mx-auto px-6 md:px-12 w-full relative z-10">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-start text-left max-w-3xl"
-        >
-          {/* Subtle upper micro-tag */}
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-1 sm:gap-2 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[7px] min-[360px]:text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider min-[360px]:tracking-widest mb-4 sm:mb-6 select-none"
-          >
-            <span className="relative flex h-1 w-1 sm:h-2 sm:w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1 w-1 sm:h-2 sm:w-2 bg-emerald-500"></span>
-            </span>
-            Open to Full-Time Roles &amp; Freelance Projects
-          </motion.div>
+      <div className="max-w-6xl mx-auto px-6 md:px-12 w-full relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          <h1 className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight">
-            Dhaval 
-            <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
-          </h1>
-
-          {/* Premium Compact Slab for modern multi-role representation - ultra compact on mobile */}
+          {/* Left: Text & Info Column */}
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.1,
-                  delayChildren: 0.1
-                }
-              }
-            }}
-            className="mb-8 w-full"
+            variants={containerVariants}
+            className="flex flex-col items-start text-left max-w-3xl lg:col-span-7 xl:col-span-8"
           >
-            <div className="flex flex-wrap gap-y-3.5 gap-x-3 sm:gap-0.5 p-1 sm:p-0.5 rounded-2xl sm:rounded-full bg-transparent sm:bg-neutral-100/50 sm:dark:bg-neutral-900/30 backdrop-blur-md sm:border sm:border-neutral-200/40 sm:dark:border-white/5 items-center justify-start sm:shadow-xs w-full sm:w-auto inline-flex max-w-full">
-              
-              {/* FullStack Developer with hover/transition */}
-              <motion.div 
-                variants={{
-                  hidden: { opacity: 0, y: 15, scale: 0.95 },
-                  visible: { opacity: 1, y: 0, scale: 1 }
-                }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                whileHover={{ 
-                  scale: 1.02, 
-                  backgroundColor: "rgba(16, 185, 129, 0.08)",
-                  borderColor: "rgba(16, 185, 129, 0.25)"
-                }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-emerald-500/20 dark:border-emerald-500/30 bg-emerald-500/8 dark:bg-emerald-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-              >
-                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
-                  <Code2 className="size-[8px] sm:size-[8.5px] md:size-[10px]" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
-                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
-                </div>
-              </motion.div>
-
-              {/* Small elegant line divider */}
-              <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
-
-              {/* React Specialist with hover/transition */}
-              <motion.div 
-                variants={{
-                  hidden: { opacity: 0, y: 15, scale: 0.95 },
-                  visible: { opacity: 1, y: 0, scale: 1 }
-                }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                whileHover={{ 
-                  scale: 1.02, 
-                  backgroundColor: "rgba(14, 165, 233, 0.08)",
-                  borderColor: "rgba(14, 165, 233, 0.25)"
-                }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-sky-500/20 dark:border-sky-500/30 bg-sky-500/8 dark:bg-sky-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-              >
-                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
-                  <Atom className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[spin_6s_linear_infinite]" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
-                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
-                </div>
-              </motion.div>
-
-              {/* Small elegant line divider */}
-              <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
-
-              {/* GenAI Integrator with hover/transition */}
-              <motion.div 
-                variants={{
-                  hidden: { opacity: 0, y: 15, scale: 0.95 },
-                  visible: { opacity: 1, y: 0, scale: 1 }
-                }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                whileHover={{ 
-                  scale: 1.02, 
-                  backgroundColor: "rgba(168, 85, 247, 0.08)",
-                  borderColor: "rgba(168, 85, 247, 0.25)"
-                }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-purple-500/20 dark:border-purple-500/30 bg-purple-500/8 dark:bg-purple-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-              >
-                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
-                  <Sparkles className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-pulse" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
-                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
-                </div>
-              </motion.div>
-
-              {/* Small elegant line divider */}
-              <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
-
-              {/* Vibe Coder with hover/transition */}
-              <motion.div 
-                variants={{
-                  hidden: { opacity: 0, y: 15, scale: 0.95 },
-                  visible: { opacity: 1, y: 0, scale: 1 }
-                }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                whileHover={{ 
-                  scale: 1.02, 
-                  backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
-                  borderColor: "rgba(236, 72, 153, 0.25)"
-                }}
-                className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/20 dark:border-pink-500/30 bg-pink-500/8 dark:bg-pink-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-              >
-                <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
-                  <Rocket className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[bounce_1.5s_infinite]" />
-                </div>
-                <div className="text-left">
-                  <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
-                  <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-          
-          <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 leading-relaxed text-left">
-            <span className="text-neutral-950 dark:text-white font-semibold block mb-1">
-              Frontend-Focused Full Stack Developer specializing in React
-            </span>
-            Building high-performance web apps with seamless UX and AI integrations
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-5 w-full">
-            <motion.a 
-              animate={{ x: coords.x, y: coords.y }}
-              transition={{ type: "spring", stiffness: 120, damping: 10, mass: 0.8 }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              whileTap={{ scale: 0.98 }}
-              href="#projects" 
-              className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center cursor-pointer"
+            {/* Status Badge */}
+            <motion.div 
+              variants={itemVariants}
+              className="inline-flex items-center gap-1 sm:gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-4 sm:mb-6 shrink-0"
             >
-              View Projects
-              <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            </motion.a>
+              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500"></span>
+              </span>
+              Open to Full-Time Roles &amp; Freelance Projects
+            </motion.div>
             
-            <div className="flex items-center justify-center gap-5 bg-neutral-100/50 dark:bg-neutral-900/25 px-5 py-3 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-sm">
-              <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="GitHub"><Github size={22} /></a>
-              <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
-              <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="LinkedIn"><Linkedin size={22} /></a>
-              <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
-              <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="WhatsApp"><MessageCircle size={22} /></a>
-              <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
-              <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="Email"><Mail size={22} /></a>
-            </div>
+            <motion.h1 
+              variants={itemVariants}
+              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight"
+            >
+              Dhaval 
+              <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
+            </motion.h1>
+
+            {/* Premium Compact Slab for modern multi-role representation - ultra compact on mobile */}
+            <motion.div
+              variants={itemVariants}
+              className="mb-8 w-full"
+            >
+              <div className="flex flex-wrap gap-y-3.5 gap-x-3 sm:gap-0.5 p-1 sm:p-0.5 rounded-2xl sm:rounded-full bg-transparent sm:bg-neutral-100/50 sm:dark:bg-neutral-900/30 backdrop-blur-md sm:border sm:border-neutral-200/40 sm:dark:border-white/5 items-center justify-start sm:shadow-xs w-full sm:w-auto inline-flex max-w-full">
+                
+                {/* FullStack Developer with hover/transition */}
+                <motion.div 
+                  whileHover={{ 
+                    scale: 1.02, 
+                    backgroundColor: "rgba(16, 185, 129, 0.08)",
+                    borderColor: "rgba(16, 185, 129, 0.25)"
+                  }}
+                  className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-emerald-500/20 dark:border-emerald-500/30 bg-emerald-500/8 dark:bg-emerald-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
+                >
+                  <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
+                    <Code2 className="size-[8px] sm:size-[8.5px] md:size-[10px]" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
+                    <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
+                  </div>
+                </motion.div>
+
+                {/* Small elegant line divider */}
+                <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
+
+                {/* React Specialist with hover/transition */}
+                <motion.div 
+                  whileHover={{ 
+                    scale: 1.02, 
+                    backgroundColor: "rgba(14, 165, 233, 0.08)",
+                    borderColor: "rgba(14, 165, 233, 0.25)"
+                  }}
+                  className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-sky-500/20 dark:border-sky-500/30 bg-sky-500/8 dark:bg-sky-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
+                >
+                  <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
+                    <Atom className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[spin_6s_linear_infinite]" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
+                    <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
+                  </div>
+                </motion.div>
+
+                {/* Small elegant line divider */}
+                <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
+
+                {/* GenAI Integrator with hover/transition */}
+                <motion.div 
+                  whileHover={{ 
+                    scale: 1.02, 
+                    backgroundColor: "rgba(168, 85, 247, 0.08)",
+                    borderColor: "rgba(168, 85, 247, 0.25)"
+                  }}
+                  className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2 sm:py-0.5 md:px-2.5 md:py-1 rounded-xl sm:rounded-full border border-purple-500/20 dark:border-purple-500/30 bg-purple-500/8 dark:bg-purple-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
+                >
+                  <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
+                    <Sparkles className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-pulse" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
+                    <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
+                  </div>
+                </motion.div>
+
+                {/* Small elegant line divider */}
+                <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
+
+                {/* Vibe Coder with hover/transition */}
+                <motion.div 
+                  whileHover={{ 
+                    scale: 1.02, 
+                    backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
+                    borderColor: "rgba(236, 72, 153, 0.25)"
+                  }}
+                  className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/20 dark:border-pink-500/30 bg-pink-500/8 dark:bg-pink-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
+                >
+                  <div className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
+                    <Rocket className="size-[8px] sm:size-[8.5px] md:size-[10px] animate-[bounce_1.5s_infinite]" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[4px] sm:text-[5.5px] md:text-[6.5px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
+                    <p className="text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+            
+            <motion.p 
+              variants={itemVariants}
+              className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 leading-relaxed text-left"
+            >
+              <span className="text-neutral-950 dark:text-white font-semibold block mb-1">
+                Frontend-Focused Full Stack Developer specializing in React
+              </span>
+              Building high-performance web apps with seamless UX and AI integrations
+            </motion.p>
+            
+            <motion.div 
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-5 w-full"
+            >
+              <motion.a 
+                animate={{ x: coords.x, y: coords.y }}
+                transition={{ type: "spring", stiffness: 120, damping: 10, mass: 0.8 }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                whileTap={{ scale: 0.98 }}
+                href="#projects" 
+                className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center cursor-pointer"
+              >
+                View Projects
+                <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </motion.a>
+              
+              <div className="flex items-center justify-center gap-5 bg-neutral-100/50 dark:bg-neutral-900/25 px-5 py-3 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-sm">
+                <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="GitHub"><Github size={22} /></a>
+                <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
+                <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="LinkedIn"><Linkedin size={22} /></a>
+                <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
+                <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="WhatsApp"><MessageCircle size={22} /></a>
+                <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
+                <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="Email"><Mail size={22} /></a>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right: Floating Decorative Composition / Profile Graphic Column */}
+          <div className="col-span-5 xl:col-span-4 hidden lg:block relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                y: [0, -15, 0],
+                rotate: [0, 1, -1, 0]
+              }}
+              transition={{
+                opacity: { duration: 1.2, delay: 0.3 },
+                scale: { duration: 1.2, delay: 0.3 },
+                y: {
+                  repeat: Infinity,
+                  duration: 6,
+                  ease: "easeInOut"
+                },
+                rotate: {
+                  repeat: Infinity,
+                  duration: 8,
+                  ease: "easeInOut"
+                }
+              }}
+              className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-radial from-emerald-500/15 via-emerald-500/5 to-transparent border border-emerald-500/20 shadow-xl shadow-emerald-500/5 backdrop-blur-md p-6 flex flex-col justify-between overflow-hidden group select-none cursor-default"
+            >
+              {/* Internal abstract floating visual nodes */}
+              <div className="absolute top-0 right-0 p-3 flex gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400/60 dark:bg-red-500/20" />
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/60 dark:bg-yellow-500/20" />
+                <span className="w-2.5 h-2.5 rounded-full bg-green-400/60 dark:bg-emerald-500/20" />
+              </div>
+
+              {/* Grid abstract background panel */}
+              <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-15" />
+
+              {/* Content items */}
+              <div className="flex flex-col gap-4 relative z-10 pt-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-serif text-emerald-500 font-bold text-lg shadow-sm">
+                    D
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-neutral-800 dark:text-neutral-100 text-sm">Dhaval Panchal</h3>
+                    <p className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">Gujarat, India</p>
+                  </div>
+                </div>
+
+                <div className="w-full h-[1px] bg-neutral-200/50 dark:bg-white/5" />
+
+                <div className="space-y-2.5 font-mono text-[10px]">
+                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
+                    <span>STATUS</span>
+                    <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      ACTIVE
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
+                    <span>ROLE</span>
+                    <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">MERN &amp; React</span>
+                  </div>
+                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
+                    <span>FOCUS</span>
+                    <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">Elegant Pixels</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Interactive glowing miniature mock terminal lines or code signature */}
+              <div className="bg-neutral-950/5 dark:bg-neutral-950/60 border border-neutral-300/40 dark:border-white/5 rounded-xl p-3 font-mono text-[9px] text-neutral-600 dark:text-neutral-300 relative z-10 leading-normal">
+                <p className="text-emerald-500 font-semibold">&gt; info.skills</p>
+                <p className="pl-3.5 text-neutral-500 select-all">["React", "FramerMotion", "TailwindCSS"]</p>
+                <p className="text-blue-500 font-semibold mt-1">&gt; loading_state</p>
+                <p className="pl-3.5 text-neutral-500">"fast-loading_optimized"</p>
+              </div>
+
+              {/* Extra outer decorative floaters */}
+              <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-xl pointer-events-none" />
+            </motion.div>
+
+            {/* Small floating particles around the card */}
+            <motion.div
+              animate={{
+                y: [0, -10, 0],
+                x: [0, 5, 0],
+                opacity: [0.3, 0.8, 0.3]
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 4,
+                ease: "easeInOut"
+              }}
+              className="absolute -top-4 left-1/4 w-3 h-3 rounded-full bg-emerald-400/40 dark:bg-emerald-500/20 blur-[1px] pointer-events-none"
+            />
+            <motion.div
+              animate={{
+                y: [0, 15, 0],
+                x: [0, -8, 0],
+                opacity: [0.2, 0.6, 0.2]
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 5,
+                ease: "easeInOut",
+                delay: 1
+              }}
+              className="absolute bottom-12 -left-6 w-2.5 h-2.5 rounded-full bg-blue-400/40 dark:bg-blue-500/20 blur-[1px] pointer-events-none"
+            />
           </div>
-        </motion.div>
+          
+        </div>
       </div>
     </section>
   );

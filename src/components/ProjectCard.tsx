@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } fr
 import { Project } from '../constants';
 import { ExternalLink, Github } from 'lucide-react';
 import { HoverPreviewTooltip } from './HoverPreviewTooltip';
+import { playHoverSound } from '../lib/sounds';
 
 interface ProjectCardProps {
   project: Project;
@@ -30,37 +31,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
   const smoothRotateX = useSpring(rotateX, springConfig);
   const smoothRotateY = useSpring(rotateY, springConfig);
   const smoothScale = useSpring(useMotionValue(1), springConfig);
-
-  const playHoverSound = () => {
-    try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContextClass) return;
-      const ctx = new AudioContextClass();
-      
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      
-      osc.type = 'sine';
-      const now = ctx.currentTime;
-      
-      // Gentle, high-pitched organic marimba pluck
-      osc.frequency.setValueAtTime(650, now);
-      osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
-      
-      // Extremely low gain to keep it ultra-subtle and pleasant
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.012, now + 0.005);
-      gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.12);
-      
-      osc.start(now);
-      osc.stop(now + 0.13);
-    } catch (e) {
-      // Handle blocked/uninitialized audio context gracefully
-    }
-  };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
