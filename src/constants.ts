@@ -32,7 +32,7 @@ export const PROJECTS: Project[] = [
     date: 'May 2026',
     description: 'A high-performance financial market intelligence simulator for tracking Indian equities and mutual funds. Combines live stock quotes, interactive TradingView-style charts, thematic portfolio baskets, mutual fund CAGR comparisons, and a custom SIP & Lumpsum return yield calculator with zero UI lag using skeleton loaders and CLS optimization.',
     tags: ['Next.js 14', 'React', 'Zustand', 'Tailwind CSS', 'Axios', 'TradingView Charts', 'Yahoo Finance API', 'AMFI API'],
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop',
+    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fonlyprofit-stock-analyzer.vercel.app%2F?w=800&h=600',
     link: 'https://onlyprofit-stock-analyzer.vercel.app/',
     githubLink: 'https://github.com/Wrap15/OnlyProfit-Stock_Analyzer',
     features: [

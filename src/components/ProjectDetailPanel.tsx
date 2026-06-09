@@ -170,12 +170,44 @@ const getArchitecturalHighlights = (project: Project) => {
   ];
 };
 
+const getProjectShareText = (project: Project): string => {
+  let summary = "";
+  switch (project.id) {
+    case '6': // OnlyProfit
+      summary = `📊 Real-time stock & mutual fund intelligence with live NSE interactive charts.\n💰 Features thematic investment portfolios and customized SIP/Lumpsum return calculators.`;
+      break;
+    case '1': // Shreeji Furniture
+      summary = `🪵 Elegant virtual furniture store showcase with interactive styled search catalogs.\n✨ High-resolution lazy loading galleries and fast, spring-loaded transition animations.`;
+      break;
+    case '2': // IMDB Clone
+      summary = `🎬 High-fidelity cinema search app displaying real-time OMDB library movie data.\n🍿 Features a personal Favorites shortlist and debounced API search inputs.`;
+      break;
+    case '3': // BuyBusy E-Commerce App
+      summary = `🛒 React shopping platform with persistent real-time Firebase CRUD operations.\n⚡ Comprehensive filter selectors, secure authentication, and instant checkout alerts.`;
+      break;
+    case '4': // Stock Market Analysis
+      summary = `📈 Visual stock analytics platform rendering fast vanilla HTML Canvas trendlines.\n🎯 Real-time historical quote comparisons across multiple dynamic timeframes.`;
+      break;
+    case '5': // Music Player App
+      summary = `🎵 Interactive browser media player with full seeking scrubbers and audio singletons.\n🎛️ Queue/playlist selectors, seamless light/dark visual theme toggles, and memory hygiene.`;
+      break;
+    default: {
+      const sentences = project.description.split('. ');
+      const line1 = sentences[0] ? sentences[0] : project.title;
+      const line2 = sentences[1] ? sentences[1] : 'Check out this awesome portfolio display!';
+      summary = `${line1}\n${line2}`;
+      break;
+    }
+  }
+  return `🚀 Check out "${project.title}" — built by Dhaval Panchal! 💜\n\n${summary}`;
+};
+
 export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({ project, onClose }) => {
   const [copied, setCopied] = useState(false);
 
-  const shareText = `Check out "${project.title}" — a stellar software build by Dhaval Panchal! 💜`;
+  const shareText = getProjectShareText(project);
   const shareUrl = project.link || project.githubLink || window.location.href;
-  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText}\nLink: ${shareUrl}`)}`;
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText}\n\n🔗 Link: ${shareUrl}`)}`;
   const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 
   // Disable body scroll when open
