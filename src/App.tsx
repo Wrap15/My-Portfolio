@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, Variants, useTransform, useMotionValue, useMotionTemplate } from 'motion/react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { 
   Github, 
   Linkedin, 
@@ -44,6 +45,7 @@ import { cn } from './lib/utils';
 import { submitContactForm } from './firebase';
 import { ProjectDetailPanel } from './components/ProjectDetailPanel';
 import { ProjectCard } from './components/ProjectCard';
+import { Particle3DField } from './components/Particle3DField';
 import { HoverPreviewTooltip } from './components/HoverPreviewTooltip';
 import { playNavClickSound, playResumeChime } from './lib/sounds';
 
@@ -112,10 +114,21 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
               playNavClickSound();
               toggleTheme();
             }}
-            className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all shadow-sm border border-neutral-200 dark:border-white/10"
+            className="relative p-2 w-9 h-9 flex items-center justify-center overflow-hidden rounded-full hover:bg-neutral-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all shadow-sm border border-neutral-200 dark:border-white/10"
             aria-label="Toggle theme"
           >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={theme}
+                initial={{ opacity: 0, scale: 0.6, rotate: -45, filter: "blur(4px)" }}
+                animate={{ opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, scale: 0.6, rotate: 45, filter: "blur(4px)" }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                className="flex items-center justify-center shrink-0"
+              >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </motion.div>
+            </AnimatePresence>
           </button>
 
           <motion.a
@@ -135,12 +148,27 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
         {/* Mobile Toggle */}
         <div className="flex items-center gap-2 md:hidden">
           <button
-            onClick={toggleTheme}
-            className="p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 active:scale-95 transition-all border border-neutral-200/40 dark:border-white/5"
+            onClick={() => {
+              playNavClickSound();
+              toggleTheme();
+            }}
+            className="relative p-2 w-9 h-9 flex items-center justify-center overflow-hidden rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 active:scale-95 transition-all border border-neutral-200/40 dark:border-white/5"
             aria-label="Toggle theme mobile"
           >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={theme}
+                initial={{ opacity: 0, scale: 0.6, rotate: -45, filter: "blur(4px)" }}
+                animate={{ opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, scale: 0.6, rotate: 45, filter: "blur(4px)" }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                className="flex items-center justify-center shrink-0"
+              >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </motion.div>
+            </AnimatePresence>
           </button>
+
           <button 
             className="p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 active:scale-95 transition-all border border-neutral-200/40 dark:border-white/5"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -212,6 +240,49 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
 
 const Hero = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const profileCardRef = useRef<HTMLDivElement>(null);
+  
+  // Interactive 3D mouse tracking for Right Profile Card
+  const profX = useMotionValue(0);
+  const profY = useMotionValue(0);
+  const profMouseX = useMotionValue(0);
+  const profMouseY = useMotionValue(0);
+
+  // Map mouse positions to 3D rotation angles
+  const profRotateX = useTransform(profY, [-0.5, 0.5], [15, -15]);
+  const profRotateY = useTransform(profX, [-0.5, 0.5], [-15, 15]);
+
+  const profSpringConfig = { damping: 25, stiffness: 180, mass: 0.5 };
+  const smoothProfRotateX = useSpring(profRotateX, profSpringConfig);
+  const smoothProfRotateY = useSpring(profRotateY, profSpringConfig);
+  const smoothProfScale = useSpring(useMotionValue(1), profSpringConfig);
+
+  const handleProfMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!profileCardRef.current) return;
+    const rect = profileCardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    const normX = (event.clientX - rect.left) / width - 0.5;
+    const normY = (event.clientY - rect.top) / height - 0.5;
+
+    profX.set(normX);
+    profY.set(normY);
+
+    profMouseX.set(event.clientX - rect.left);
+    profMouseY.set(event.clientY - rect.top);
+    smoothProfScale.set(1.05);
+  };
+
+  const handleProfMouseEnter = () => {
+    smoothProfScale.set(1.05);
+  };
+
+  const handleProfMouseLeave = () => {
+    profX.set(0);
+    profY.set(0);
+    smoothProfScale.set(1);
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const { clientX, clientY, currentTarget } = e;
@@ -228,7 +299,7 @@ const Hero = () => {
     setCoords({ x: 0, y: 0 });
   };
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -239,12 +310,12 @@ const Hero = () => {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+      transition: { duration: 0.6, ease: "easeOut" }
     }
   };
 
@@ -254,6 +325,9 @@ const Hero = () => {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_30%_50%,#000_75%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/[0.06] dark:bg-blue-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
+      
+      {/* 3D Parallax Particle Field Overlay (Option B Core) */}
+      <Particle3DField />
       
       <div className="max-w-6xl mx-auto px-6 md:px-12 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -396,6 +470,11 @@ const Hero = () => {
                 onMouseLeave={handleMouseLeave}
                 whileTap={{ scale: 0.98 }}
                 href="#projects" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  playNavClickSound();
+                  document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center cursor-pointer"
               >
                 View Projects
@@ -417,31 +496,32 @@ const Hero = () => {
           {/* Right: Floating Decorative Composition / Profile Graphic Column */}
           <div className="col-span-5 xl:col-span-4 hidden lg:block relative">
             <motion.div
+              ref={profileCardRef}
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                y: [0, -15, 0],
-                rotate: [0, 1, -1, 0]
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              style={{
+                rotateX: smoothProfRotateX,
+                rotateY: smoothProfRotateY,
+                scale: smoothProfScale,
+                transformStyle: 'preserve-3d',
+                perspective: '1000px',
               }}
-              transition={{
-                opacity: { duration: 1.2, delay: 0.3 },
-                scale: { duration: 1.2, delay: 0.3 },
-                y: {
-                  repeat: Infinity,
-                  duration: 6,
-                  ease: "easeInOut"
-                },
-                rotate: {
-                  repeat: Infinity,
-                  duration: 8,
-                  ease: "easeInOut"
-                }
-              }}
-              className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-radial from-emerald-500/15 via-emerald-500/5 to-transparent border border-emerald-500/20 shadow-xl shadow-emerald-500/5 backdrop-blur-md p-6 flex flex-col justify-between overflow-hidden group select-none cursor-default"
+              onMouseMove={handleProfMouseMove}
+              onMouseEnter={handleProfMouseEnter}
+              onMouseLeave={handleProfMouseLeave}
+              className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-radial from-emerald-500/15 via-emerald-500/5 to-transparent border border-emerald-500/20 shadow-xl shadow-emerald-500/5 backdrop-blur-md p-6 flex flex-col justify-between overflow-hidden group select-none cursor-default will-change-transform"
             >
+              {/* Option B Spotlight glow reflection layer */}
+              <motion.div
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
+                style={{
+                  background: useMotionTemplate`radial-gradient(180px circle at ${profMouseX}px ${profMouseY}px, rgba(16, 185, 129, 0.15), transparent 85%)`,
+                }}
+              />
+
               {/* Internal abstract floating visual nodes */}
-              <div className="absolute top-0 right-0 p-3 flex gap-1.5">
+              <div className="absolute top-0 right-0 p-3 flex gap-1.5 z-20">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-400/60 dark:bg-red-500/20" />
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/60 dark:bg-yellow-500/20" />
                 <span className="w-2.5 h-2.5 rounded-full bg-green-400/60 dark:bg-emerald-500/20" />
@@ -450,45 +530,49 @@ const Hero = () => {
               {/* Grid abstract background panel */}
               <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-15" />
 
-              {/* Content items */}
-              <div className="flex flex-col gap-4 relative z-10 pt-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-serif text-emerald-500 font-bold text-lg shadow-sm">
-                    D
+              {/* 3D Translation of elements for real structural depth feel */}
+              <div style={{ transform: 'translateZ(20px)', transformStyle: 'preserve-3d' }} className="w-full h-full relative z-10 flex flex-col justify-between">
+                
+                {/* Content items */}
+                <div style={{ transform: 'translateZ(10px)' }} className="flex flex-col gap-4 pt-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-serif text-emerald-500 font-bold text-lg shadow-sm">
+                      D
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-neutral-800 dark:text-neutral-100 text-sm">Dhaval Panchal</h3>
+                      <p className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">Gujarat, India</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-neutral-800 dark:text-neutral-100 text-sm">Dhaval Panchal</h3>
-                    <p className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">Gujarat, India</p>
+
+                  <div className="w-full h-[1px] bg-neutral-200/50 dark:bg-white/5" />
+
+                  <div className="space-y-2.5 font-mono text-[10px]">
+                    <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
+                      <span>STATUS</span>
+                      <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        ACTIVE
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
+                      <span>ROLE</span>
+                      <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">MERN &amp; React</span>
+                    </div>
+                    <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
+                      <span>FOCUS</span>
+                      <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">Elegant Pixels</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="w-full h-[1px] bg-neutral-200/50 dark:bg-white/5" />
-
-                <div className="space-y-2.5 font-mono text-[10px]">
-                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                    <span>STATUS</span>
-                    <span className="text-emerald-500 font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      ACTIVE
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                    <span>ROLE</span>
-                    <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">MERN &amp; React</span>
-                  </div>
-                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                    <span>FOCUS</span>
-                    <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">Elegant Pixels</span>
-                  </div>
+                {/* Interactive glowing miniature mock terminal lines or code signature */}
+                <div style={{ transform: 'translateZ(15px)' }} className="bg-neutral-950/5 dark:bg-neutral-950/60 border border-neutral-300/40 dark:border-white/5 rounded-xl p-3 font-mono text-[9px] text-neutral-600 dark:text-neutral-300 leading-normal mb-1">
+                  <p className="text-emerald-500 font-semibold">&gt; info.skills</p>
+                  <p className="pl-3.5 text-neutral-500 select-all">["React", "FramerMotion", "TailwindCSS"]</p>
+                  <p className="text-blue-500 font-semibold mt-1">&gt; loading_state</p>
+                  <p className="pl-3.5 text-neutral-500">"fast-loading_optimized"</p>
                 </div>
-              </div>
-
-              {/* Interactive glowing miniature mock terminal lines or code signature */}
-              <div className="bg-neutral-950/5 dark:bg-neutral-950/60 border border-neutral-300/40 dark:border-white/5 rounded-xl p-3 font-mono text-[9px] text-neutral-600 dark:text-neutral-300 relative z-10 leading-normal">
-                <p className="text-emerald-500 font-semibold">&gt; info.skills</p>
-                <p className="pl-3.5 text-neutral-500 select-all">["React", "FramerMotion", "TailwindCSS"]</p>
-                <p className="text-blue-500 font-semibold mt-1">&gt; loading_state</p>
-                <p className="pl-3.5 text-neutral-500">"fast-loading_optimized"</p>
               </div>
 
               {/* Extra outer decorative floaters */}
@@ -531,24 +615,59 @@ const Hero = () => {
   );
 };
 
-const SectionHeader = ({ title, subtitle, icon: Icon, centered = false }: { title: string, subtitle: string, icon?: any, centered?: boolean }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.8, ease: "easeOut" }}
-    className={cn("mb-16", centered && "text-center flex flex-col items-center")}
-  >
-    <div className={cn("flex items-center gap-3 text-emerald-500 mb-4", centered && "justify-center")}>
-      {Icon && <Icon size={20} />}
-      <span className="text-sm font-bold uppercase tracking-[0.2em]">{title}</span>
-    </div>
-    <h2 className="text-4xl md:text-5xl font-serif font-bold relative inline-block text-neutral-950 dark:text-white">
-      {subtitle}
-      {centered && <div className="mt-4 h-1 w-24 bg-neutral-950 dark:bg-white mx-auto rounded-full" />}
-    </h2>
-  </motion.div>
-);
+const SectionHeader = ({ title, subtitle, icon: Icon, centered = false }: { title: string, subtitle: string, icon?: any, centered?: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Track this header's scroll progress through the viewport for interactive parallax
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Calculate dynamic 3D rotational tilt and scale based on scroll position
+  const rotateX = useTransform(scrollYProgress, [0, 1], [25, -25]);
+  const rotateY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1.15, 0.9]);
+  
+  // Apply a smooth spring transition to the tilt values
+  const springRotateX = useSpring(rotateX, { stiffness: 80, damping: 22 });
+  const springRotateY = useSpring(rotateY, { stiffness: 80, damping: 22 });
+  const springScale = useSpring(scale, { stiffness: 80, damping: 22 });
+
+  return (
+    <motion.div 
+      ref={containerRef}
+      initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className={cn("mb-16", centered && "text-center flex flex-col items-center")}
+    >
+      <div className={cn("flex items-center gap-3 text-emerald-500 mb-4", centered && "justify-center")}>
+        {Icon && (
+          <div style={{ perspective: "600px" }} className="inline-block">
+            <motion.div
+              style={{
+                rotateX: springRotateX,
+                rotateY: springRotateY,
+                scale: springScale,
+                transformStyle: "preserve-3d"
+              }}
+              className="flex items-center justify-center p-2 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-150 dark:border-white/[0.04] shadow-xs hover:border-emerald-500/20 hover:dark:border-emerald-400/20 transition-all duration-300"
+            >
+              <Icon size={20} className="text-emerald-500" />
+            </motion.div>
+          </div>
+        )}
+        <span className="text-sm font-bold uppercase tracking-[0.2em]">{title}</span>
+      </div>
+      <h2 className="text-4xl md:text-5xl font-serif font-bold relative inline-block text-neutral-950 dark:text-white">
+        {subtitle}
+        {centered && <div className="mt-4 h-1 w-24 bg-neutral-950 dark:bg-white mx-auto rounded-full" />}
+      </h2>
+    </motion.div>
+  );
+};
 
 const Shimmer = () => (
   <motion.div
@@ -1236,6 +1355,51 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  const footerContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const footerItemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
+  const socialContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.15
+      }
+    }
+  };
+
+  const socialItemVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.85, y: 12 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 18
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -1404,10 +1568,19 @@ const Contact = () => {
           )}
         </motion.div>
 
-        <div className="mt-24 pt-16 border-t border-neutral-200/60 dark:border-white/10 w-full">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={footerContainerVariants}
+          className="mt-24 pt-16 border-t border-neutral-200/60 dark:border-white/10 w-full"
+        >
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-12 w-full text-left">
             {/* Column 1: Brand & Status ticker */}
-            <div className="md:col-span-8 flex flex-col gap-4">
+            <motion.div 
+              variants={footerItemVariants}
+              className="md:col-span-8 flex flex-col gap-4"
+            >
               <div className="flex flex-wrap items-center gap-3">
                 <span 
                   className="text-2xl font-serif italic font-bold tracking-tight text-neutral-950 dark:text-white cursor-pointer hover:opacity-85 transition-opacity"
@@ -1434,12 +1607,18 @@ const Contact = () => {
                 Frontend-Focused Full Stack Developer specializing in React &amp; performance optimization<br />
                 Crafting modern, high-performance web apps with seamless UX and AI-powered experiences
               </p>
-            </div>
+            </motion.div>
 
             {/* Column 2: Contact details & Socials */}
-            <div className="md:col-span-4 flex flex-col gap-4">
+            <motion.div 
+              variants={footerItemVariants}
+              className="md:col-span-4 flex flex-col gap-4"
+            >
               <h4 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">Get In Touch</h4>
-              <div className="flex items-center gap-3 mt-1">
+              <motion.div 
+                variants={socialContainerVariants}
+                className="flex items-center gap-3 mt-1"
+              >
                 {[
                   {
                     label: 'Gmail',
@@ -1463,8 +1642,9 @@ const Contact = () => {
                   { icon: Linkedin, url: 'https://www.linkedin.com/in/dhaval-panchal-726a0625b/', label: 'LinkedIn' },
                   { icon: MessageCircle, url: 'https://wa.me/919875161613', label: 'WhatsApp' }
                 ].map((social) => (
-                  <a 
+                  <motion.a 
                     key={social.label}
+                    variants={socialItemVariants}
                     href={social.url} 
                     target="_blank" 
                     rel="noreferrer"
@@ -1476,14 +1656,17 @@ const Contact = () => {
                     ) : (
                       social.icon && <social.icon size={18} className="group-hover:scale-110 transition-transform duration-300" />
                     )}
-                  </a>
+                  </motion.a>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
 
           {/* Tech Stack Marquee Carousel */}
-          <div className="mt-12 pt-8 pb-4 border-t border-neutral-200/40 dark:border-white/[0.04] w-full overflow-hidden">
+          <motion.div 
+            variants={footerItemVariants}
+            className="mt-12 pt-8 pb-4 border-t border-neutral-200/40 dark:border-white/[0.04] w-full overflow-hidden"
+          >
             <h4 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500 mb-6 text-center">
               CORE TECHNOLOGIES &amp; TOOLKIT
             </h4>
@@ -1523,18 +1706,47 @@ const Contact = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Sub Footer row */}
-          <div className="pt-8 border-t border-neutral-200/50 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 pb-10">
-            <div className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 flex-wrap justify-center text-center">
-              Designed &amp; Built with <span className="inline-block animate-[pulse_1.5s_infinite] text-purple-500 text-[13px]">💜</span> by <span className="text-neutral-800 dark:text-neutral-100 font-extrabold">DHAVAL PANCHAL</span>
-            </div>
-            <div className="text-[11px] font-bold text-neutral-400 dark:text-neutral-600 uppercase tracking-widest text-center">
+          <motion.div 
+            variants={footerItemVariants}
+            className="pt-8 border-t border-neutral-200/50 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6 pb-12"
+          >
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              className="px-6 py-2.5 rounded-full bg-neutral-50 dark:bg-neutral-900/40 border border-neutral-100 dark:border-white/[0.03] hover:border-emerald-500/20 hover:dark:border-emerald-400/20 transition-all duration-300 flex items-center gap-2 flex-wrap justify-center text-center shadow-xs cursor-default select-none group/footer"
+            >
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-bold">
+                Designed &amp; Engineered with
+              </span>
+              <motion.span 
+                animate={{ 
+                  scale: [1, 1.2, 1, 1.2, 1],
+                  filter: ["drop-shadow(0 0 1px rgba(168,85,247,0.3))", "drop-shadow(0 0 4px rgba(168,85,247,0.6))", "drop-shadow(0 0 1px rgba(168,85,247,0.3))"]
+                }}
+                transition={{ 
+                  repeat: Infinity,
+                  duration: 1.6,
+                  ease: "easeInOut"
+                }}
+                className="inline-block text-purple-500 text-sm mx-0.5"
+              >
+                💜
+              </motion.span>
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-bold">
+                by
+              </span>
+              <span className="font-sans text-xs sm:text-[13px] tracking-widest ml-1 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-500 to-emerald-500 dark:from-purple-400 dark:via-emerald-400 dark:to-blue-400 uppercase transition-all duration-300 group-hover/footer:brightness-110">
+                DHAVAL PANCHAL
+              </span>
+            </motion.div>
+            
+            <div className="text-[11px] font-mono font-bold text-neutral-400 dark:text-neutral-600 uppercase tracking-widest text-center sm:text-right">
               © {new Date().getFullYear()} All rights reserved.
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1675,9 +1887,13 @@ export default function App() {
   });
 
   const toggleTheme = () => {
+    document.documentElement.classList.add('theme-transitioning');
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning');
+    }, 700);
   };
 
   useEffect(() => {
@@ -1697,22 +1913,98 @@ export default function App() {
     restDelta: 0.001
   });
 
+  const [activeSection, setActiveSection] = useState('About');
+  const [scrollPercent, setScrollPercent] = useState(0);
+
+  useEffect(() => {
+    const handleScrollPercentage = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        setScrollPercent(Math.round((window.scrollY / totalHeight) * 100));
+      }
+    };
+    window.addEventListener('scroll', handleScrollPercentage, { passive: true });
+    handleScrollPercentage();
+
+    const sections = [
+      { id: 'about', label: 'About' },
+      { id: 'projects', label: 'Projects' },
+      { id: 'education', label: 'Education' },
+      { id: 'skills', label: 'Skills' },
+      { id: 'contact', label: 'Contact' }
+    ];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const matched = sections.find(s => s.id === entry.target.id);
+          if (matched) {
+            setActiveSection(matched.label);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach((sec) => {
+      const el = document.getElementById(sec.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollPercentage);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300">
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <Hero />
-      <Features />
-      <Projects />
-      <Education />
-      <Skills />
-      <Contact />
-      <ScrollToTop />
-      
-      {/* Scroll Progress Bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-emerald-500 z-[60] origin-left"
-        style={{ scaleX }}
-      />
-    </div>
+    <HelmetProvider>
+      <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300">
+        <Helmet>
+          <title>Dhaval Panchal | Full-Time FullStack Developer &amp; React Specialist</title>
+          <meta name="description" content="Portfolio of Dhaval Panchal, an ambitious FullStack Developer and React Specialist based in Gujarat, India. Specializing in elegant UX, production MERN apps, and GenAI integrations." />
+          <meta name="keywords" content="Dhaval Panchal, Portfolio, FullStack Developer, MERN Stack, React Specialist, Gujarat India UI Web Developer" />
+          
+          {/* OpenGraph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://ais-pre-m3mprso6f5z7riitd2tpxt-403389390217.asia-southeast1.run.app" />
+          <meta property="og:title" content="Dhaval Panchal | Full-Time FullStack Developer &amp; React Specialist" />
+          <meta property="og:description" content="Explore Dhaval Panchal's portfolio. Specializing in front-end refinement, MERN backend stacks, and GenAI integrations." />
+          <meta property="og:image" content="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop" />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:url" content="https://ais-pre-m3mprso6f5z7riitd2tpxt-403389390217.asia-southeast1.run.app" />
+          <meta name="twitter:title" content="Dhaval Panchal | Full-Time FullStack Developer &amp; React Specialist" />
+          <meta name="twitter:description" content="Explore Dhaval Panchal's portfolio. Specializing in front-end refinement, MERN backend stacks, and GenAI integrations." />
+          <meta name="twitter:image" content="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop" />
+          
+          <link rel="canonical" href="https://ais-pre-m3mprso6f5z7riitd2tpxt-403389390217.asia-southeast1.run.app" />
+        </Helmet>
+
+        <Navbar theme={theme} toggleTheme={toggleTheme} />
+        <Hero />
+        <Features />
+        <Projects />
+        <Education />
+        <Skills />
+        <Contact />
+        <ScrollToTop />
+        
+        {/* Reading Scroll Progress Indicator */}
+        <div className="fixed top-0 left-0 right-0 h-1 bg-transparent z-[60] select-none pointer-events-none">
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-[1.5px] bg-emerald-500 origin-left"
+            style={{ scaleX }}
+          />
+        </div>
+      </div>
+    </HelmetProvider>
   );
 }
