@@ -38,7 +38,10 @@ import {
   Server,
   Sparkles,
   Play,
-  Info
+  Info,
+  BarChart2,
+  FileText,
+  Kanban
 } from 'lucide-react';
 import { PROJECTS, EDUCATION, SKILLS, Project } from './constants';
 import { cn } from './lib/utils';
@@ -46,6 +49,7 @@ import { submitContactForm } from './firebase';
 import { ProjectDetailPanel } from './components/ProjectDetailPanel';
 import { ProjectCard } from './components/ProjectCard';
 import { Particle3DField } from './components/Particle3DField';
+import { SuccessConfetti } from './components/SuccessConfetti';
 import { HoverPreviewTooltip } from './components/HoverPreviewTooltip';
 import { playNavClickSound, playResumeChime } from './lib/sounds';
 
@@ -433,7 +437,7 @@ const Hero = () => {
                 <motion.div 
                   whileHover={{ 
                     scale: 1.02, 
-                    backgroundColor: "rgba(236, 72, 153, 0.08)", // pink
+                    backgroundColor: "rgba(236, 72, 153, 0.08)", 
                     borderColor: "rgba(236, 72, 153, 0.25)"
                   }}
                   className="flex items-center gap-2 sm:gap-1 px-3 py-1.5 sm:px-2.5 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/20 dark:border-pink-500/30 bg-pink-500/8 dark:bg-pink-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
@@ -461,8 +465,9 @@ const Hero = () => {
             
             <motion.div 
               variants={itemVariants}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-5 w-full"
+              className="flex flex-wrap items-center justify-start gap-4 w-full"
             >
+              {/* Primary View Projects */}
               <motion.a 
                 animate={{ x: coords.x, y: coords.y }}
                 transition={{ type: "spring", stiffness: 120, damping: 10, mass: 0.8 }}
@@ -475,20 +480,49 @@ const Hero = () => {
                   playNavClickSound();
                   document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20 dark:shadow-white/5 shrink-0 text-center cursor-pointer"
+                className="px-7 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/10 dark:shadow-white/5 text-sm cursor-pointer whitespace-nowrap"
               >
-                View Projects
-                <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                <span>View Projects</span>
+                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </motion.a>
               
-              <div className="flex items-center justify-center gap-5 bg-neutral-100/50 dark:bg-neutral-900/25 px-5 py-3 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-sm">
-                <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="GitHub"><Github size={22} /></a>
-                <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
-                <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="LinkedIn"><Linkedin size={22} /></a>
-                <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
-                <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="WhatsApp"><MessageCircle size={22} /></a>
-                <div className="w-px h-4 bg-neutral-300 dark:bg-white/10" />
-                <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:scale-110 transition-all duration-200" title="Email"><Mail size={22} /></a>
+              {/* Download Resume Link */}
+              <motion.a
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                href="https://drive.google.com/file/d/1JSKxzXl2HKSGffpkCo5HuOnyy8Mnoeyt/view?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={playResumeChime}
+                className="px-7 py-3.5 rounded-full border border-neutral-300 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20 text-neutral-800 dark:text-neutral-200 font-bold transition-all flex items-center justify-center gap-2 text-sm cursor-pointer bg-neutral-100/30 dark:bg-white/[0.02]"
+              >
+                <GraduationCap size={16} />
+                <span>Download Resume</span>
+              </motion.a>
+
+              {/* Contact Me Button */}
+              <motion.a
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playNavClickSound();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-7 py-3.5 rounded-full bg-neutral-950 hover:bg-neutral-800 dark:bg-white/10 dark:hover:bg-white/15 text-white dark:text-neutral-200 font-bold transition-all flex items-center justify-center text-sm cursor-pointer border border-neutral-800 dark:border-white/5 text-center"
+              >
+                <span>Contact Me</span>
+              </motion.a>
+              
+              <div className="flex items-center justify-center gap-4.5 bg-neutral-100/50 dark:bg-neutral-900/25 px-5 py-3.5 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-sm md:ml-2">
+                <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="GitHub"><Github size={18} /></a>
+                <div className="w-px h-3.5 bg-neutral-300 dark:bg-white/10" />
+                <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="LinkedIn"><Linkedin size={18} /></a>
+                <div className="w-px h-3.5 bg-neutral-300 dark:bg-white/10" />
+                <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="WhatsApp"><MessageCircle size={18} /></a>
+                <div className="w-px h-3.5 bg-neutral-300 dark:bg-white/10" />
+                <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="Email"><Mail size={18} /></a>
               </div>
             </motion.div>
           </motion.div>
@@ -1001,7 +1035,7 @@ const SkillGroupSkeleton = () => (
 );
 
 const Skills = () => {
-  const categories = ['Frontend', 'Backend', 'Tools', 'Soft Skills', 'Other'];
+  const categories = ['Frontend', 'Backend', 'State Management', 'AI & Tools', 'Soft Skills'];
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasHover, setHasHover] = useState(false);
@@ -1051,7 +1085,7 @@ const Skills = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
         delayChildren: 0.05
       }
     }
@@ -1081,27 +1115,29 @@ const Skills = () => {
   const categoryDescriptions: Record<string, string> = {
     'Frontend': 'Interfaces and user experience using modern frameworks.',
     'Backend': 'Server-side logic, APIs, and database management.',
-    'Tools': 'Development environment and utility software.',
-    'Soft Skills': 'Professional communication and analytical thinking.',
-    'Other': 'Algorithms, architecture, and core computer science.'
+    'State Management': 'Robust schemas and high-performance client state stores.',
+    'AI & Tools': 'Development tools, AI integrations, and deployment environments.',
+    'Soft Skills': 'Professional execution, communications, and cooperative problem solving.'
   };
   
   const getIcon = (name: string) => {
     const n = name.toLowerCase();
     if (n.includes('react')) return Atom;
-    if (n.includes('javascript')) return Code2;
-    if (n.includes('html') || n.includes('css')) return Globe;
+    if (n.includes('javascript') || n.includes('typescript')) return Code2;
+    if (n.includes('html') || n.includes('css') || n.includes('api')) return Globe;
     if (n.includes('tailwind')) return Wind;
     if (n.includes('bootstrap')) return Trello;
     if (n.includes('node') || n.includes('express')) return Server;
     if (n.includes('python')) return Terminal;
-    if (n.includes('mongo') || n.includes('mysql') || n.includes('firebase')) return Database;
-    if (n.includes('github')) return Github;
+    if (n.includes('mongo') || n.includes('mysql') || n.includes('firebase') || n.includes('postgres')) return Database;
+    if (n.includes('github') || n.includes('git')) return Github;
     if (n.includes('postman')) return Settings;
-    if (n.includes('vscode')) return Monitor;
-    if (n.includes('dsa')) return Cpu;
-    if (n.includes('oops')) return Layers;
-    if (n.includes('learner') || n.includes('ethic') || n.includes('oriented')) return CheckCircle2;
+    if (n.includes('vscode') || n.includes('vercel') || n.includes('vite')) return Monitor;
+    if (n.includes('dsa') || n.includes('genai')) return Cpu;
+    if (n.includes('oops') || n.includes('docker') || n.includes('zustand') || n.includes('redux')) return Layers;
+    if (n.includes('detail') || n.includes('oriented')) return CheckCircle2;
+    if (n.includes('learner') || n.includes('quick')) return Rocket;
+    if (n.includes('ethic') || n.includes('work')) return Sparkles;
     return Zap;
   };
   
@@ -1122,7 +1158,7 @@ const Skills = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 xl:gap-8"
             >
               {categories.map((cat) => (
                 <SkillGroupSkeleton key={cat} />
@@ -1135,123 +1171,132 @@ const Skills = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 xl:gap-8"
             >
-              {categories.map((cat, catIndex) => (
-                <motion.div 
-                  key={cat}
-                  variants={cardVariants}
-                  className="relative"
-                >
-                  <div className="relative inline-block mb-8 skills-category-header">
-                    <h3 
-                      className="text-xl font-bold flex items-center gap-2 cursor-help group select-none"
-                      onMouseEnter={() => hasHover && setHoveredCategory(cat)}
-                      onMouseLeave={() => hasHover && setHoveredCategory(null)}
-                      onClick={() => setHoveredCategory(hoveredCategory === cat ? null : cat)}
-                    >
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform" />
-                      {cat}
-                      <Info size={14} className="text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 transition-colors opacity-60 group-hover:opacity-100 shrink-0 ml-0.5" />
-                    </h3>
-                    
-                    <AnimatePresence>
-                      {hoveredCategory === cat && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute z-20 left-0 top-full mt-2 w-48 p-3 rounded-lg bg-white dark:bg-neutral-800 shadow-xl border border-neutral-200 dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 pointer-events-none"
-                        >
-                          <div className="absolute -top-1 left-4 w-2 h-2 bg-white dark:bg-neutral-800 border-t border-l border-neutral-200 dark:border-white/10 rotate-45" />
-                          {categoryDescriptions[cat]}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+              {categories.map((cat, catIndex) => {
+                const catColors: Record<string, { bg: string; border: string; text: string; shadow: string; hoverText: string; indicator: string }> = {
+                  'Frontend': {
+                    bg: "rgba(16, 185, 129, 0.08)",
+                    border: "rgba(16, 185, 129, 0.35)",
+                    text: "text-emerald-500 dark:text-emerald-400",
+                    shadow: "0 10px 20px -8px rgba(16, 185, 129, 0.3)",
+                    hoverText: "group-hover:text-emerald-400",
+                    indicator: "bg-emerald-500"
+                  },
+                  'Backend': {
+                    bg: "rgba(99, 102, 241, 0.08)",
+                    border: "rgba(99, 102, 241, 0.35)",
+                    text: "text-indigo-500 dark:text-indigo-400",
+                    shadow: "0 10px 20px -8px rgba(99, 102, 241, 0.3)",
+                    hoverText: "group-hover:text-indigo-400",
+                    indicator: "bg-indigo-500"
+                  },
+                  'State Management': {
+                    bg: "rgba(14, 165, 233, 0.08)",
+                    border: "rgba(14, 165, 233, 0.35)",
+                    text: "text-sky-500 dark:text-sky-400",
+                    shadow: "0 10px 20px -8px rgba(14, 165, 233, 0.3)",
+                    hoverText: "group-hover:text-sky-400",
+                    indicator: "bg-sky-500"
+                  },
+                  'AI & Tools': {
+                    bg: "rgba(168, 85, 247, 0.08)",
+                    border: "rgba(168, 85, 247, 0.35)",
+                    text: "text-purple-500 dark:text-purple-400",
+                    shadow: "0 10px 20px -8px rgba(168, 85, 247, 0.3)",
+                    hoverText: "group-hover:text-purple-400",
+                    indicator: "bg-purple-500"
+                  },
+                  'Soft Skills': {
+                    bg: "rgba(244, 63, 94, 0.08)",
+                    border: "rgba(244, 63, 94, 0.35)",
+                    text: "text-rose-500 dark:text-rose-400",
+                    shadow: "0 10px 20px -8px rgba(244, 63, 94, 0.3)",
+                    hoverText: "group-hover:text-rose-400",
+                    indicator: "bg-rose-500"
+                  }
+                };
 
-                  <div className="flex flex-wrap gap-3 animate-fade-in">
-                    {SKILLS.filter(s => s.category === cat).map((skill, i) => {
-                      const Icon = getIcon(skill.name);
+                const colors = catColors[cat] || catColors['Frontend'];
+
+                return (
+                  <motion.div 
+                    key={cat}
+                    variants={cardVariants}
+                    className="relative p-6 pt-8 rounded-[24px] border border-neutral-100 dark:border-white/[0.03] bg-neutral-50/30 dark:bg-neutral-900/5 hover:border-neutral-200/50 dark:hover:border-white/10 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/10 transition-all duration-300 overflow-hidden"
+                  >
+                    {/* Visual Card Accent Bar */}
+                    <div className={`absolute top-0 left-0 right-0 h-[2.5px] opacity-70 dark:opacity-55 ${colors.indicator}`} />
+
+                    <div className="relative inline-block mb-6 skills-category-header">
+                      <h3 
+                        className="text-lg font-bold flex items-center gap-2 cursor-help group select-none font-serif"
+                        onMouseEnter={() => hasHover && setHoveredCategory(cat)}
+                        onMouseLeave={() => hasHover && setHoveredCategory(null)}
+                        onClick={() => setHoveredCategory(hoveredCategory === cat ? null : cat)}
+                      >
+                        <span className={`w-2 h-2 rounded-full ${colors.indicator} group-hover:scale-150 transition-transform duration-300`} />
+                        {cat}
+                        <Info size={14} className="text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors opacity-60 group-hover:opacity-100 shrink-0 ml-0.5" />
+                      </h3>
                       
-                      // Define interactive premium dynamic color maps per category type
-                      const catColors: Record<string, { bg: string; border: string; text: string; shadow: string; hoverText: string }> = {
-                        'Frontend': {
-                          bg: "rgba(16, 185, 129, 0.08)", // emerald
-                          border: "rgba(16, 185, 129, 0.35)",
-                          text: "text-emerald-500 dark:text-emerald-400",
-                          shadow: "0 10px 20px -8px rgba(16, 185, 129, 0.3)",
-                          hoverText: "group-hover:text-emerald-400"
-                        },
-                        'Backend': {
-                          bg: "rgba(99, 102, 241, 0.08)", // indigo
-                          border: "rgba(99, 102, 241, 0.35)",
-                          text: "text-indigo-500 dark:text-indigo-400",
-                          shadow: "0 10px 20px -8px rgba(99, 102, 241, 0.3)",
-                          hoverText: "group-hover:text-indigo-400"
-                        },
-                        'Tools': {
-                          bg: "rgba(14, 165, 233, 0.08)", // sky
-                          border: "rgba(14, 165, 233, 0.35)",
-                          text: "text-sky-500 dark:text-sky-400",
-                          shadow: "0 10px 20px -8px rgba(14, 165, 233, 0.3)",
-                          hoverText: "group-hover:text-sky-400"
-                        },
-                        'Soft Skills': {
-                          bg: "rgba(244, 63, 94, 0.08)", // rose
-                          border: "rgba(244, 63, 94, 0.35)",
-                          text: "text-rose-500 dark:text-rose-400",
-                          shadow: "0 10px 20px -8px rgba(244, 63, 94, 0.3)",
-                          hoverText: "group-hover:text-rose-400"
-                        },
-                        'Other': {
-                          bg: "rgba(245, 158, 11, 0.08)", // amber
-                          border: "rgba(245, 158, 11, 0.35)",
-                          text: "text-amber-500 dark:text-amber-400",
-                          shadow: "0 10px 20px -8px rgba(245, 158, 11, 0.3)",
-                          hoverText: "group-hover:text-amber-400"
-                        }
-                      };
-
-                      const colors = catColors[cat] || catColors['Other'];
-
-                      return (
-                        <motion.div
-                          key={skill.name}
-                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                          whileHover={hasHover ? { 
-                            scale: 1.08, 
-                            rotate: i % 2 === 0 ? 3 : -3,
-                            y: -5,
-                            backgroundColor: colors.bg,
-                            borderColor: colors.border,
-                            boxShadow: colors.shadow
-                          } : {}}
-                          whileTap={{ scale: 0.95 }}
-                          viewport={{ once: true }}
-                          transition={{ 
-                            type: "spring",
-                            stiffness: 260,
-                            damping: 18,
-                            delay: (catIndex * 0.08) + (i * 0.02) 
-                          }}
-                          className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-sm font-medium text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer select-none shadow-sm hover:z-10"
-                        >
+                      <AnimatePresence>
+                        {hoveredCategory === cat && (
                           <motion.div
-                            whileHover={hasHover ? { rotate: [0, -15, 15, -10, 0], scale: 1.25 } : {}}
-                            transition={{ duration: 0.4 }}
-                            className={`${colors.text} ${colors.hoverText} pb-0.5 transition-colors`}
+                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                            className="absolute z-20 left-0 top-full mt-2 w-48 p-3 rounded-lg bg-white dark:bg-neutral-800 shadow-xl border border-neutral-200 dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 pointer-events-none"
                           >
-                            <Icon size={14} />
+                            <div className="absolute -top-1 left-4 w-2 h-2 bg-white dark:bg-neutral-800 border-t border-l border-neutral-200 dark:border-white/10 rotate-45" />
+                            {categoryDescriptions[cat]}
                           </motion.div>
-                          {skill.name}
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              ))}
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2.5 animate-fade-in">
+                      {SKILLS.filter(s => s.category === cat).map((skill, i) => {
+                        const Icon = getIcon(skill.name);
+
+                        return (
+                          <motion.div
+                            key={skill.name}
+                            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                            whileHover={hasHover ? { 
+                              scale: 1.05, 
+                              rotate: i % 2 === 0 ? 2 : -2,
+                              y: -3,
+                              backgroundColor: colors.bg,
+                              borderColor: colors.border,
+                              boxShadow: colors.shadow
+                            } : {}}
+                            whileTap={{ scale: 0.95 }}
+                            viewport={{ once: true }}
+                            transition={{ 
+                              type: "spring",
+                              stiffness: 260,
+                              damping: 18,
+                              delay: (catIndex * 0.05) + (i * 0.02) 
+                            }}
+                            className="group flex items-center gap-2 px-3 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200/50 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer select-none shadow-sm hover:z-10"
+                          >
+                            <motion.div
+                              whileHover={hasHover ? { rotate: [0, -15, 15, -10, 0], scale: 1.2 } : {}}
+                              transition={{ duration: 0.4 }}
+                              className={`${colors.text} ${colors.hoverText} pb-0.5 transition-colors`}
+                            >
+                              <Icon size={13} />
+                            </motion.div>
+                            {skill.name}
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           )}
         </AnimatePresence>
@@ -1423,6 +1468,9 @@ const Contact = () => {
 
   return (
     <section id="contact" className="py-16 md:py-32 px-4 sm:px-6 relative overflow-hidden">
+      {/* Confetti animation on successful form submission */}
+      <SuccessConfetti active={status === 'success'} />
+
       {/* Animated background particles effect */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
         {[...Array(20)].map((_, i) => (
@@ -1753,66 +1801,90 @@ const Contact = () => {
 };
 
 const Features = () => {
-  const features = [
+  const competencies = [
     {
-      title: 'Fast',
-      description: 'Fast load times and lag free interaction, my highest priority.',
+      title: 'Performance-First Philosophy',
+      description: 'Deep focus on Core Web Vitals, Cumulative Layout Shift (CLS), and sub-200ms Largest Contentful Paint (LCP) benchmarks.',
       icon: Gauge,
+      badge: '99 Score'
     },
     {
-      title: 'Responsive',
-      description: 'My layouts will work on any device, big or small.',
-      icon: Laptop,
+      title: 'Clean UI/UX Architecture',
+      description: 'Designing functional, high-contrast, friction-free interfaces with responsive spring-interpolated animations.',
+      icon: Layers,
+      badge: '60 FPS'
     },
     {
-      title: 'Intuitive',
-      description: 'Strong preference for easy to use, intuitive UX/UI.',
-      icon: Lightbulb,
+      title: 'Real-World Production Experience',
+      description: 'Shipping complete, reactive client-server architectures featuring optimal data modeling and robust security policies.',
+      icon: Briefcase,
+      badge: 'Full-Stack'
     },
     {
-      title: 'Dynamic',
-      description: "Websites don't have to be static, I love making pages come to life.",
-      icon: Rocket,
+      title: 'API Optimization & Caching',
+      description: 'Advanced throttle/debounce mechanics, custom storage fallbacks, and request deduplication to save network transit.',
+      icon: Cpu,
+      badge: '92% Saved'
     },
+    {
+      title: 'Generative AI Capabilities',
+      description: 'Orchestrating robust model prompts, async streaming brokers, and context retrieval directly inside client layouts.',
+      icon: Sparkles,
+      badge: 'GenAI'
+    },
+    {
+      title: 'Robust Code Hygiene',
+      description: 'Exacting type safety using pure TypeScript, modular directory architectures, and systematic resource cleanups.',
+      icon: Code2,
+      badge: 'TypeScript'
+    }
   ];
 
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6 relative">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-5 pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto relative z-10 text-center">
+    <section id="why-hire-me" className="py-20 md:py-32 px-4 sm:px-6 relative overflow-hidden">
+      <div className="absolute inset-0 bg-neutral-50/50 dark:bg-neutral-950/20 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20"
+          className="text-center mb-16 md:mb-24"
         >
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">My Websites are</h2>
-          <div className="h-1.5 w-32 bg-neutral-950 dark:bg-white mx-auto rounded-full" />
+          <span className="text-[10px] uppercase font-extrabold font-mono tracking-widest text-emerald-500 mb-2 block">Value Proposition</span>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-neutral-950 dark:text-white">Why Hire Me</h2>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-3 max-w-lg mx-auto">
+            Combining rigorous software engineering, clean performance constraints, and UI elegance to build elite digital products.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mt-16">
-          {features.map((feature, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {competencies.map((comp, i) => (
             <motion.div
-              key={feature.title}
+              key={comp.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex flex-col items-center"
+              viewport={{ once: true, margin: "-10px" }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: "easeOut" }}
+              className="relative p-6 rounded-[24px] border border-neutral-200/50 dark:border-white/[0.04] bg-white dark:bg-neutral-900/10 hover:border-emerald-500/20 dark:hover:border-emerald-500/15 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.05)] transition-all group flex flex-col justify-between"
             >
-              <div 
-                className="w-24 h-28 bg-emerald-500 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-110 transition-transform duration-300"
-                style={{
-                  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                }}
-              >
-                <feature.icon size={40} className="text-black" />
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200/30 dark:border-white/5 flex items-center justify-center text-neutral-800 dark:text-emerald-400 shrink-0 group-hover:scale-110 group-hover:bg-emerald-500/10 transition-all duration-300">
+                    <comp.icon size={18} />
+                  </div>
+                  <span className="text-[9px] font-mono font-extrabold px-2.5 py-1 rounded bg-neutral-50 dark:bg-white/5 text-neutral-500 dark:text-neutral-400 uppercase tracking-widest border border-neutral-200/30 dark:border-white/5">
+                    {comp.badge}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2 font-serif group-hover:text-emerald-500 transition-colors">
+                  {comp.title}
+                </h3>
+                <p className="text-neutral-500 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
+                  {comp.description}
+                </p>
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-neutral-900 dark:text-white">{feature.title}</h3>
-              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-[200px]">
-                {feature.description}
-              </p>
             </motion.div>
           ))}
         </div>
@@ -1990,11 +2062,13 @@ export default function App() {
 
         <Navbar theme={theme} toggleTheme={toggleTheme} />
         <Hero />
+        
         <Features />
         <Projects />
         <Education />
         <Skills />
         <Contact />
+
         <ScrollToTop />
         
         {/* Reading Scroll Progress Indicator */}
