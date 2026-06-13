@@ -4,15 +4,42 @@ import { Project } from '../constants';
 import { ExternalLink, Github, ArrowRight, Gauge, Layers, Cpu } from 'lucide-react';
 import { HoverPreviewTooltip } from './HoverPreviewTooltip';
 import { playHoverSound } from '../lib/sounds';
+import { cn } from '../lib/utils';
 
 interface ProjectCardProps {
   project: Project;
   index: number;
   onClick: () => void;
+  highlightedTag?: string | null;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, highlightedTag }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const [isIntersected, setIsIntersected] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!cardRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsIntersected(true);
+          // Stop observing once visible to retain visibility
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.12, // slightly higher threshold for intentional scroll placement
+        rootMargin: '0px 0px -40px 0px', // triggers animation as it comes up from bottom
+      }
+    );
+
+    observer.observe(cardRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   // Motion values for 3D rotation tracking
   const x = useMotionValue(0);
@@ -76,13 +103,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
     }
   };
 
+  const hasActiveHighlight = !!highlightedTag;
+  const isMatching = highlightedTag ? project.tags.includes(highlightedTag) : false;
+
   return (
     <motion.div
       ref={cardRef}
-      initial={{ opacity: 0, scale: 0.96, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10px" }}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, scale: 0.96, y: 35 }}
+      animate={isIntersected ? { opacity: 1, y: 0 } : { opacity: 0, y: 35 }}
+      transition={{ 
+        duration: 0.75, 
+        delay: index * 0.12, 
+        ease: [0.16, 1, 0.3, 1] 
+      }}
       style={{
         rotateX: smoothRotateX,
         rotateY: smoothRotateY,
@@ -93,7 +126,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative cursor-pointer bg-white dark:bg-neutral-900/10 p-5 rounded-[24px] border border-neutral-200/60 dark:border-white/[0.04] hover:border-emerald-500/20 dark:hover:border-emerald-500/15 transition-all duration-300 shadow-sm hover:shadow-[0_24px_50px_-12px_rgba(16,185,129,0.06)] dark:hover:shadow-[0_24px_50px_-12px_rgba(0,0,0,0.4)] select-none will-change-transform overflow-hidden"
+      className={cn(
+        "group relative cursor-pointer bg-white dark:bg-neutral-900/10 p-5 rounded-[24px] border transition-all duration-300 shadow-sm select-none will-change-transform overflow-hidden",
+        !hasActiveHighlight
+          ? "border-neutral-200/60 dark:border-white/[0.04] hover:border-emerald-500/20 dark:hover:border-emerald-500/15 hover:shadow-[0_24px_50px_-12px_rgba(16,185,129,0.06)] dark:hover:shadow-[0_24px_50px_-12px_rgba(0,0,0,0.4)]"
+          : isMatching
+            ? "border-emerald-500/70 dark:border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.15)] ring-2 ring-emerald-500/20 z-10 scale-[1.01]"
+            : "border-neutral-200/40 dark:border-white/[0.02] opacity-35 dark:opacity-25"
+      )}
       id={`project-card-${project.id}`}
     >
       {/* Spotlight light-beam reflective layer */}

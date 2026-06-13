@@ -24,13 +24,21 @@ import {
 } from 'lucide-react';
 import { Project } from '../constants';
 import { HoverPreviewTooltip } from './HoverPreviewTooltip';
+import { cn } from '../lib/utils';
 
 interface ProjectDetailPanelProps {
   project: Project;
   onClose: () => void;
+  highlightedTag?: string | null;
+  onTagClick?: (tag: string) => void;
 }
 
-export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({ project, onClose }) => {
+export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({ 
+  project, 
+  onClose,
+  highlightedTag,
+  onTagClick
+}) => {
   const [copied, setCopied] = useState(false);
 
   // Disable body scroll when open
@@ -270,16 +278,35 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({ project,
 
           {/* Technical Specifications / Tech Tags */}
           <div className="space-y-3">
-            <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono block">Integrated Technology Stack</h3>
+            <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono flex items-center justify-between gap-2">
+              <span>Integrated Technology Stack</span>
+              <span className="text-[10px] text-neutral-400 dark:text-neutral-500 normal-case font-mono flex items-center gap-1 font-normal">
+                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                Click tag to highlight matching projects
+              </span>
+            </h3>
             <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs font-mono font-medium px-2.5 py-1 rounded bg-neutral-50 dark:bg-white/[0.03] border border-neutral-200/50 dark:border-white/[0.05] text-neutral-600 dark:text-neutral-400"
-                >
-                  {tag}
-                </span>
-              ))}
+              {project.tags.map((tag) => {
+                const isHighlighted = highlightedTag === tag;
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => onTagClick?.(tag)}
+                    className={cn(
+                      "text-xs font-mono font-medium px-2.5 py-1 rounded transition-all cursor-pointer hover:scale-[1.05] active:scale-[0.98] select-none flex items-center gap-1.5 focus:outline-none border",
+                      isHighlighted 
+                        ? "bg-emerald-500/10 dark:bg-emerald-500/10 border-emerald-500/50 dark:border-emerald-400/50 text-emerald-600 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-semibold"
+                        : "bg-neutral-50 dark:bg-white/[0.03] border-neutral-200/50 dark:border-white/[0.05] text-neutral-600 dark:text-neutral-400 hover:border-emerald-500/30 dark:hover:border-emerald-400/30 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-emerald-500/[0.03]"
+                    )}
+                    title={isHighlighted ? "Click to clear highlight" : `Highlight other projects with ${tag}`}
+                  >
+                    {tag}
+                    {isHighlighted && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

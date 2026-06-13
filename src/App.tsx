@@ -51,7 +51,7 @@ import { ProjectCard } from './components/ProjectCard';
 import { Particle3DField } from './components/Particle3DField';
 import { SuccessConfetti } from './components/SuccessConfetti';
 import { HoverPreviewTooltip } from './components/HoverPreviewTooltip';
-import { playNavClickSound, playResumeChime } from './lib/sounds';
+import { playNavClickSound, playResumeChime, playHoverSound } from './lib/sounds';
 
 const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -242,7 +242,137 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
   );
 };
 
-const Hero = () => {
+interface HeroSlabProps {
+  label: string;
+  title: string;
+  icon: React.ComponentType<any>;
+  color: 'emerald' | 'sky' | 'purple' | 'pink';
+  targetTag: string;
+  onSlabClick: (tag: string) => void;
+}
+
+const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, targetTag, onSlabClick }) => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top } = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - left);
+    mouseY.set(e.clientY - top);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    playHoverSound();
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const handleClick = () => {
+    playResumeChime();
+    onSlabClick(targetTag);
+  };
+
+  const colors = {
+    emerald: {
+      border: 'border-emerald-500/10 hover:border-emerald-500/35 dark:border-emerald-500/10 dark:hover:border-emerald-400/30',
+      text: 'text-emerald-500 dark:text-emerald-400',
+      iconBg: 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/15',
+      spotlight: 'rgba(16, 185, 129, 0.12)',
+      shadow: 'hover:shadow-[0_12px_32px_rgba(16,185,129,0.08)] dark:hover:shadow-[0_12px_32px_rgba(16,185,129,0.05)]'
+    },
+    sky: {
+      border: 'border-sky-500/10 hover:border-sky-500/35 dark:border-sky-500/10 dark:hover:border-sky-400/30',
+      text: 'text-sky-500 dark:text-sky-400',
+      iconBg: 'bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/15',
+      spotlight: 'rgba(14, 165, 233, 0.12)',
+      shadow: 'hover:shadow-[0_12px_32px_rgba(14,165,233,0.08)] dark:hover:shadow-[0_12px_32px_rgba(14,165,233,0.05)]'
+    },
+    purple: {
+      border: 'border-purple-500/10 hover:border-purple-500/35 dark:border-purple-500/10 dark:hover:border-purple-400/30',
+      text: 'text-purple-500 dark:text-purple-400',
+      iconBg: 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border-purple-500/15',
+      spotlight: 'rgba(168, 85, 247, 0.12)',
+      shadow: 'hover:shadow-[0_12px_32px_rgba(168, 85, 247, 0.08)] dark:hover:shadow-[0_12px_32px_rgba(168, 85, 247, 0.05)]'
+    },
+    pink: {
+      border: 'border-pink-500/10 hover:border-pink-500/35 dark:border-pink-500/10 dark:hover:border-pink-400/30',
+      text: 'text-pink-500 dark:text-pink-400',
+      iconBg: 'bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/15',
+      spotlight: 'rgba(236, 72, 153, 0.12)',
+      shadow: 'hover:shadow-[0_12px_32px_rgba(236, 72, 153, 0.08)] dark:hover:shadow-[0_12px_32px_rgba(236, 72, 153, 0.05)]'
+    }
+  }[color];
+
+  const spotlightBackground = useMotionTemplate`radial-gradient(100px circle at ${mouseX}px ${mouseY}px, ${colors.spotlight}, transparent 80%)`;
+
+  return (
+    <motion.div
+      whileHover={{ y: -2, scale: 1.012 }}
+      whileTap={{ scale: 0.98 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
+      className={cn(
+        "group relative cursor-pointer overflow-hidden rounded-2xl p-2.5 sm:p-3 md:p-3.5 text-left border bg-white/40 dark:bg-neutral-900/15 backdrop-blur-md transition-all duration-300 shadow-2xs flex items-center gap-2.5 sm:gap-3 w-full self-stretch select-none",
+        colors.border,
+        colors.shadow
+      )}
+    >
+      {/* Interactive Spotlight background filter */}
+      <motion.div 
+        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" 
+        style={{ background: spotlightBackground }}
+      />
+
+      {/* Decorative accent background blob */}
+      <div className={cn(
+        "absolute -right-4 -bottom-4 w-12 h-12 rounded-full blur-xl pointer-events-none opacity-15 dark:opacity-8 transition-opacity duration-300 z-0",
+        color === 'emerald' && 'bg-emerald-500',
+        color === 'sky' && 'bg-sky-500',
+        color === 'purple' && 'bg-purple-500',
+        color === 'pink' && 'bg-pink-500'
+      )} />
+
+      {/* Left side: Icon Container */}
+      <div className={cn(
+        "w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-105 relative z-10",
+        colors.iconBg
+      )}>
+        <Icon className={cn(
+          "size-4 sm:size-4.5 transition-transform duration-300",
+          color === 'sky' && 'animate-[spin_8s_linear_infinite]',
+          color === 'purple' && 'animate-pulse',
+          color === 'pink' && 'group-hover:animate-[bounce_1s_infinite]'
+        )} />
+      </div>
+
+      {/* Right side: Inner content */}
+      <div className="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
+        <p className={cn(
+          "text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider leading-none mb-0.5 sm:mb-1 transition-all select-none",
+          colors.text
+        )}>
+          {label}
+        </p>
+        <p className="text-[11px] sm:text-[12px] md:text-[13px] font-bold text-neutral-800 dark:text-neutral-200 tracking-tight leading-snug truncate group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
+          {title}
+        </p>
+      </div>
+
+      {/* Ultra subtle hover shortcut cue on desktop */}
+      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-300 pointer-events-none hidden md:block">
+        <ArrowUpRight size={12} className={cn("transition-transform", colors.text)} />
+      </div>
+    </motion.div>
+  );
+};
+
+const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const profileCardRef = useRef<HTMLDivElement>(null);
   
@@ -363,93 +493,44 @@ const Hero = () => {
               <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
             </motion.h1>
 
-            {/* Premium Compact Slab for modern multi-role representation - ultra compact on mobile */}
+            {/* Premium Interactive Bento-Style Slabs */}
             <motion.div
               variants={itemVariants}
               className="mb-8 w-full"
             >
-              <div className="flex flex-wrap gap-y-3.5 gap-x-3 sm:gap-0.5 p-1 sm:p-0.5 rounded-2xl sm:rounded-full bg-transparent sm:bg-neutral-100/50 sm:dark:bg-neutral-900/30 backdrop-blur-md sm:border sm:border-neutral-200/40 sm:dark:border-white/5 items-center justify-start sm:shadow-xs w-full sm:w-auto inline-flex max-w-full">
-                
-                {/* FullStack Developer with hover/transition */}
-                <motion.div 
-                  whileHover={{ 
-                    scale: 1.02, 
-                    backgroundColor: "rgba(16, 185, 129, 0.08)",
-                    borderColor: "rgba(16, 185, 129, 0.25)"
-                  }}
-                  className="flex items-center gap-2 sm:gap-1.5 px-3 py-2 sm:px-3 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-emerald-500/20 dark:border-emerald-500/30 bg-emerald-500/8 dark:bg-emerald-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-                >
-                  <div className="w-5 h-5 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10">
-                    <Code2 className="size-[10px] sm:size-[11px] md:size-[12px]" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[8px] sm:text-[9px] md:text-[10px] text-emerald-500 dark:text-emerald-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Architecting</p>
-                    <p className="text-xs sm:text-xs md:text-sm font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">FullStack Developer</p>
-                  </div>
-                </motion.div>
-
-                {/* Small elegant line divider */}
-                <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
-
-                {/* React Specialist with hover/transition */}
-                <motion.div 
-                  whileHover={{ 
-                    scale: 1.02, 
-                    backgroundColor: "rgba(14, 165, 233, 0.08)",
-                    borderColor: "rgba(14, 165, 233, 0.25)"
-                  }}
-                  className="flex items-center gap-2 sm:gap-1.5 px-3 py-2 sm:px-3 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-sky-500/20 dark:border-sky-500/30 bg-sky-500/8 dark:bg-sky-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-                >
-                  <div className="w-5 h-5 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 rounded-full bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/10">
-                    <Atom className="size-[10px] sm:size-[11px] md:size-[12px] animate-[spin_6s_linear_infinite]" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[8px] sm:text-[9px] md:text-[10px] text-sky-500 dark:text-sky-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Specializing</p>
-                    <p className="text-xs sm:text-xs md:text-sm font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">React Specialist</p>
-                  </div>
-                </motion.div>
-
-                {/* Small elegant line divider */}
-                <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
-
-                {/* GenAI Integrator with hover/transition */}
-                <motion.div 
-                  whileHover={{ 
-                    scale: 1.02, 
-                    backgroundColor: "rgba(168, 85, 247, 0.08)",
-                    borderColor: "rgba(168, 85, 247, 0.25)"
-                  }}
-                  className="flex items-center gap-2 sm:gap-1.5 px-3 py-2 sm:px-3 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-purple-500/20 dark:border-purple-500/30 bg-purple-500/8 dark:bg-purple-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-                >
-                  <div className="w-5 h-5 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10">
-                    <Sparkles className="size-[10px] sm:size-[11px] md:size-[12px] animate-pulse" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[8px] sm:text-[9px] md:text-[10px] text-purple-500 dark:text-purple-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Integrating</p>
-                    <p className="text-xs sm:text-xs md:text-sm font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">GenAI Integrator</p>
-                  </div>
-                </motion.div>
-
-                {/* Small elegant line divider */}
-                <div className="hidden sm:block w-px h-2.5 md:h-3.5 bg-neutral-300/60 dark:bg-white/10" />
-
-                {/* Vibe Coder with hover/transition */}
-                <motion.div 
-                  whileHover={{ 
-                    scale: 1.02, 
-                    backgroundColor: "rgba(236, 72, 153, 0.08)", 
-                    borderColor: "rgba(236, 72, 153, 0.25)"
-                  }}
-                  className="flex items-center gap-2 sm:gap-1.5 px-3 py-2 sm:px-3 sm:py-1 md:px-3.5 md:py-1.5 rounded-xl sm:rounded-full border border-pink-500/20 dark:border-pink-500/30 bg-pink-500/8 dark:bg-pink-500/12 sm:border-transparent sm:bg-transparent sm:dark:bg-transparent transition-colors cursor-default"
-                >
-                  <div className="w-5 h-5 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0 border border-pink-500/10">
-                    <Rocket className="size-[10px] sm:size-[11px] md:size-[12px] animate-[bounce_1.5s_infinite]" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[8px] sm:text-[9px] md:text-[10px] text-pink-500 dark:text-pink-400 font-extrabold uppercase tracking-widest leading-none mb-0.5">Vibing</p>
-                    <p className="text-xs sm:text-xs md:text-sm font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap">Vibe Coder</p>
-                  </div>
-                </motion.div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5 md:gap-4 w-full">
+                <HeroSlab 
+                  label="Architecting" 
+                  title="FullStack Developer" 
+                  icon={Code2} 
+                  color="emerald" 
+                  targetTag="Next.js 14"
+                  onSlabClick={onSlabClick}
+                />
+                <HeroSlab 
+                  label="Specializing" 
+                  title="React Specialist" 
+                  icon={Atom} 
+                  color="sky" 
+                  targetTag="React 18"
+                  onSlabClick={onSlabClick}
+                />
+                <HeroSlab 
+                  label="Integrating" 
+                  title="GenAI Integrator" 
+                  icon={Sparkles} 
+                  color="purple" 
+                  targetTag="Zustand"
+                  onSlabClick={onSlabClick}
+                />
+                <HeroSlab 
+                  label="Vibing" 
+                  title="Vibe Coder" 
+                  icon={Rocket} 
+                  color="pink" 
+                  targetTag="Framer Motion"
+                  onSlabClick={onSlabClick}
+                />
               </div>
             </motion.div>
             
@@ -755,7 +836,13 @@ const ProjectSkeleton = () => (
   </div>
 );
 
-const Projects = () => {
+const Projects = ({ 
+  highlightedTag, 
+  setHighlightedTag 
+}: { 
+  highlightedTag: string | null; 
+  setHighlightedTag: React.Dispatch<React.SetStateAction<string | null>>;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -777,6 +864,30 @@ const Projects = () => {
           subtitle="Selected Projects" 
           icon={Briefcase} 
         />
+
+        <AnimatePresence>
+          {highlightedTag && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="flex items-center justify-between gap-3 bg-emerald-500/[0.04] dark:bg-emerald-500/[0.02] border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-5 py-3 rounded-2xl text-xs font-mono w-full max-w-md mx-auto mb-10 shadow-xs"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Showing matches for tech: <strong>{highlightedTag}</strong></span>
+              </div>
+              <button
+                onClick={() => setHighlightedTag(null)}
+                className="hover:bg-emerald-500/10 border border-emerald-500/10 px-2.5 py-1 rounded-lg transition-colors cursor-pointer text-[10px] uppercase font-bold flex items-center gap-1"
+                title="Clear highlight"
+              >
+                <span>Clear</span>
+                <X size={10} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="space-y-16 w-full">
           <AnimatePresence mode="wait">
@@ -808,6 +919,7 @@ const Projects = () => {
                     project={project}
                     index={i}
                     onClick={() => setSelectedProject(project)}
+                    highlightedTag={highlightedTag}
                   />
                 ))}
               </motion.div>
@@ -830,69 +942,96 @@ const Projects = () => {
               </div>
               
               <div className="grid gap-4">
-                {archivedProjects.map((project) => (
-                  <HoverPreviewTooltip key={project.id} project={project} className="w-full block">
-                    <div 
-                      onClick={() => setSelectedProject(project)}
-                      className="group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30 transition-all cursor-pointer shadow-sm"
-                      id={`archived-project-row-${project.id}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
-                          <img 
-                            src={project.image} 
-                            alt={project.title}
-                            className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                              {project.title}
-                            </h4>
-                            <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
-                              {project.date}
-                            </span>
+                {archivedProjects.map((project) => {
+                  const isRowMatching = highlightedTag ? project.tags.includes(highlightedTag) : false;
+                  const hasRowHighlight = !!highlightedTag;
+                  return (
+                    <HoverPreviewTooltip key={project.id} project={project} className="w-full block">
+                      <div 
+                        onClick={() => setSelectedProject(project)}
+                        className={cn(
+                          "group flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/10 border transition-all cursor-pointer shadow-sm",
+                          !hasRowHighlight
+                            ? "border-neutral-100 dark:border-white/[0.02] hover:border-neutral-200 dark:hover:border-white/5 hover:bg-neutral-100/40 dark:hover:bg-neutral-900/30"
+                            : isRowMatching
+                              ? "border-emerald-500/70 dark:border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.12)] ring-1 ring-emerald-500/10 scale-[1.005]"
+                              : "border-neutral-150/10 dark:border-white/[0.01] opacity-35 dark:opacity-20"
+                        )}
+                        id={`archived-project-row-${project.id}`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 shrink-0 border border-neutral-200/40 dark:border-white/5 shadow-sm">
+                            <img 
+                              src={project.image} 
+                              alt={project.title}
+                              className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-300"
+                              referrerPolicy="no-referrer"
+                            />
                           </div>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
-                            {project.description}
-                          </p>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                                {project.title}
+                              </h4>
+                              <span className="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-neutral-200/35 dark:border-white/5">
+                                {project.date}
+                              </span>
+                            </div>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 max-w-xl">
+                              {project.description}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
+                          <div className="flex flex-wrap gap-1.5">
+                            {project.tags.map(tag => {
+                              const isTagHighlighted = highlightedTag === tag;
+                              return (
+                                <button
+                                  key={tag}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setHighlightedTag(prev => prev === tag ? null : tag);
+                                  }}
+                                  className={cn(
+                                    "text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded transition-all cursor-pointer border focus:outline-none",
+                                    isTagHighlighted
+                                      ? "bg-emerald-500/10 border-emerald-500/60 text-emerald-600 dark:text-emerald-400 font-extrabold"
+                                      : "bg-neutral-100 dark:bg-white/5 border-neutral-200 dark:border-white/10 text-neutral-400 hover:text-emerald-500 hover:border-emerald-500/30"
+                                  )}
+                                  title={isTagHighlighted ? "Click to clear highlight" : `Highlight other projects with ${tag}`}
+                                >
+                                  {tag}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                            <a 
+                              href={project.link} 
+                              target="_blank"  
+                              rel="noreferrer"
+                              className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                              title="Open archived live demo"
+                            >
+                              <ExternalLink size={15} />
+                            </a>
+                            <a 
+                              href={project.githubLink || "https://github.com/Wrap15"} 
+                              target="_blank" 
+                              rel="noreferrer"
+                              className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
+                              title="Open repository code"
+                            >
+                              <Github size={15} />
+                            </a>
+                          </div>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-none pt-3 md:pt-0 border-neutral-150 dark:border-white/[0.02]">
-                        <div className="flex flex-wrap gap-1.5">
-                          {project.tags.map(tag => (
-                            <span key={tag} className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-400">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                          <a 
-                            href={project.link} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
-                            title="Open archived live demo"
-                          >
-                            <ExternalLink size={15} />
-                          </a>
-                          <a 
-                            href={project.githubLink || "https://github.com/Wrap15"} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            className="p-1.5 rounded-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/5 transition-all"
-                            title="Open repository code"
-                          >
-                            <Github size={15} />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </HoverPreviewTooltip>
-                ))}
+                    </HoverPreviewTooltip>
+                  );
+                })}
               </div>
             </motion.div>
           )}
@@ -905,6 +1044,8 @@ const Projects = () => {
             <ProjectDetailPanel 
               project={selectedProject} 
               onClose={() => setSelectedProject(null)} 
+              highlightedTag={highlightedTag}
+              onTagClick={(tag) => setHighlightedTag(prev => prev === tag ? null : tag)}
             />
           )}
         </AnimatePresence>
@@ -1951,6 +2092,7 @@ const ScrollToTop = () => {
 };
 
 export default function App() {
+  const [highlightedTag, setHighlightedTag] = useState<string | null>(null);
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'dark';
@@ -2061,10 +2203,16 @@ export default function App() {
         </Helmet>
 
         <Navbar theme={theme} toggleTheme={toggleTheme} />
-        <Hero />
+        <Hero onSlabClick={(tag) => {
+          setHighlightedTag(tag);
+          const el = document.getElementById('projects');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }} />
         
         <Features />
-        <Projects />
+        <Projects highlightedTag={highlightedTag} setHighlightedTag={setHighlightedTag} />
         <Education />
         <Skills />
         <Contact />
