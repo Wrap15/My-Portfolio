@@ -536,12 +536,12 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.p 
               variants={itemVariants}
-              className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-6 sm:mb-8 leading-relaxed text-left font-sans animate-fade-in"
+              className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-5 sm:mb-7 leading-relaxed text-left font-sans"
             >
-              <span className="text-neutral-950 dark:text-white font-semibold block mb-0.5 sm:mb-1">
-                Frontend-Focused Full Stack Developer specializing in React
+              <span className="text-neutral-950 dark:text-white font-bold block mb-1.5 text-base sm:text-lg tracking-tight">
+                Building High-Performance Fintech & AI Web Applications.
               </span>
-              Building high-performance web apps with seamless UX and AI integrations
+              Frontend-Focused Full Stack Developer specializing in React, Next.js, performance optimization, and intelligent user experiences.
             </motion.p>
             
             <motion.div 
@@ -1142,6 +1142,8 @@ const Education = () => {
   );
 };
 
+
+
 const SkillGroupSkeleton = () => (
   <div className="relative w-full">
     {/* Category header skeleton */}
@@ -1150,9 +1152,9 @@ const SkillGroupSkeleton = () => (
     </div>
     
     {/* Tags wrapper skeleton */}
-    <div className="flex flex-wrap gap-3">
-      {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="relative h-9 w-24 rounded-xl bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden border border-neutral-200/20 dark:border-white/5">
+    <div className="flex flex-col gap-3">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="relative h-9 w-32 rounded-xl bg-neutral-100/60 dark:bg-neutral-900/40 overflow-hidden border border-neutral-200/20 dark:border-white/5 font-mono">
           <Shimmer />
         </div>
       ))}
@@ -1300,14 +1302,15 @@ const Skills = () => {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 xl:gap-8"
             >
               {categories.map((cat, catIndex) => {
-                const catColors: Record<string, { bg: string; border: string; text: string; shadow: string; hoverText: string; indicator: string }> = {
+                const catColors: Record<string, { bg: string; border: string; text: string; shadow: string; hoverText: string; indicator: string; borderTop: string }> = {
                   'Frontend': {
                     bg: "rgba(16, 185, 129, 0.08)",
                     border: "rgba(16, 185, 129, 0.35)",
                     text: "text-emerald-500 dark:text-emerald-400",
                     shadow: "0 10px 20px -8px rgba(16, 185, 129, 0.3)",
                     hoverText: "group-hover:text-emerald-400",
-                    indicator: "bg-emerald-500"
+                    indicator: "bg-emerald-500",
+                    borderTop: "border-emerald-500/40 dark:border-emerald-500/50"
                   },
                   'Backend': {
                     bg: "rgba(99, 102, 241, 0.08)",
@@ -1315,7 +1318,8 @@ const Skills = () => {
                     text: "text-indigo-500 dark:text-indigo-400",
                     shadow: "0 10px 20px -8px rgba(99, 102, 241, 0.3)",
                     hoverText: "group-hover:text-indigo-400",
-                    indicator: "bg-indigo-500"
+                    indicator: "bg-indigo-500",
+                    borderTop: "border-indigo-500/40 dark:border-indigo-500/50"
                   },
                   'State Management': {
                     bg: "rgba(14, 165, 233, 0.08)",
@@ -1323,7 +1327,8 @@ const Skills = () => {
                     text: "text-sky-500 dark:text-sky-400",
                     shadow: "0 10px 20px -8px rgba(14, 165, 233, 0.3)",
                     hoverText: "group-hover:text-sky-400",
-                    indicator: "bg-sky-500"
+                    indicator: "bg-sky-500",
+                    borderTop: "border-sky-500/40 dark:border-sky-500/50"
                   },
                   'AI & Tools': {
                     bg: "rgba(168, 85, 247, 0.08)",
@@ -1331,7 +1336,8 @@ const Skills = () => {
                     text: "text-purple-500 dark:text-purple-400",
                     shadow: "0 10px 20px -8px rgba(168, 85, 247, 0.3)",
                     hoverText: "group-hover:text-purple-400",
-                    indicator: "bg-purple-500"
+                    indicator: "bg-purple-500",
+                    borderTop: "border-purple-500/40 dark:border-purple-500/50"
                   },
                   'Soft Skills': {
                     bg: "rgba(244, 63, 94, 0.08)",
@@ -1339,7 +1345,8 @@ const Skills = () => {
                     text: "text-rose-500 dark:text-rose-400",
                     shadow: "0 10px 20px -8px rgba(244, 63, 94, 0.3)",
                     hoverText: "group-hover:text-rose-400",
-                    indicator: "bg-rose-500"
+                    indicator: "bg-rose-500",
+                    borderTop: "border-rose-500/40 dark:border-rose-500/50"
                   }
                 };
 
@@ -1356,14 +1363,16 @@ const Skills = () => {
 
                     <div className="relative inline-block mb-6 skills-category-header">
                       <h3 
-                        className="text-lg font-bold flex items-center gap-2 cursor-help group select-none font-serif"
+                        className="text-lg font-bold flex items-start gap-2 cursor-help group select-none font-serif"
                         onMouseEnter={() => hasHover && setHoveredCategory(cat)}
                         onMouseLeave={() => hasHover && setHoveredCategory(null)}
                         onClick={() => setHoveredCategory(hoveredCategory === cat ? null : cat)}
                       >
-                        <span className={`w-2 h-2 rounded-full ${colors.indicator} group-hover:scale-150 transition-transform duration-300`} />
-                        {cat}
-                        <Info size={14} className="text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors opacity-60 group-hover:opacity-100 shrink-0 ml-0.5" />
+                        <span className={`w-2.5 h-2.5 rounded-full ${colors.indicator} mt-2 group-hover:scale-150 transition-transform duration-300 shrink-0`} />
+                        <span className="flex items-center gap-1.5 flex-wrap">
+                          {cat}
+                          <Info size={14} className="text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors opacity-60 group-hover:opacity-100 shrink-0 mt-0.5" />
+                        </span>
                       </h3>
                       
                       <AnimatePresence>
@@ -1381,7 +1390,7 @@ const Skills = () => {
                       </AnimatePresence>
                     </div>
 
-                    <div className="flex flex-wrap gap-2.5 animate-fade-in">
+                    <div className="flex flex-col gap-3 items-start animate-fade-in w-full">
                       {SKILLS.filter(s => s.category === cat).map((skill, i) => {
                         const Icon = getIcon(skill.name);
 
@@ -1392,8 +1401,8 @@ const Skills = () => {
                             whileInView={{ opacity: 1, scale: 1, y: 0 }}
                             whileHover={hasHover ? { 
                               scale: 1.05, 
-                              rotate: i % 2 === 0 ? 2 : -2,
-                              y: -3,
+                              rotate: i % 2 === 0 ? 1.5 : -1.5,
+                              x: 4,
                               backgroundColor: colors.bg,
                               borderColor: colors.border,
                               boxShadow: colors.shadow
@@ -1406,7 +1415,7 @@ const Skills = () => {
                               damping: 18,
                               delay: (catIndex * 0.05) + (i * 0.02) 
                             }}
-                            className="group flex items-center gap-2 px-3 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200/50 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer select-none shadow-sm hover:z-10"
+                            className="group flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-neutral-100/50 dark:bg-white/5 border border-neutral-200/50 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer select-none shadow-sm hover:z-10 w-fit animate-fade-in"
                           >
                             <motion.div
                               whileHover={hasHover ? { rotate: [0, -15, 15, -10, 0], scale: 1.2 } : {}}

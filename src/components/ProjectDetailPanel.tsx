@@ -40,6 +40,7 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({
   onTagClick
 }) => {
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<'Overview' | 'Problem' | 'Solution' | 'Architecture' | 'Challenges' | 'Results'>('Overview');
 
   // Disable body scroll when open
   useEffect(() => {
@@ -63,6 +64,12 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
+  };
+
+  const pageVariants = {
+    initial: { opacity: 0, x: 10 },
+    animate: { opacity: 1, x: 0, transition: { duration: 0.25, ease: "easeOut" as const } },
+    exit: { opacity: 0, x: -10, transition: { duration: 0.15 } }
   };
 
   return (
@@ -114,200 +121,310 @@ export const ProjectDetailPanel: React.FC<ProjectDetailPanelProps> = ({
         </div>
 
         {/* Scrollable Document log content */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 select-text">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 select-text flex flex-col">
           
-          {/* Main Hero Shot & Metrics Core */}
-          <div className="space-y-6">
-            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/50 dark:border-white/[0.05] shadow-xs">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-full object-cover object-top"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-neutral-950/20 to-transparent flex items-end p-6">
-                <div className="flex items-center gap-2 text-white text-xs font-mono bg-neutral-950/50 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
-                  <Calendar size={13} className="text-emerald-400 animate-pulse" />
-                  <span>Production Release: {project.date}</span>
-                </div>
+          {/* Main Hero Shot & Release Info */}
+          <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/50 dark:border-white/[0.05] shadow-xs shrink-0 mb-2">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover object-top"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-neutral-950/20 to-transparent flex items-end p-6">
+              <div className="flex items-center gap-2 text-white text-xs font-mono bg-neutral-950/50 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
+                <Calendar size={13} className="text-emerald-400 animate-pulse" />
+                <span>Production Release: {project.date}</span>
               </div>
             </div>
+          </div>
 
-            {/* Metrics Dashboard panel (Recruiter hook) */}
-            {project.metrics && project.metrics.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-2xl border bg-emerald-500/[0.01] dark:bg-emerald-500/[0.01] border-emerald-500/10 dark:border-emerald-500/5 shadow-xs">
-                {project.metrics.map((metric, idx) => (
-                  <div key={idx} className="flex flex-col gap-1 px-1 border-r border-neutral-100 dark:border-white/[0.03] last:border-r-0">
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 font-mono">
-                      {metric.label}
-                    </span>
-                    <span className="text-2xl font-mono font-bold text-emerald-500 dark:text-emerald-400 tracking-tight leading-none mt-1">
-                      {metric.value}
-                    </span>
-                    {metric.description && (
-                      <span className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1 pb-0.5 leading-snug">
-                        {metric.description}
-                      </span>
-                    )}
+          {/* Interactive Case Study Navigation Tabs - Sticky list inside body */}
+          <div className="flex items-center gap-1 border-b border-neutral-200/60 dark:border-white/[0.05] pb-0.5 overflow-x-auto no-scrollbar scroll-smooth shrink-0 sticky top-0 bg-white dark:bg-neutral-950 z-20 pt-1 -mx-6 px-6 sm:-mx-8 sm:px-8">
+            {(['Overview', 'Problem', 'Solution', 'Architecture', 'Challenges', 'Results'] as const).map((tab) => {
+              const isActive = activeTab === tab;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={cn(
+                    "relative py-3 px-3 sm:px-4 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider whitespace-nowrap cursor-pointer transition-all select-none border-b-2 -mb-[2px] focus:outline-none",
+                    isActive 
+                      ? "text-emerald-500 border-emerald-550 font-extrabold" 
+                      : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 border-transparent"
+                  )}
+                >
+                  {tab}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeCaseStudyTabUnderline"
+                      className="absolute bottom-0 inset-x-0 h-[2.5px] bg-emerald-500"
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Tab Page Content Frame */}
+          <div className="flex-1 mt-2">
+            <AnimatePresence mode="wait">
+              {activeTab === 'Overview' && (
+                <motion.div
+                  key="overview-page"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-6"
+                >
+                  <div className="space-y-3">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono block">Project Summary</h3>
+                    <p className="text-neutral-700 dark:text-neutral-300 text-[15px] leading-relaxed font-sans">
+                      {project.description}
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
 
-          {/* Project Summary Description */}
-          <div className="space-y-3">
-            <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono block">Project Overview</h3>
-            <p className="text-neutral-700 dark:text-neutral-300 text-[15px] leading-relaxed font-sans">
-              {project.description}
-            </p>
-          </div>
-
-          {/* Problem Statement block */}
-          {project.problemStatement && (
-            <div className="space-y-3">
-              <h3 className="text-xs uppercase tracking-widest font-extrabold text-red-500 dark:text-red-400 font-mono block">The Engineering Problem</h3>
-              <div className="p-5 rounded-2xl bg-red-500/[0.02] dark:bg-red-500/[0.01] border border-red-500/15 dark:border-red-500/10 flex gap-4">
-                <div className="h-8 w-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 border border-red-500/10">
-                  <Zap size={15} />
-                </div>
-                <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
-                  {project.problemStatement}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Technical Solution Provided */}
-          {project.solutionProvided && (
-            <div className="space-y-3">
-              <h3 className="text-xs uppercase tracking-widest font-extrabold text-emerald-500 dark:text-emerald-400 font-mono block">The Architectural Solution</h3>
-              <div className="p-5 rounded-2xl bg-emerald-500/[0.02] dark:bg-emerald-500/[0.01] border border-emerald-500/15 dark:border-emerald-500/10 flex gap-4">
-                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-500/10">
-                  <CheckCircle2 size={15} />
-                </div>
-                <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
-                  {project.solutionProvided}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Systemic Flow & Structural Elements */}
-          {project.architecture && project.architecture.length > 0 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100 dark:border-white/[0.04]">
-                <Cpu size={16} className="text-teal-500 shrink-0" />
-                <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-800 dark:text-neutral-200 font-mono">Systemic Architecture Blueprint</h3>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {project.architecture.map((step, idx) => {
-                  const parts = step.split(':');
-                  const headerText = parts[0] || '';
-                  const bodyText = parts[1] || '';
-                  return (
-                    <div key={idx} className="p-4 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200/40 dark:border-white/[0.04] hover:bg-neutral-100/30 dark:hover:bg-white/[0.04] transition-all flex flex-col gap-1.5">
-                      <span className="text-xs font-bold text-neutral-900 dark:text-white uppercase tracking-wider font-mono">
-                        {headerText}
-                      </span>
-                      {bodyText && (
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed font-sans">
-                          {bodyText.trim()}
-                        </p>
-                      )}
+                  {project.features && project.features.length > 0 && (
+                    <div className="space-y-4 pt-5 border-t border-neutral-100 dark:border-white/[0.04]">
+                      <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono block">Key Features & Deliverables</h3>
+                      <ul className="grid gap-3">
+                        {project.features.map((feature, idx) => (
+                          <li key={idx} className="flex gap-3 text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0 mt-2" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+                  )}
 
-          {/* Performance Optimizations */}
-          {project.performanceDetails && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100 dark:border-white/[0.04]">
-                <Gauge size={16} className="text-sky-500 shrink-0" />
-                <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-800 dark:text-neutral-200 font-mono">Performance Optimizations</h3>
-              </div>
-              <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
-                {project.performanceDetails}
-              </p>
-            </div>
-          )}
-
-          {/* Challenges and Learnings */}
-          {project.challenges && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100 dark:border-white/[0.04]">
-                <Sparkles size={16} className="text-purple-500 shrink-0" />
-                <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-800 dark:text-neutral-200 font-mono">Challenges & Learnings</h3>
-              </div>
-              <div className="space-y-3">
-                <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
-                  {project.challenges}
-                </p>
-                {project.learnings && (
-                  <div className="p-4.5 rounded-xl bg-purple-500/[0.01] dark:bg-purple-500/[0.01] border border-purple-500/10 dark:border-purple-500/5 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans flex gap-3">
-                    <span className="text-purple-500 shrink-0 select-none">💜</span>
-                    <span className="text-xs font-serif italic text-neutral-600 dark:text-neutral-400">
-                      <strong>Takeaway:</strong> {project.learnings}
-                    </span>
+                  {/* Technical Specifications / Tech Tags */}
+                  <div className="space-y-3 pt-5 border-t border-neutral-100 dark:border-white/[0.04]">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <span>Integrated Technology Stack</span>
+                      <span className="text-[9px] text-neutral-400 dark:text-neutral-500 normal-case font-mono flex items-center gap-1 font-normal">
+                        <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                        Click tag to highlight matching projects
+                      </span>
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => {
+                        const isHighlighted = highlightedTag === tag;
+                        return (
+                          <button
+                            key={tag}
+                            onClick={() => onTagClick?.(tag)}
+                            className={cn(
+                              "text-xs font-mono font-medium px-2.5 py-1 rounded transition-all cursor-pointer hover:scale-[1.05] active:scale-[0.98] select-none flex items-center gap-1.5 focus:outline-none border",
+                              isHighlighted 
+                                ? "bg-emerald-500/10 dark:bg-emerald-500/10 border-emerald-500/50 dark:border-emerald-400/50 text-emerald-600 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-semibold"
+                                : "bg-neutral-50 dark:bg-white/[0.03] border-neutral-200/50 dark:border-white/[0.05] text-neutral-600 dark:text-neutral-400 hover:border-emerald-500/30 dark:hover:border-emerald-400/30 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-emerald-500/[0.03]"
+                            )}
+                            title={isHighlighted ? "Click to clear highlight" : `Highlight other projects with ${tag}`}
+                          >
+                            {tag}
+                            {isHighlighted && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-          )}
+                </motion.div>
+              )}
 
-          {/* Deliverables Section */}
-          {project.features && project.features.length > 0 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100 dark:border-white/[0.04]">
-                <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
-                <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-800 dark:text-neutral-200 font-mono">Key Features & Deliverables</h3>
-              </div>
-              <ul className="grid gap-3.5">
-                {project.features.map((feature, idx) => (
-                  <li key={idx} className="flex gap-3 text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0 mt-2" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+              {activeTab === 'Problem' && (
+                <motion.div
+                  key="problem-page"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-6"
+                >
+                  <div className="space-y-3">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-red-500 dark:text-red-400 font-mono block">The Engineering Problem</h3>
+                    {project.problemStatement ? (
+                      <div className="p-5 rounded-2xl bg-red-500/[0.02] dark:bg-red-500/[0.01] border border-red-500/15 dark:border-red-500/10 flex gap-4">
+                        <div className="h-8 w-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 border border-red-500/10 mt-0.5">
+                          <Zap size={15} />
+                        </div>
+                        <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
+                          {project.problemStatement}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs font-mono italic py-4 text-center">
+                        No critical bottlenecks stored for this record.
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
 
-          {/* Technical Specifications / Tech Tags */}
-          <div className="space-y-3">
-            <h3 className="text-xs uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono flex items-center justify-between gap-2">
-              <span>Integrated Technology Stack</span>
-              <span className="text-[10px] text-neutral-400 dark:text-neutral-500 normal-case font-mono flex items-center gap-1 font-normal">
-                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                Click tag to highlight matching projects
-              </span>
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => {
-                const isHighlighted = highlightedTag === tag;
-                return (
-                  <button
-                    key={tag}
-                    onClick={() => onTagClick?.(tag)}
-                    className={cn(
-                      "text-xs font-mono font-medium px-2.5 py-1 rounded transition-all cursor-pointer hover:scale-[1.05] active:scale-[0.98] select-none flex items-center gap-1.5 focus:outline-none border",
-                      isHighlighted 
-                        ? "bg-emerald-500/10 dark:bg-emerald-500/10 border-emerald-500/50 dark:border-emerald-400/50 text-emerald-600 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-semibold"
-                        : "bg-neutral-50 dark:bg-white/[0.03] border-neutral-200/50 dark:border-white/[0.05] text-neutral-600 dark:text-neutral-400 hover:border-emerald-500/30 dark:hover:border-emerald-400/30 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-emerald-500/[0.03]"
+              {activeTab === 'Solution' && (
+                <motion.div
+                  key="solution-page"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-6"
+                >
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-emerald-500 dark:text-emerald-400 font-mono block">The Architectural Solution</h3>
+                    {project.solutionProvided ? (
+                      <div className="p-5 rounded-2xl bg-emerald-500/[0.02] dark:bg-emerald-500/[0.01] border border-emerald-500/15 dark:border-emerald-500/10 flex gap-4">
+                        <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-500/10 mt-0.5">
+                          <CheckCircle2 size={15} />
+                        </div>
+                        <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
+                          {project.solutionProvided}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs font-mono italic py-4 text-center">
+                        No custom architectural description logged for this record.
+                      </p>
                     )}
-                    title={isHighlighted ? "Click to clear highlight" : `Highlight other projects with ${tag}`}
-                  >
-                    {tag}
-                    {isHighlighted && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  </div>
+
+                  {project.performanceDetails && (
+                    <div className="space-y-3 pt-5 border-t border-neutral-100 dark:border-white/[0.04]">
+                      <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-sky-500 dark:text-sky-400 font-mono flex items-center gap-1.5">
+                        <Gauge size={14} className="text-sky-500 animate-pulse" />
+                        <span>Performance Audits & Benchmarks</span>
+                      </h3>
+                      <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
+                        {project.performanceDetails}
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+
+              {activeTab === 'Architecture' && (
+                <motion.div
+                  key="architecture-page"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-6"
+                >
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono flex items-center gap-2">
+                      <Cpu size={15} className="text-teal-500 shrink-0" />
+                      <span>Systemic Flow & Structural Elements</span>
+                    </h3>
+                    {project.architecture && project.architecture.length > 0 ? (
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {project.architecture.map((step, idx) => {
+                          const parts = step.split(':');
+                          const headerText = parts[0] || '';
+                          const bodyText = parts[1] || '';
+                          return (
+                            <div key={idx} className="p-4 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200/40 dark:border-white/[0.04] hover:bg-neutral-100/30 dark:hover:bg-white/[0.04] transition-all flex flex-col gap-1.5">
+                              <span className="text-xs font-bold text-neutral-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                                <span className="h-4 w-4 rounded-md bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-[10px] font-bold shrink-0">{idx + 1}</span>
+                                {headerText}
+                              </span>
+                              {bodyText && (
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed font-sans">
+                                  {bodyText.trim()}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs font-mono italic py-4 text-center">
+                        Architecture parameters not charted for this record.
+                      </p>
                     )}
-                  </button>
-                );
-              })}
-            </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'Challenges' && (
+                <motion.div
+                  key="challenges-page"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-6"
+                >
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono flex items-center gap-2">
+                      <Sparkles size={15} className="text-purple-500 shrink-0" />
+                      <span>Engineering Hurdles & Takeaways</span>
+                    </h3>
+                    {project.challenges ? (
+                      <div className="space-y-4">
+                        <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans">
+                          {project.challenges}
+                        </p>
+                        {project.learnings && (
+                          <div className="p-4.5 rounded-xl bg-purple-500/[0.01] dark:bg-purple-500/[0.01] border border-purple-500/10 dark:border-purple-500/5 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed font-sans flex gap-3">
+                            <span className="text-purple-500 shrink-0 select-none">💜</span>
+                            <span className="text-xs font-serif italic text-neutral-600 dark:text-neutral-400">
+                              <strong>Key Takeaway:</strong> {project.learnings}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs font-mono italic py-4 text-center">
+                        Takeaways of development not stored.
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'Results' && (
+                <motion.div
+                  key="results-page"
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-6"
+                >
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] uppercase tracking-widest font-extrabold text-neutral-400 dark:text-neutral-500 font-mono block">Quantitative Real-World Results</h3>
+                    
+                    {project.metrics && project.metrics.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {project.metrics.map((metric, idx) => (
+                          <div key={idx} className="flex flex-col gap-1 p-4.5 rounded-xl border bg-emerald-500/[0.02] dark:bg-emerald-500/[0.01] border-emerald-500/15 dark:border-emerald-500/10 shadow-3xs hover:scale-[1.02] transition-transform">
+                            <span className="text-[9px] font-extrabold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 font-mono">
+                              {metric.label}
+                            </span>
+                            <span className="text-2xl font-mono font-bold text-emerald-500 dark:text-emerald-400 tracking-tight leading-none mt-1">
+                              {metric.value}
+                            </span>
+                            {metric.description && (
+                              <span className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 pb-0.5 leading-snug">
+                                {metric.description}
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs font-mono italic py-4 text-center">
+                        Results data not formally stored for this project yet.
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
         </div>
