@@ -53,7 +53,7 @@ import { SuccessConfetti } from './components/SuccessConfetti';
 import { HoverPreviewTooltip } from './components/HoverPreviewTooltip';
 import { playNavClickSound, playResumeChime, playHoverSound } from './lib/sounds';
 
-const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void }) => {
+const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: (e?: React.MouseEvent) => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -114,9 +114,9 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
           ))}
           
           <button
-            onClick={() => {
+            onClick={(e) => {
               playNavClickSound();
-              toggleTheme();
+              toggleTheme(e);
             }}
             className="relative p-2 w-9 h-9 flex items-center justify-center overflow-hidden rounded-full hover:bg-neutral-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all shadow-sm border border-neutral-200 dark:border-white/10"
             aria-label="Toggle theme"
@@ -152,9 +152,9 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: () => void
         {/* Mobile Toggle */}
         <div className="flex items-center gap-2 md:hidden">
           <button
-            onClick={() => {
+            onClick={(e) => {
               playNavClickSound();
-              toggleTheme();
+              toggleTheme(e);
             }}
             className="relative p-2 w-9 h-9 flex items-center justify-center overflow-hidden rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 active:scale-95 transition-all border border-neutral-200/40 dark:border-white/5"
             aria-label="Toggle theme mobile"
@@ -318,7 +318,7 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-2xl p-2.5 sm:p-3 md:p-3.5 text-left border bg-white/40 dark:bg-neutral-900/15 backdrop-blur-md transition-all duration-300 shadow-2xs flex items-center gap-2.5 sm:gap-3 w-full self-stretch select-none",
+        "group relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl p-1.5 min-[375px]:p-2 sm:p-3 md:p-3.5 text-left border bg-white/40 dark:bg-neutral-900/15 backdrop-blur-md transition-all duration-300 shadow-2xs flex items-center gap-1.5 min-[375px]:gap-2 sm:gap-3 w-full self-stretch select-none",
         colors.border,
         colors.shadow
       )}
@@ -331,7 +331,7 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
 
       {/* Decorative accent background blob */}
       <div className={cn(
-        "absolute -right-4 -bottom-4 w-12 h-12 rounded-full blur-xl pointer-events-none opacity-15 dark:opacity-8 transition-opacity duration-300 z-0",
+        "absolute -right-4 -bottom-4 w-12 h-12 rounded-full blur-xl pointer-events-none opacity-10 dark:opacity-5 transition-opacity duration-300 z-0",
         color === 'emerald' && 'bg-emerald-500',
         color === 'sky' && 'bg-sky-500',
         color === 'purple' && 'bg-purple-500',
@@ -340,11 +340,11 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
 
       {/* Left side: Icon Container */}
       <div className={cn(
-        "w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-105 relative z-10",
+        "w-6 h-6 min-[375px]:w-7 min-[375px]:h-7 sm:w-9 sm:h-9 rounded-md sm:rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-105 relative z-10",
         colors.iconBg
       )}>
         <Icon className={cn(
-          "size-4 sm:size-4.5 transition-transform duration-300",
+          "size-3 min-[375px]:size-3.5 sm:size-4.5 transition-transform duration-300",
           color === 'sky' && 'animate-[spin_8s_linear_infinite]',
           color === 'purple' && 'animate-pulse',
           color === 'pink' && 'group-hover:animate-[bounce_1s_infinite]'
@@ -354,12 +354,12 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
       {/* Right side: Inner content */}
       <div className="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
         <p className={cn(
-          "text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider leading-none mb-0.5 sm:mb-1 transition-all select-none",
+          "text-[7px] min-[375px]:text-[7.5px] sm:text-[9px] font-extrabold uppercase tracking-wider leading-none mb-0.5 sm:mb-1 transition-all select-none",
           colors.text
         )}>
           {label}
         </p>
-        <p className="text-[11px] sm:text-[12px] md:text-[13px] font-bold text-neutral-800 dark:text-neutral-200 tracking-tight leading-snug truncate group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
+        <p className="text-[9.5px] min-[375px]:text-[10px] sm:text-[12px] md:text-[13px] font-bold text-neutral-800 dark:text-neutral-200 tracking-tight leading-none min-[375px]:leading-snug truncate group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
           {title}
         </p>
       </div>
@@ -454,7 +454,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   };
 
   return (
-    <section id="about" className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
+    <section id="about" className="relative lg:min-h-screen flex items-center pt-20 sm:pt-28 pb-12 sm:pb-20 overflow-hidden">
       {/* Background Decorative Grid and Glow Elements */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_30%_50%,#000_75%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
@@ -487,7 +487,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-8 text-neutral-950 dark:text-white tracking-tight"
+              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-4 sm:mb-6 text-neutral-950 dark:text-white tracking-tight"
             >
               Dhaval 
               <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
@@ -496,9 +496,9 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             {/* Premium Interactive Bento-Style Slabs */}
             <motion.div
               variants={itemVariants}
-              className="mb-8 w-full"
+              className="mb-4 sm:mb-6 w-full"
             >
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5 md:gap-4 w-full">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 min-[375px]:gap-2 sm:gap-3 w-full">
                 <HeroSlab 
                   label="Architecting" 
                   title="FullStack Developer" 
@@ -536,9 +536,9 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.p 
               variants={itemVariants}
-              className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-10 leading-relaxed text-left font-sans"
+              className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-6 sm:mb-8 leading-relaxed text-left font-sans animate-fade-in"
             >
-              <span className="text-neutral-950 dark:text-white font-semibold block mb-1">
+              <span className="text-neutral-950 dark:text-white font-semibold block mb-0.5 sm:mb-1">
                 Frontend-Focused Full Stack Developer specializing in React
               </span>
               Building high-performance web apps with seamless UX and AI integrations
@@ -546,7 +546,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.div 
               variants={itemVariants}
-              className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-start gap-4 w-full"
+              className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-start gap-2.5 sm:gap-3.5 w-full"
             >
               {/* Primary View Projects */}
               <motion.a 
@@ -561,10 +561,10 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
                   playNavClickSound();
                   document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/10 dark:shadow-white/5 text-sm cursor-pointer whitespace-nowrap"
+                className="w-full sm:w-auto px-5 py-2.5 sm:px-6.5 sm:py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold dark:bg-white dark:hover:bg-neutral-200 transition-colors flex items-center justify-center gap-1.5 group shadow-md shadow-emerald-500/10 dark:shadow-white/5 text-xs sm:text-sm cursor-pointer whitespace-nowrap"
               >
                 <span>View Projects</span>
-                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </motion.a>
               
               {/* Download Resume Link */}
@@ -575,35 +575,20 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={playResumeChime}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-full border border-neutral-300 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20 text-neutral-800 dark:text-neutral-200 font-bold transition-all flex items-center justify-center gap-2 text-sm cursor-pointer bg-neutral-100/30 dark:bg-white/[0.02]"
+                className="w-full sm:w-auto px-5 py-2.5 sm:px-6.5 sm:py-3 rounded-full border border-neutral-300 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20 text-neutral-800 dark:text-neutral-200 font-bold transition-all flex items-center justify-center gap-1.5 text-xs sm:text-sm cursor-pointer bg-neutral-100/30 dark:bg-white/[0.02]"
               >
-                <GraduationCap size={16} />
+                <GraduationCap size={14} />
                 <span>Download Resume</span>
               </motion.a>
-
-              {/* Contact Me Button */}
-              <motion.a
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playNavClickSound();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-neutral-950 hover:bg-neutral-800 dark:bg-white/10 dark:hover:bg-white/15 text-white dark:text-neutral-200 font-bold transition-all flex items-center justify-center text-sm cursor-pointer border border-neutral-800 dark:border-white/5 text-center"
-              >
-                <span>Contact Me</span>
-              </motion.a>
               
-              <div className="w-full sm:w-auto flex items-center justify-center gap-4.5 bg-neutral-100/50 dark:bg-neutral-900/25 px-5 py-3.5 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-sm md:ml-2">
-                <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="GitHub"><Github size={18} /></a>
-                <div className="w-px h-3.5 bg-neutral-300 dark:bg-white/10" />
-                <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="LinkedIn"><Linkedin size={18} /></a>
-                <div className="w-px h-3.5 bg-neutral-300 dark:bg-white/10" />
-                <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="WhatsApp"><MessageCircle size={18} /></a>
-                <div className="w-px h-3.5 bg-neutral-300 dark:bg-white/10" />
-                <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="Email"><Mail size={18} /></a>
+              <div className="w-full sm:w-auto flex items-center justify-center gap-4 bg-neutral-100/50 dark:bg-neutral-900/25 px-4.5 py-2.5 sm:px-5 sm:py-3 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-2xs md:ml-2">
+                <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="GitHub"><Github size={16} /></a>
+                <div className="w-px h-3 bg-neutral-300 dark:bg-white/10" />
+                <a href="https://www.linkedin.com/in/dhaval-panchal-726a0625b/" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="LinkedIn"><Linkedin size={16} /></a>
+                <div className="w-px h-3 bg-neutral-300 dark:bg-white/10" />
+                <a href="https://wa.me/919875161613" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="WhatsApp"><MessageCircle size={16} /></a>
+                <div className="w-px h-3 bg-neutral-300 dark:bg-white/10" />
+                <a href="mailto:dhavalpanchal1775@gmail.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="Email"><Mail size={16} /></a>
               </div>
             </motion.div>
           </motion.div>
@@ -2100,14 +2085,59 @@ export default function App() {
     return 'dark';
   });
 
-  const toggleTheme = () => {
-    document.documentElement.classList.add('theme-transitioning');
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transitioning');
-    }, 700);
+  const toggleTheme = (e?: React.MouseEvent) => {
+    const changeTheme = () => {
+      const newTheme = theme === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      localStorage.setItem('theme', newTheme);
+    };
+
+    if (
+      typeof document === 'undefined' ||
+      typeof window === 'undefined' ||
+      !document.startViewTransition ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      document.documentElement.classList.add('theme-transitioning');
+      changeTheme();
+      setTimeout(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+      }, 750);
+      return;
+    }
+
+    let x = window.innerWidth - 40;
+    let y = 40;
+
+    if (e && e.clientX !== undefined && e.clientY !== undefined) {
+      x = e.clientX;
+      y = e.clientY;
+    }
+
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      changeTheme();
+    });
+
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+          ]
+        },
+        {
+          duration: 650,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          pseudoElement: '::view-transition-new(root)'
+        }
+      );
+    });
   };
 
   useEffect(() => {
