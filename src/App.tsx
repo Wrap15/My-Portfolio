@@ -73,9 +73,9 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: (e?: React
 
   return (
     <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 py-4",
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 pt-4 pb-5 md:py-4",
       isScrolled 
-        ? "bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200/50 dark:border-white/5 py-3" 
+        ? "bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200/50 dark:border-white/5 pt-3 pb-5 md:py-3" 
         : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -577,7 +577,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   };
 
   return (
-    <section id="about" className="relative lg:min-h-screen flex items-center pt-24 min-[360px]:pt-28 sm:pt-32 pb-8 sm:pb-20 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
+    <section id="about" className="relative lg:min-h-screen flex items-center pt-32 xs:pt-[130px] sm:pt-32 pb-8 sm:pb-20 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       {/* Background Decorative Grid and Glow Elements */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_30%_50%,#000_75%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
@@ -603,7 +603,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             {/* Status Badge */}
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-5 sm:mb-8 shrink-0 shadow-sm"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mt-4 xs:mt-5 sm:mt-0 mb-5 sm:mb-8 shrink-0 shadow-sm"
             >
               <span className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
