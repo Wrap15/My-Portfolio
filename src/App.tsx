@@ -311,14 +311,14 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
 
   return (
     <motion.div
-      whileHover={{ y: -2, scale: 1.012 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ y: -1.5, scale: 1.01 }}
+      whileTap={{ scale: 0.985 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl p-1.5 min-[375px]:p-2 sm:p-3 md:p-3.5 text-left border bg-white/40 dark:bg-neutral-900/15 backdrop-blur-md transition-all duration-300 shadow-2xs flex items-center gap-1.5 min-[375px]:gap-2 sm:gap-3 w-full self-stretch select-none",
+        "group relative cursor-pointer overflow-hidden rounded-lg sm:rounded-xl p-1.5 min-[375px]:p-2 sm:p-2.5 text-left border bg-white/40 dark:bg-neutral-900/15 backdrop-blur-md transition-all duration-300 shadow-2xs flex items-center gap-1.5 min-[375px]:gap-2 sm:gap-2.5 w-full self-stretch select-none",
         colors.border,
         colors.shadow
       )}
@@ -340,11 +340,11 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
 
       {/* Left side: Icon Container */}
       <div className={cn(
-        "w-6 h-6 min-[375px]:w-7 min-[375px]:h-7 sm:w-9 sm:h-9 rounded-md sm:rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-105 relative z-10",
+        "w-5 h-5 min-[375px]:w-5.5 min-[375px]:h-5.5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-105 relative z-10",
         colors.iconBg
       )}>
         <Icon className={cn(
-          "size-3 min-[375px]:size-3.5 sm:size-4.5 transition-transform duration-300",
+          "size-2.5 min-[375px]:size-3 sm:size-4 transition-transform duration-300",
           color === 'sky' && 'animate-[spin_8s_linear_infinite]',
           color === 'purple' && 'animate-pulse',
           color === 'pink' && 'group-hover:animate-[bounce_1s_infinite]'
@@ -354,12 +354,12 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
       {/* Right side: Inner content */}
       <div className="flex-1 min-w-0 relative z-10 flex flex-col justify-center">
         <p className={cn(
-          "text-[7px] min-[375px]:text-[7.5px] sm:text-[9px] font-extrabold uppercase tracking-wider leading-none mb-0.5 sm:mb-1 transition-all select-none",
+          "text-[5.5px] min-[375px]:text-[6px] sm:text-[7.5px] font-bold font-mono uppercase tracking-[0.14em] leading-none mb-0.5 sm:mb-1 transition-all select-none opacity-80 dark:opacity-85",
           colors.text
         )}>
           {label}
         </p>
-        <p className="text-[9.5px] min-[375px]:text-[10px] sm:text-[12px] md:text-[13px] font-bold text-neutral-800 dark:text-neutral-200 tracking-tight leading-none min-[375px]:leading-snug truncate group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
+        <p className="text-[9.5px] min-[375px]:text-[10px] sm:text-[11.5px] md:text-[12px] font-display font-semibold text-neutral-800 dark:text-neutral-100 tracking-tight leading-none min-[375px]:leading-snug truncate group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
           {title}
         </p>
       </div>
@@ -372,10 +372,75 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
   );
 };
 
+const AnimatedCounter = ({ value, duration = 1000 }: { value: number; duration?: number }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const elapsedTime = timestamp - startTimestamp;
+      const progress = Math.min(elapsedTime / duration, 1);
+      
+      setCount(Math.floor(easeOutCubic(progress) * value));
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+
+    const animFrame = window.requestAnimationFrame(step);
+    return () => window.cancelAnimationFrame(animFrame);
+  }, [value, duration]);
+
+  return <>{count}%</>;
+};
+
 const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [dashboardTab, setDashboardTab] = useState<'profile' | 'terminal' | 'metrics'>('profile');
+  const [tabDirection, setTabDirection] = useState<-1 | 1>(1);
+  const [activeCmd, setActiveCmd] = useState<'cat bio.md' | 'npm test' | 'coffee --status'>('cat bio.md');
+  const [indianTime, setIndianTime] = useState("");
+  const [consoleState, setConsoleState] = useState<'normal' | 'minimized' | 'fullwidth' | 'closed'>('closed');
   const profileCardRef = useRef<HTMLDivElement>(null);
   
+  // Rotating headline index
+  const highlights = [
+    "High-Performance Fintech Apps",
+    "Intelligent AI Web Workspaces",
+    "Tailwind & Pixel Perfect Interfaces",
+    "Sub-100ms Core Web Vitals"
+  ];
+
+  // Rotate tagline highlights
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % highlights.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Live IST clock
+  useEffect(() => {
+    const updateTime = () => {
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      setIndianTime(new Date().toLocaleTimeString('en-US', options));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Interactive 3D mouse tracking for Right Profile Card
   const profX = useMotionValue(0);
   const profY = useMotionValue(0);
@@ -383,13 +448,37 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   const profMouseY = useMotionValue(0);
 
   // Map mouse positions to 3D rotation angles
-  const profRotateX = useTransform(profY, [-0.5, 0.5], [15, -15]);
-  const profRotateY = useTransform(profX, [-0.5, 0.5], [-15, 15]);
+  const profRotateX = useTransform(profY, [-0.5, 0.5], [10, -10]);
+  const profRotateY = useTransform(profX, [-0.5, 0.5], [-10, 10]);
 
   const profSpringConfig = { damping: 25, stiffness: 180, mass: 0.5 };
   const smoothProfRotateX = useSpring(profRotateX, profSpringConfig);
   const smoothProfRotateY = useSpring(profRotateY, profSpringConfig);
   const smoothProfScale = useSpring(useMotionValue(1), profSpringConfig);
+  const spotlightBg = useMotionTemplate`radial-gradient(180px circle at ${profMouseX}px ${profMouseY}px, rgba(16, 185, 129, 0.12), transparent 85%)`;
+
+  const tabVariants = {
+    initial: (direction: number) => ({
+      x: direction > 0 ? 30 : -30,
+      opacity: 0,
+    }),
+    animate: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { type: "spring" as const, stiffness: 380, damping: 30 },
+        opacity: { duration: 0.2 }
+      }
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -30 : 30,
+      opacity: 0,
+      transition: {
+        x: { type: "spring" as const, stiffness: 380, damping: 30 },
+        opacity: { duration: 0.15 }
+      }
+    })
+  };
 
   const handleProfMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!profileCardRef.current) return;
@@ -405,11 +494,10 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
 
     profMouseX.set(event.clientX - rect.left);
     profMouseY.set(event.clientY - rect.top);
-    smoothProfScale.set(1.05);
   };
 
   const handleProfMouseEnter = () => {
-    smoothProfScale.set(1.05);
+    smoothProfScale.set(1.02);
   };
 
   const handleProfMouseLeave = () => {
@@ -431,6 +519,37 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
 
   const handleMouseLeave = () => {
     setCoords({ x: 0, y: 0 });
+  };
+
+  const handleTabChange = (tab: 'profile' | 'terminal' | 'metrics') => {
+    const tabIndices = {
+      profile: 0,
+      terminal: 1,
+      metrics: 2
+    };
+    const currentIdx = tabIndices[dashboardTab];
+    const targetIdx = tabIndices[tab];
+    setTabDirection(targetIdx > currentIdx ? 1 : -1);
+    setDashboardTab(tab);
+    playHoverSound();
+  };
+
+  const handleCmdClick = (cmd: 'cat bio.md' | 'npm test' | 'coffee --status') => {
+    setActiveCmd(cmd);
+    playHoverSound();
+  };
+
+  const handleConsoleAction = (action: 'close' | 'minimize' | 'fullwidth') => {
+    if (action === 'close') {
+      setConsoleState('closed');
+      playNavClickSound();
+    } else if (action === 'minimize') {
+      setConsoleState(prev => prev === 'minimized' ? 'normal' : 'minimized');
+      playNavClickSound();
+    } else if (action === 'fullwidth') {
+      setConsoleState(prev => prev === 'fullwidth' ? 'normal' : 'fullwidth');
+      playNavClickSound();
+    }
   };
 
   const containerVariants: Variants = {
@@ -460,7 +579,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/[0.06] dark:bg-blue-500/[0.04] rounded-full blur-[120px] pointer-events-none" />
       
-      {/* 3D Parallax Particle Field Overlay (Option B Core) */}
+      {/* 3D Parallax Particle Field Overlay */}
       <Particle3DField />
       
       <div className="max-w-6xl mx-auto px-6 md:px-12 w-full relative z-10">
@@ -471,26 +590,34 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="flex flex-col items-start text-left max-w-3xl lg:col-span-7 xl:col-span-8"
+            className={cn(
+              "flex flex-col items-start text-left max-w-3xl transition-all duration-350",
+              consoleState === 'fullwidth' ? "lg:col-span-12 xl:col-span-12 max-w-full" : "lg:col-span-7 xl:col-span-8",
+              consoleState === 'closed' ? "lg:col-span-12 xl:col-span-12 max-w-full" : ""
+            )}
           >
             {/* Status Badge */}
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-1 sm:gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-4 sm:mb-6 shrink-0"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-400/10 dark:bg-emerald-500/5 border border-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[6.5px] min-[360px]:text-[7.5px] sm:text-[8.5px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-4 sm:mb-6 shrink-0 shadow-xs"
             >
-              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+              <span className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-1 w-1 sm:h-1.5 sm:w-1.5 bg-emerald-500"></span>
               </span>
-              Open to Full-Time Roles &amp; Freelance Projects
+              Available for Full-Time Roles &amp; Freelance Core Projects
             </motion.div>
             
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-4 sm:mb-6 text-neutral-950 dark:text-white tracking-tight"
+              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-4 sm:mb-6 text-neutral-950 dark:text-white tracking-tight relative"
             >
               Dhaval 
               <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
+              {/* Technical aesthetic coordinates overlay */}
+              <span className="absolute -top-3.5 right-6 text-[8px] font-mono text-neutral-400/50 dark:text-neutral-500/30 tracking-[0.25em] select-none hidden sm:inline-block">
+                SYS_LOC [23° N, 72° E]
+              </span>
             </motion.h1>
 
             {/* Premium Interactive Bento-Style Slabs */}
@@ -533,16 +660,54 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
                 />
               </div>
             </motion.div>
+
+            <AnimatePresence>
+              {consoleState === 'closed' && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="mb-4 sm:mb-6"
+                >
+                  <button
+                    onClick={() => {
+                      setConsoleState('normal');
+                      playResumeChime();
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold tracking-tight shadow-xs cursor-pointer transition-all"
+                  >
+                    <Sparkles size={11} className="animate-pulse" />
+                    Restore Interactive Workspace Console
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
             
-            <motion.p 
+            <motion.div 
               variants={itemVariants}
-              className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-5 sm:mb-7 leading-relaxed text-left font-sans"
+              className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-6 sm:mb-8 leading-relaxed text-left font-sans"
             >
-              <span className="text-neutral-950 dark:text-white font-bold block mb-1.5 text-base sm:text-lg tracking-tight">
-                Building High-Performance Fintech & AI Web Applications.
-              </span>
-              Frontend-Focused Full Stack Developer specializing in React, Next.js, performance optimization, and intelligent user experiences.
-            </motion.p>
+              {/* Interactive Smooth Tagline Rotator */}
+              <div className="h-6 sm:h-7 mb-1.5 overflow-hidden flex items-center">
+                <span className="text-neutral-950 dark:text-white font-serif italic mr-2 shrink-0">I craft</span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentIndex}
+                    initial={{ y: 15, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -15, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className="text-emerald-500 dark:text-emerald-400 font-extrabold tracking-tight"
+                  >
+                    {highlights[currentIndex]}.
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+              <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm md:text-base mt-2">
+                Frontend-focused Full Stack Developer specializing in MERN, client rendering engine design, intelligent GenAI interfaces, and sub-100ms Core Web Vitals optimization.
+              </p>
+            </motion.div>
             
             <motion.div 
               variants={itemVariants}
@@ -567,20 +732,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </motion.a>
               
-              {/* Download Resume Link */}
-              <motion.a
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                href="https://drive.google.com/file/d/1JSKxzXl2HKSGffpkCo5HuOnyy8Mnoeyt/view?usp=drive_link"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={playResumeChime}
-                className="w-full sm:w-auto px-5 py-2.5 sm:px-6.5 sm:py-3 rounded-full border border-neutral-300 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20 text-neutral-800 dark:text-neutral-200 font-bold transition-all flex items-center justify-center gap-1.5 text-xs sm:text-sm cursor-pointer bg-neutral-100/30 dark:bg-white/[0.02]"
-              >
-                <GraduationCap size={14} />
-                <span>Download Resume</span>
-              </motion.a>
-              
+
               <div className="w-full sm:w-auto flex items-center justify-center gap-4 bg-neutral-100/50 dark:bg-neutral-900/25 px-4.5 py-2.5 sm:px-5 sm:py-3 rounded-full border border-neutral-200/40 dark:border-white/5 backdrop-blur-sm shadow-2xs md:ml-2">
                 <a href="https://github.com/Wrap15" target="_blank" rel="noreferrer" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-all duration-200" title="GitHub"><Github size={16} /></a>
                 <div className="w-px h-3 bg-neutral-300 dark:bg-white/10" />
@@ -593,90 +745,369 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             </motion.div>
           </motion.div>
 
-          {/* Right: Floating Decorative Composition / Profile Graphic Column */}
-          <div className="col-span-5 xl:col-span-4 hidden lg:block relative">
-            <motion.div
-              ref={profileCardRef}
-              initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-              style={{
-                rotateX: smoothProfRotateX,
-                rotateY: smoothProfRotateY,
-                scale: smoothProfScale,
-                transformStyle: 'preserve-3d',
-                perspective: '1000px',
-              }}
-              onMouseMove={handleProfMouseMove}
-              onMouseEnter={handleProfMouseEnter}
-              onMouseLeave={handleProfMouseLeave}
-              className="relative w-full max-w-[340px] aspect-square rounded-3xl bg-radial from-emerald-500/15 via-emerald-500/5 to-transparent border border-emerald-500/20 shadow-xl shadow-emerald-500/5 backdrop-blur-md p-6 flex flex-col justify-between overflow-hidden group select-none cursor-default will-change-transform"
-            >
-              {/* Option B Spotlight glow reflection layer */}
+          {/* Right: Premium Interactive Developer Console Board (3D Rotation) */}
+          <AnimatePresence>
+            {consoleState !== 'closed' && (
               <motion.div
-                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
-                style={{
-                  background: useMotionTemplate`radial-gradient(180px circle at ${profMouseX}px ${profMouseY}px, rgba(16, 185, 129, 0.15), transparent 85%)`,
-                }}
-              />
+                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className={cn(
+                  "block relative mt-6 lg:mt-0 transition-all duration-350",
+                  consoleState === 'fullwidth' 
+                    ? "col-span-1 lg:col-span-12 xl:col-span-12 w-full flex justify-center" 
+                    : "col-span-1 lg:col-span-15 xl:col-span-4 lg:col-span-5"
+                )}
+              >
+                <motion.div
+                  ref={profileCardRef}
+                  style={{
+                    rotateX: consoleState === 'fullwidth' ? 0 : smoothProfRotateX,
+                    rotateY: consoleState === 'fullwidth' ? 0 : smoothProfRotateY,
+                    scale: smoothProfScale,
+                    transformStyle: 'preserve-3d',
+                    perspective: '1000px',
+                  }}
+                  onMouseMove={handleProfMouseMove}
+                  onMouseEnter={handleProfMouseEnter}
+                  onMouseLeave={handleProfMouseLeave}
+                  className={cn(
+                    "relative w-full rounded-3xl bg-neutral-55 sm:bg-neutral-50 dark:bg-neutral-900/35 border border-neutral-200/60 dark:border-white/10 shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/30 backdrop-blur-md flex flex-col overflow-hidden group select-none cursor-default will-change-transform transition-all duration-350",
+                    consoleState === 'fullwidth' 
+                      ? "max-w-full md:h-[360px]" 
+                      : consoleState === 'minimized'
+                        ? "max-w-[420px] lg:max-w-[370px] h-[46px]"
+                        : "max-w-[420px] lg:max-w-[370px] aspect-[4/3] min-[450px]:aspect-square"
+                  )}
+                >
+                  {/* Option B Spotlight glow reflection layer */}
+                  <motion.div
+                    className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
+                    style={{
+                      background: spotlightBg,
+                    }}
+                  />
 
-              {/* Internal abstract floating visual nodes */}
-              <div className="absolute top-0 right-0 p-3 flex gap-1.5 z-20">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-400/60 dark:bg-red-500/20" />
-                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/60 dark:bg-yellow-500/20" />
-                <span className="w-2.5 h-2.5 rounded-full bg-green-400/60 dark:bg-emerald-500/20" />
+                  {/* Console Dashboard Header Command Bar */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-neutral-100/80 dark:bg-neutral-950/40 border-b border-neutral-200/50 dark:border-white/5 shrink-0 z-10">
+                    {/* Traffic System dots */}
+                    <div className="flex gap-1.5 group/dots items-center">
+                      <button
+                        onClick={() => handleConsoleAction('close')}
+                        className="w-2.5 h-2.5 rounded-full bg-red-400 dark:bg-red-500/80 hover:bg-red-500 flex items-center justify-center text-[7px] font-extrabold text-red-950/10 hover:text-red-900 dark:text-red-950/10 dark:hover:text-red-950 transition-all select-none cursor-pointer h-2.5 border-0 p-0 relative"
+                        title="Close"
+                        style={{ outline: 'none' }}
+                      >
+                        <span className="opacity-0 group-hover/dots:opacity-100 transition-opacity mb-[0.2px] pointer-events-none">×</span>
+                      </button>
+                      <button
+                        onClick={() => handleConsoleAction('minimize')}
+                        className="w-2.5 h-2.5 rounded-full bg-yellow-405 dark:bg-yellow-500/80 hover:bg-yellow-500 flex items-center justify-center text-[7px] font-extrabold text-yellow-955/10 hover:text-yellow-900 dark:text-yellow-955/10 dark:hover:text-yellow-950 transition-all select-none cursor-pointer h-2.5 border-0 p-0 relative"
+                        title="Minimize"
+                        style={{ outline: 'none' }}
+                      >
+                        <span className="opacity-0 group-hover/dots:opacity-100 transition-opacity mb-[1.2px] leading-none pointer-events-none">-</span>
+                      </button>
+                      <button
+                        onClick={() => handleConsoleAction('fullwidth')}
+                        className="w-2.5 h-2.5 rounded-full bg-emerald-405 dark:bg-emerald-500/80 hover:bg-emerald-500 flex items-center justify-center text-[5px] font-extrabold text-emerald-955/10 hover:text-emerald-900 dark:text-emerald-955/10 dark:hover:text-emerald-950 transition-all select-none cursor-pointer h-2.5 border-0 p-0 relative"
+                        title="Toggle Full Width"
+                        style={{ outline: 'none' }}
+                      >
+                        <span className="opacity-0 group-hover/dots:opacity-100 transition-opacity mb-[0.2px] pointer-events-none">↕</span>
+                      </button>
+                    </div>
+                
+                {/* Micro Tabs Interface */}
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleTabChange('profile')}
+                    className={cn(
+                      "px-2.5 py-1 rounded-md text-[10px] font-mono transition-all font-semibold cursor-pointer",
+                      dashboardTab === 'profile' 
+                        ? "bg-white dark:bg-neutral-800 text-emerald-500 dark:text-emerald-400 shadow-xs border border-neutral-200 dark:border-white/5" 
+                        : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                    )}
+                  >
+                    profile.json
+                  </button>
+                  <button
+                    onClick={() => handleTabChange('terminal')}
+                    className={cn(
+                      "px-2.5 py-1 rounded-md text-[10px] font-mono transition-all font-semibold cursor-pointer",
+                      dashboardTab === 'terminal' 
+                        ? "bg-white dark:bg-neutral-800 text-emerald-500 dark:text-emerald-400 shadow-xs border border-neutral-200 dark:border-white/5" 
+                        : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                    )}
+                  >
+                    terminal.sh
+                  </button>
+                  <button
+                    onClick={() => handleTabChange('metrics')}
+                    className={cn(
+                      "px-2.5 py-1 rounded-md text-[10px] font-mono transition-all font-semibold cursor-pointer",
+                      dashboardTab === 'metrics' 
+                        ? "bg-white dark:bg-neutral-800 text-emerald-500 dark:text-emerald-400 shadow-xs border border-neutral-200 dark:border-white/5" 
+                        : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                    )}
+                  >
+                    metrics.live
+                  </button>
+                </div>
               </div>
 
-              {/* Grid abstract background panel */}
-              <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-15" />
+              {consoleState !== 'minimized' && (
+                <>
+                  {/* Grid abstract background panel */}
+                  <div className="absolute inset-x-0 top-12 bottom-0 bg-[radial-gradient(#10b981_0.75px,transparent_0.75px)] [background-size:16px_16px] opacity-[0.05] pointer-events-none" />
 
-              {/* 3D Translation of elements for real structural depth feel */}
-              <div style={{ transform: 'translateZ(20px)', transformStyle: 'preserve-3d' }} className="w-full h-full relative z-10 flex flex-col justify-between">
+                  {/* 3D Translation of elements for real structural depth feel */}
+                  <div style={{ transform: 'translateZ(15px)', transformStyle: 'preserve-3d' }} className="flex-1 p-5 relative z-10 flex flex-col justify-between overflow-y-auto">
                 
-                {/* Content items */}
-                <div style={{ transform: 'translateZ(10px)' }} className="flex flex-col gap-4 pt-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-serif text-emerald-500 font-bold text-lg shadow-sm">
-                      D
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-neutral-800 dark:text-neutral-100 text-sm">Dhaval Panchal</h3>
-                      <p className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">Gujarat, India</p>
-                    </div>
-                  </div>
+                <AnimatePresence mode="wait" custom={tabDirection}>
+                  {dashboardTab === 'profile' && (
+                    <motion.div
+                      key="tab-profile"
+                      custom={tabDirection}
+                      variants={tabVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="flex flex-col h-full justify-between"
+                    >
+                      {/* Avatar Identity Info */}
+                      <div className="flex items-center gap-3.5 mb-3.5">
+                        <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/25 flex items-center justify-center font-serif text-emerald-500 font-bold text-xl shadow-xs shrink-0 select-none">
+                          D
+                        </div>
+                        <div>
+                          <h3 className="font-extrabold text-neutral-800 dark:text-white text-base tracking-tight leading-none mb-1">Dhaval Panchal</h3>
+                          <div className="flex items-center gap-1.5 font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                            <span>GUJARAT, INDIA</span>
+                          </div>
+                        </div>
+                      </div>
 
-                  <div className="w-full h-[1px] bg-neutral-200/50 dark:bg-white/5" />
+                      {/* Line decorative divider */}
+                      <div className="w-full h-px bg-neutral-200/50 dark:bg-white/5 mb-3" />
 
-                  <div className="space-y-2.5 font-mono text-[10px]">
-                    <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                      <span>STATUS</span>
-                      <span className="text-emerald-500 font-semibold flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        ACTIVE
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                      <span>ROLE</span>
-                      <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">MERN &amp; React</span>
-                    </div>
-                    <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
-                      <span>FOCUS</span>
-                      <span className="text-neutral-800 dark:text-neutral-200 font-semibold uppercase">Elegant Pixels</span>
-                    </div>
-                  </div>
-                </div>
+                      {/* Styled JSON Viewer with syntax highlights */}
+                      <div className="bg-neutral-900/5 dark:bg-neutral-950/50 border border-neutral-200/30 dark:border-white/5 rounded-xl p-3.5 font-mono text-[10.5px] leading-relaxed text-left shrink-0 max-w-full">
+                        <div className="text-zinc-600 dark:text-neutral-500">{"{"}</div>
+                        
+                        <div className="pl-4">
+                          <span className="text-indigo-500 dark:text-sky-400">"role"</span>: <span className="text-amber-600 dark:text-amber-300">"FullStack & React Expert"</span>,
+                        </div>
+                        
+                        <div className="pl-4">
+                          <span className="text-indigo-500 dark:text-sky-400">"available"</span>: <span className="text-emerald-500 dark:text-emerald-400 font-bold">true</span>,
+                        </div>
+                        
+                        <div className="pl-4">
+                          <span className="text-indigo-500 dark:text-sky-400">"location"</span>: <span className="text-amber-600 dark:text-amber-300">"Gujarat, India"</span>,
+                        </div>
+                        
+                        <div className="pl-4 flex items-center gap-1.5 flex-wrap">
+                          <span className="text-indigo-500 dark:text-sky-400">"local_time"</span>:{" "}
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-neutral-900 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold shadow-inner">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            {indianTime || "12:00:00 PM"}
+                          </span>
+                        </div>
+                        
+                        <div className="text-zinc-600 dark:text-neutral-500">{"}"}</div>
+                      </div>
+                    </motion.div>
+                  )}
 
-                {/* Interactive glowing miniature mock terminal lines or code signature */}
-                <div style={{ transform: 'translateZ(15px)' }} className="bg-neutral-950/5 dark:bg-neutral-950/60 border border-neutral-300/40 dark:border-white/5 rounded-xl p-3 font-mono text-[9px] text-neutral-600 dark:text-neutral-300 leading-normal mb-1">
-                  <p className="text-emerald-500 font-semibold">&gt; info.skills</p>
-                  <p className="pl-3.5 text-neutral-500 select-all">["React", "FramerMotion", "TailwindCSS"]</p>
-                  <p className="text-blue-500 font-semibold mt-1">&gt; loading_state</p>
-                  <p className="pl-3.5 text-neutral-500">"fast-loading_optimized"</p>
-                </div>
+                  {dashboardTab === 'terminal' && (
+                    <motion.div
+                      key="tab-terminal"
+                      custom={tabDirection}
+                      variants={tabVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="flex flex-col h-full justify-between gap-3 text-left"
+                    >
+                      {/* Action command selectors */}
+                      <div className="flex flex-wrap gap-1.5 shrink-0 z-10">
+                        <button
+                          onClick={() => handleCmdClick('cat bio.md')}
+                          className={cn(
+                            "px-2 py-1 rounded-md text-[9px] font-mono transition-all border font-semibold cursor-pointer",
+                            activeCmd === 'cat bio.md'
+                              ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
+                              : "bg-neutral-100 dark:bg-neutral-900 border-neutral-200/40 dark:border-white/5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                          )}
+                        >
+                          cat bio.md
+                        </button>
+                        <button
+                          onClick={() => handleCmdClick('npm test')}
+                          className={cn(
+                            "px-2 py-1 rounded-md text-[9px] font-mono transition-all border font-semibold cursor-pointer",
+                            activeCmd === 'npm test'
+                              ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
+                              : "bg-neutral-100 dark:bg-neutral-900 border-neutral-200/40 dark:border-white/5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                          )}
+                        >
+                          npm test
+                        </button>
+                        <button
+                          onClick={() => handleCmdClick('coffee --status')}
+                          className={cn(
+                            "px-2 py-1 rounded-md text-[9px] font-mono transition-all border font-semibold cursor-pointer",
+                            activeCmd === 'coffee --status'
+                              ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
+                              : "bg-neutral-100 dark:bg-neutral-900 border-neutral-200/40 dark:border-white/5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                          )}
+                        >
+                          coffee.sh
+                        </button>
+                      </div>
+
+                      {/* Display shell execution area */}
+                      <div className="flex-1 flex flex-col justify-center bg-neutral-950 border border-neutral-800/80 rounded-xl p-3.5 font-mono text-[10px] leading-normal text-neutral-300 min-h-[140px] overflow-y-auto">
+                        <div className="flex items-center gap-1.5 mb-1.5 text-zinc-500 select-none text-[9px]">
+                          <span>dhaval@portfolio:~$</span>
+                          <span className="text-amber-400">{activeCmd}</span>
+                        </div>
+
+                        <div className="animate-fade-in flex-1">
+                          {activeCmd === 'cat bio.md' && (
+                            <div className="text-zinc-300">
+                              <span className="text-emerald-400 font-bold block mb-1">=== DEVSPEC ===</span>
+                              <p className="leading-relaxed text-zinc-400">
+                                Driven to architect bulletproof full-stack engines, optimize client bundles to absolute limits, and design memorable interactive journeys.
+                              </p>
+                            </div>
+                          )}
+
+                          {activeCmd === 'npm test' && (
+                            <div className="space-y-1 text-zinc-400">
+                              <div className="flex items-center gap-1.5 text-emerald-400 font-semibold mb-1">
+                                <CheckCircle2 size={11} className="shrink-0" />
+                                <span>ALL SUITES GREEN [3/3]</span>
+                              </div>
+                              <div className="space-y-0.5 text-zinc-500 pl-1">
+                                <p>✓ type checking: strict checks passed</p>
+                                <p>✓ page speed: lighthouse index 100/100</p>
+                                <p>✓ bundles: treeshaking optimized to 1.8MB</p>
+                              </div>
+                            </div>
+                          )}
+
+                          {activeCmd === 'coffee --status' && (
+                            <div className="text-[10px] text-zinc-400 leading-normal">
+                              <span className="text-purple-400 font-bold block mb-1">=== TELEMETRY ===</span>
+                              <p>Brain Status: <span className="text-emerald-400 font-semibold animate-pulse">Compiling Next Idea</span></p>
+                              <p>MERN State: <span className="text-sky-400 font-semibold">Fully Syncing</span></p>
+                              <p>Coffee Cup: <span className="text-amber-500">100% Full (Inexhaustible)</span></p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {dashboardTab === 'metrics' && (
+                    <motion.div
+                      key="tab-metrics"
+                      custom={tabDirection}
+                      variants={tabVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="flex flex-col h-full justify-between gap-4 text-left"
+                    >
+                      {/* Competency metric visual bars */}
+                      <div className="space-y-3 flex-1 justify-center flex flex-col">
+                        <div>
+                          <div className="flex justify-between text-[10px] font-mono font-bold text-neutral-500 dark:text-neutral-400 mb-1">
+                            <span>MERN / REACT STACK</span>
+                            <span className="text-emerald-500">
+                              <AnimatedCounter value={98} duration={800} />
+                            </span>
+                          </div>
+                          <div className="h-1.5 w-full bg-neutral-100 dark:bg-neutral-950 rounded-full overflow-hidden border border-neutral-200/30 dark:border-white/5">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: "98%" }}
+                              transition={{ duration: 0.8, ease: "easeOut" }}
+                              className="h-full bg-gradient-to-r from-emerald-500 to-sky-400 rounded-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-[10px] font-mono font-bold text-neutral-500 dark:text-neutral-400 mb-1">
+                            <span>FINTECH ARCHITECTURE</span>
+                            <span className="text-indigo-400">
+                              <AnimatedCounter value={94} duration={800} />
+                            </span>
+                          </div>
+                          <div className="h-1.5 w-full bg-neutral-100 dark:bg-neutral-950 rounded-full overflow-hidden border border-neutral-200/30 dark:border-white/5">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: "94%" }}
+                              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                              className="h-full bg-gradient-to-r from-indigo-500 to-purple-400 rounded-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-[10px] font-mono font-bold text-neutral-500 dark:text-neutral-400 mb-1">
+                            <span>PERFORMANCE &amp; CORE WEB VITALS</span>
+                            <span className="text-amber-500">
+                              <AnimatedCounter value={99} duration={800} />
+                            </span>
+                          </div>
+                          <div className="h-1.5 w-full bg-neutral-100 dark:bg-neutral-950 rounded-full overflow-hidden border border-neutral-200/30 dark:border-white/5">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: "99%" }}
+                              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                              className="h-full bg-gradient-to-r from-amber-500 to-rose-400 rounded-full"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Smooth CPU compiling frequency wave animations */}
+                      <div className="w-full shrink-0">
+                        <div className="text-[8px] font-mono text-neutral-400 dark:text-neutral-500 tracking-wider mb-1.5 uppercase select-none font-bold">
+                          Live Active CPU Compilation Waveform:
+                        </div>
+                        <div className="flex items-end justify-center gap-1.5 h-11 w-full bg-neutral-100/50 dark:bg-neutral-950/40 rounded-xl p-2 border border-neutral-200/40 dark:border-white/5 overflow-hidden">
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((k) => (
+                            <motion.div
+                              key={k}
+                              className="w-[3px] rounded-full bg-emerald-500/75 dark:bg-emerald-400/70"
+                              animate={{
+                                height: [12, Math.random() * 26 + 4, 12]
+                              }}
+                              transition={{
+                                duration: 0.7 + (k * 0.04) % 0.6,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Extra outer decorative floaters */}
               <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-xl pointer-events-none" />
+                </>
+              )}
             </motion.div>
 
             {/* Small floating particles around the card */}
@@ -691,7 +1122,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
                 duration: 4,
                 ease: "easeInOut"
               }}
-              className="absolute -top-4 left-1/4 w-3 h-3 rounded-full bg-emerald-400/40 dark:bg-emerald-500/20 blur-[1px] pointer-events-none"
+              className="absolute -top-4 left-1/4 w-3 h-3 rounded-full bg-emerald-400/45 dark:bg-emerald-500/20 blur-[1px] pointer-events-none hidden lg:block"
             />
             <motion.div
               animate={{
@@ -705,9 +1136,11 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
                 ease: "easeInOut",
                 delay: 1
               }}
-              className="absolute bottom-12 -left-6 w-2.5 h-2.5 rounded-full bg-blue-400/40 dark:bg-blue-500/20 blur-[1px] pointer-events-none"
+              className="absolute bottom-12 -left-6 w-2.5 h-2.5 rounded-full bg-blue-400/45 dark:bg-blue-500/20 blur-[1px] pointer-events-none hidden lg:block"
             />
-          </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           
         </div>
       </div>

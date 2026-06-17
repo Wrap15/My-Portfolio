@@ -144,6 +144,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClic
         }}
       />
 
+      {/* Premium subtle glare sweep effect */}
+      <div className="pointer-events-none absolute inset-0 rounded-[24px] overflow-hidden z-15">
+        <div className="absolute top-[-50%] bottom-[-50%] w-[45%] -translate-x-full rotate-[25deg] bg-gradient-to-r from-transparent via-white/20 dark:via-emerald-400/[0.08] to-transparent transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[300%]" />
+      </div>
+
       <div style={{ transform: 'translateZ(10px)', transformStyle: 'preserve-3d' }} className="w-full h-full relative z-20 flex flex-col justify-between">
         
         {/* Card Header: Category & Date (Visible statically) */}

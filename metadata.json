@@ -1,5 +1,6 @@
 {
   "name": "Panchal's PortFolio",
   "description": "A modern, professional portfolio showcase for developers and academics with smooth animations and high-end typography.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
