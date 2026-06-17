@@ -39,6 +39,38 @@ export interface Skill {
 
 export const PROJECTS: Project[] = [
   {
+    id: '5',
+    title: 'Keshav Restro',
+    category: 'Web Application',
+    date: 'June 2026',
+    description: 'A premium, highly interactive digital dining and restaurant layout system styled for 100% pure vegetarian cuisine. Integrates custom circular filters, allergen alerts, dynamic table layout selection, invoices synced via LocalStorage, and professional fluid animations.',
+    tags: ['React 18', 'Vite', 'Tailwind CSS', 'Framer Motion', 'LocalStorage', 'Component-Driven UI'],
+    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fkeshav-veg-restro.vercel.app%2F?w=800&h=600',
+    link: 'https://keshav-veg-restro.vercel.app/',
+    githubLink: 'https://github.com/Wrap15/KeshavVegRestro',
+    metrics: [
+      { label: 'Menu Catalog Size', value: '150+ Items', description: 'Extensive range of premium dishes and localized street food items' },
+      { label: 'Dine-In Table Selector', value: '12 Tables', description: 'Visual map coordinating customer seat layouts with invoices' },
+      { label: 'Fast Animation Curves', value: '60 FPS', description: 'Hardware-accelerated item flips, heart beats, and hover shine sweeps' }
+    ],
+    problemStatement: 'Digital menus are frequently static and lack real-world customer convenience. Customers cannot visualize table allocations, verify ingredient warnings dynamically, or reorder instantly from localized past invoices.',
+    solutionProvided: 'Built an elegant React platform featuring Swiggy-style circular filters, an interactive dine-in table mapping system, and a robust cart panel with promo codes. Created automatic allergen logic recognizing Gluten (bread/pav) and Dairy (butter) loadouts, plus an incremental preparation timer dashboard.',
+    performanceDetails: 'Structured clean Tailwind CSS styles for rapid rendering with sub-second lazy shimmers. Offloaded menu list modifications and detailed modals directly to state blocks, implementing custom Spring physics loops on all hover states and button scaling interactions.',
+    learnings: 'Aquired knowledge on responsive viewport mapping (bottom-left scroll bounds), full multi-column layout footers, and storing invoice caches successfully offline first.',
+    features: [
+      '🍽️ Fluid Table Grid — Renders a custom seat reservation dashboard syncing order lists directly to occupied stations.',
+      '🌶️ Circular Swiggy Filter — Fast, responsive category dials featuring custom street food items (Dabeli, Frankie, Moong Dal Chilla).',
+      '🥗 Smart Allergen Warnings — Instant detection dynamically highlights Gluten and Dairy ingredients to ensure dietary safety.',
+      '⚡ Order Preparation Tracker — Real-time progress timeline simulating master chef preparations, packaging, and serving stages.'
+    ],
+    architecture: [
+      'Component Isolation: Keeps CartSidebars, custom filters, and detail grids perfectly responsive.',
+      'Persistent Invoice Cache: Keeps client purchase history cached inside local browser storage.',
+      'Active Touch Feedback: Includes subtle vibrate patterns on mobile to provide clear tactile responses.'
+    ],
+    challenges: 'Handling large-scale lists (150+ items) without causing mobile redraw lag. Resolved by building light SVG placeholder shimmers and offloading complex filter triggers into isolated render loops.'
+  },
+  {
     id: '6',
     title: 'OnlyProfit',
     category: 'FinTech',

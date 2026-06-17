@@ -577,7 +577,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   };
 
   return (
-    <section id="about" className="relative lg:min-h-screen flex items-center pt-14 sm:pt-28 pb-8 sm:pb-20 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
+    <section id="about" className="relative lg:min-h-screen flex items-center pt-24 min-[360px]:pt-28 sm:pt-32 pb-8 sm:pb-20 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       {/* Background Decorative Grid and Glow Elements */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_30%_50%,#000_75%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
@@ -603,7 +603,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             {/* Status Badge */}
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[7px] min-[360px]:text-[8px] sm:text-[9.5px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-6 sm:mb-9 shrink-0 shadow-sm"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-5 sm:mb-8 shrink-0 shadow-sm"
             >
               <span className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -614,10 +614,10 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] lg:text-[6rem] font-serif font-extrabold leading-[0.9] mb-4 sm:mb-6 text-neutral-950 dark:text-white tracking-tight relative select-none"
+              className="text-3xl min-[360px]:text-4xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-3 sm:mb-5 text-neutral-950 dark:text-white tracking-tight relative"
             >
               Dhaval 
-              <span className="block bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 dark:from-emerald-400 dark:via-emerald-300 dark:to-teal-400 bg-clip-text text-transparent italic mt-1.5 pb-1 pr-4 drop-shadow-[0_2px_10px_rgba(16,185,129,0.15)]">Panchal</span>
+              <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
               {/* Technical aesthetic coordinates overlay */}
               <span className="absolute -top-3.5 right-6 text-[8px] font-mono text-neutral-400/50 dark:text-neutral-500/30 tracking-[0.25em] select-none hidden sm:inline-block">
                 SYS_LOC [23° N, 72° E]
@@ -627,9 +627,9 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             {/* Premium Interactive Bento-Style Slabs */}
             <motion.div
               variants={itemVariants}
-              className="mb-4 sm:mb-6 mt-2 sm:mt-3 w-full"
+              className="mb-3 sm:mb-5 w-full"
             >
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 w-full">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-1 min-[340px]:gap-1.5 min-[360px]:gap-2 sm:gap-2.5 w-full">
                 <HeroSlab 
                   label="Architecting" 
                   title="FullStack Developer" 
@@ -2506,19 +2506,86 @@ const ScrollToTop = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          initial={{ opacity: 0, scale: 0.5, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.5, y: 20 }}
+          exit={{ opacity: 0, scale: 0.5, y: 15 }}
           whileHover={{ scale: 1.1, backgroundColor: '#10b981' }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-neutral-900 dark:bg-emerald-500 text-white shadow-2xl border border-white/10 dark:border-none flex items-center justify-center transition-colors group"
+          className="fixed bottom-28 right-6 md:bottom-8 md:right-8 z-50 p-3.5 sm:p-4 rounded-full bg-neutral-900 dark:bg-emerald-500 text-white shadow-2xl border border-white/10 dark:border-none flex items-center justify-center transition-colors group"
           aria-label="Scroll to top"
         >
-          <ArrowUp size={24} className="group-hover:animate-bounce" />
+          <ArrowUp size={22} className="group-hover:animate-bounce" />
         </motion.button>
       )}
     </AnimatePresence>
+  );
+};
+
+const MobileDock = ({ activeSection }: { activeSection: string }) => {
+  const dockSections = [
+    { name: 'About', id: 'about', icon: User },
+    { name: 'Projects', id: 'projects', icon: Briefcase },
+    { name: 'Education', id: 'education', icon: GraduationCap },
+    { name: 'Skills', id: 'skills', icon: Cpu },
+    { name: 'Contact', id: 'contact', icon: Mail }
+  ];
+
+  const handleDockClick = (id: string) => {
+    playNavClickSound();
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(20);
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[45] md:hidden w-[90%] max-w-[380px] xs:max-w-xs px-2.5">
+      <div className="bg-white/70 dark:bg-neutral-950/75 border border-neutral-200/50 dark:border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-neutral-900/10 dark:shadow-black/50 px-2.5 py-1.5 flex items-center justify-around w-full">
+        {dockSections.map((sec) => {
+          const Icon = sec.icon;
+          const isActive = activeSection.toLowerCase() === sec.id;
+          return (
+            <button
+              key={sec.id}
+              onClick={() => handleDockClick(sec.id)}
+              className="relative py-1 flex flex-col items-center justify-center rounded-xl transition-all duration-300 group focus:outline-none flex-1 min-h-[44px]"
+              aria-label={`Scroll to ${sec.name}`}
+            >
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeDockIndicator"
+                    className="absolute inset-0 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-xl border border-emerald-500/20"
+                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  />
+                )}
+              </AnimatePresence>
+              <Icon 
+                size={18} 
+                className={cn(
+                  "transition-transform duration-300 group-active:scale-90 relative z-10",
+                  isActive 
+                    ? "text-emerald-500 dark:text-emerald-400 scale-105" 
+                    : "text-neutral-500 dark:text-neutral-400"
+                )}
+              />
+              <span className={cn(
+                "text-[8.5px] font-bold tracking-tight mt-0.5 transition-colors duration-300 font-sans relative z-10",
+                isActive 
+                  ? "text-emerald-600 dark:text-emerald-400" 
+                  : "text-neutral-400 dark:text-neutral-500"
+              )}>
+                {sec.name}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
@@ -2766,6 +2833,7 @@ export default function App() {
         <Contact />
 
         <ScrollToTop />
+        <MobileDock activeSection={activeSection} />
         
         {/* Reading Scroll Progress Indicator */}
         <div className="fixed top-0 left-0 right-0 h-1 bg-transparent z-[60] select-none pointer-events-none">
