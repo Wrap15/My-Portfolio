@@ -273,6 +273,10 @@ const HeroSlab: React.FC<HeroSlabProps> = ({ label, title, icon: Icon, color, ta
 
   const handleClick = () => {
     playResumeChime();
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined' && navigator.vibrate) {
+      // Subtle single vibration tick for professional tactile confirmation
+      navigator.vibrate(15);
+    }
     onSlabClick(targetTag);
   };
 
@@ -573,7 +577,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
   };
 
   return (
-    <section id="about" className="relative lg:min-h-screen flex items-center pt-20 sm:pt-28 pb-12 sm:pb-20 overflow-hidden">
+    <section id="about" className="relative lg:min-h-screen flex items-center pt-14 sm:pt-28 pb-8 sm:pb-20 overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       {/* Background Decorative Grid and Glow Elements */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_30%_50%,#000_75%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-emerald-500/[0.08] dark:bg-emerald-500/[0.05] rounded-full blur-[130px] pointer-events-none animate-pulse" />
@@ -591,7 +595,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             animate="visible"
             variants={containerVariants}
             className={cn(
-              "flex flex-col items-start text-left max-w-3xl transition-all duration-350",
+               "flex flex-col items-start text-left max-w-3xl transition-all duration-350",
               consoleState === 'fullwidth' ? "lg:col-span-12 xl:col-span-12 max-w-full" : "lg:col-span-7 xl:col-span-8",
               consoleState === 'closed' ? "lg:col-span-12 xl:col-span-12 max-w-full" : ""
             )}
@@ -599,7 +603,7 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             {/* Status Badge */}
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-400/10 dark:bg-emerald-500/5 border border-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[6.5px] min-[360px]:text-[7.5px] sm:text-[8.5px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-4 sm:mb-6 shrink-0 shadow-xs"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-400/10 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[7px] min-[360px]:text-[8px] sm:text-[9.5px] font-bold font-mono uppercase tracking-wider min-[360px]:tracking-widest select-none cursor-default mb-6 sm:mb-9 shrink-0 shadow-sm"
             >
               <span className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -610,10 +614,10 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] font-serif font-bold leading-[0.95] mb-4 sm:mb-6 text-neutral-950 dark:text-white tracking-tight relative"
+              className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-[5.5rem] lg:text-[6rem] font-serif font-extrabold leading-[0.9] mb-4 sm:mb-6 text-neutral-950 dark:text-white tracking-tight relative select-none"
             >
               Dhaval 
-              <span className="block text-gradient italic mt-1 pb-1 pr-4">Panchal</span>
+              <span className="block bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 dark:from-emerald-400 dark:via-emerald-300 dark:to-teal-400 bg-clip-text text-transparent italic mt-1.5 pb-1 pr-4 drop-shadow-[0_2px_10px_rgba(16,185,129,0.15)]">Panchal</span>
               {/* Technical aesthetic coordinates overlay */}
               <span className="absolute -top-3.5 right-6 text-[8px] font-mono text-neutral-400/50 dark:text-neutral-500/30 tracking-[0.25em] select-none hidden sm:inline-block">
                 SYS_LOC [23° N, 72° E]
@@ -623,9 +627,9 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             {/* Premium Interactive Bento-Style Slabs */}
             <motion.div
               variants={itemVariants}
-              className="mb-4 sm:mb-6 w-full"
+              className="mb-4 sm:mb-6 mt-2 sm:mt-3 w-full"
             >
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 min-[375px]:gap-2 sm:gap-3 w-full">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 w-full">
                 <HeroSlab 
                   label="Architecting" 
                   title="FullStack Developer" 
@@ -686,25 +690,25 @@ const Hero = ({ onSlabClick }: { onSlabClick: (tag: string) => void }) => {
             
             <motion.div 
               variants={itemVariants}
-              className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-6 sm:mb-8 leading-relaxed text-left font-sans"
+              className="text-xs sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mb-5 sm:mb-7 leading-relaxed text-left font-sans"
             >
               {/* Interactive Smooth Tagline Rotator */}
-              <div className="h-6 sm:h-7 mb-1.5 overflow-hidden flex items-center">
-                <span className="text-neutral-950 dark:text-white font-serif italic mr-2 shrink-0">I craft</span>
+              <div className="h-5 sm:h-7 mb-1 overflow-hidden flex items-center">
+                <span className="text-neutral-950 dark:text-white font-serif italic mr-1.5 shrink-0 text-xs sm:text-lg">I craft</span>
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={currentIndex}
-                    initial={{ y: 15, opacity: 0 }}
+                    initial={{ y: 12, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -15, opacity: 0 }}
+                    exit={{ y: -12, opacity: 0 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="text-emerald-500 dark:text-emerald-400 font-extrabold tracking-tight"
+                    className="text-emerald-500 dark:text-emerald-400 font-extrabold tracking-tight text-xs sm:text-lg"
                   >
                     {highlights[currentIndex]}.
                   </motion.span>
                 </AnimatePresence>
               </div>
-              <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm md:text-base mt-2">
+              <p className="text-neutral-600 dark:text-neutral-400 text-[10.5px] min-[360px]:text-xs sm:text-sm md:text-base mt-1.5 sm:mt-2">
                 Frontend-focused Full Stack Developer specializing in MERN, client rendering engine design, intelligent GenAI interfaces, and sub-100ms Core Web Vitals optimization.
               </p>
             </motion.div>
@@ -1275,7 +1279,7 @@ const Projects = ({
   const archivedProjects = PROJECTS.filter(project => project.id === '4');
 
   return (
-    <section id="projects" className="py-16 md:py-32 px-4 sm:px-6">
+    <section id="projects" className="py-16 md:py-32 px-4 sm:px-6 scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Portfolio" 
@@ -1510,7 +1514,7 @@ const Education = () => {
   }, []);
 
   return (
-    <section id="education" className="py-16 md:py-32 px-4 sm:px-6 bg-neutral-50 dark:bg-neutral-900/30">
+    <section id="education" className="py-16 md:py-32 px-4 sm:px-6 bg-neutral-50 dark:bg-neutral-900/30 scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Academic" 
@@ -1703,7 +1707,7 @@ const Skills = () => {
   };
   
   return (
-    <section id="skills" className="py-16 md:py-32 px-4 sm:px-6">
+    <section id="skills" className="py-16 md:py-32 px-4 sm:px-6 scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-7xl mx-auto">
         <SectionHeader 
           title="Expertise" 
@@ -2035,7 +2039,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-16 md:py-32 px-4 sm:px-6 relative overflow-hidden">
+    <section id="contact" className="py-16 md:py-32 px-4 sm:px-6 relative overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       {/* Confetti animation on successful form submission */}
       <SuccessConfetti active={status === 'success'} />
 
@@ -2409,7 +2413,7 @@ const Features = () => {
   ];
 
   return (
-    <section id="why-hire-me" className="py-20 md:py-32 px-4 sm:px-6 relative overflow-hidden">
+    <section id="why-hire-me" className="py-20 md:py-32 px-4 sm:px-6 relative overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       <div className="absolute inset-0 bg-neutral-50/50 dark:bg-neutral-950/20 pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -2599,6 +2603,75 @@ export default function App() {
     restDelta: 0.001
   });
 
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  const cursorOuterX = useSpring(cursorX, { stiffness: 120, damping: 22, mass: 0.6 });
+  const cursorOuterY = useSpring(cursorY, { stiffness: 120, damping: 22, mass: 0.6 });
+
+  const cursorInnerX = useSpring(cursorX, { stiffness: 450, damping: 30, mass: 0.1 });
+  const cursorInnerY = useSpring(cursorY, { stiffness: 450, damping: 30, mass: 0.1 });
+
+  const [isHoveringLink, setIsHoveringLink] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
+  const [showCursor, setShowCursor] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
+
+  useEffect(() => {
+    const checkTouch = () => {
+      const hasTouch = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+      setIsTouchDevice(hasTouch);
+    };
+    checkTouch();
+    window.addEventListener('resize', checkTouch);
+
+    const moveCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      if (!showCursor) setShowCursor(true);
+    };
+
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
+
+    const handleMouseEnterWindow = () => setShowCursor(true);
+    const handleMouseLeaveWindow = () => setShowCursor(false);
+
+    if (!isTouchDevice) {
+      window.addEventListener('mousemove', moveCursor);
+      window.addEventListener('mousedown', handleMouseDown);
+      window.addEventListener('mouseup', handleMouseUp);
+      document.body.addEventListener('mouseenter', handleMouseEnterWindow);
+      document.body.addEventListener('mouseleave', handleMouseLeaveWindow);
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkTouch);
+      window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      document.body.removeEventListener('mouseenter', handleMouseEnterWindow);
+      document.body.removeEventListener('mouseleave', handleMouseLeaveWindow);
+    };
+  }, [isTouchDevice, showCursor]);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      const isClickable = target.closest('a, button, [role="button"], .cursor-pointer, input, select, textarea');
+      setIsHoveringLink(!!isClickable);
+    };
+
+    window.addEventListener('mouseover', handleMouseOver);
+    return () => {
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, [isTouchDevice]);
+
   const [activeSection, setActiveSection] = useState('About');
   const [scrollPercent, setScrollPercent] = useState(0);
 
@@ -2651,7 +2724,10 @@ export default function App() {
 
   return (
     <HelmetProvider>
-      <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300">
+      <div className={cn(
+        "min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300",
+        !isTouchDevice && showCursor && "cursor-none"
+      )}>
         <Helmet>
           <title>Dhaval Panchal | Full-Time FullStack Developer &amp; React Specialist</title>
           <meta name="description" content="Portfolio of Dhaval Panchal, an ambitious FullStack Developer and React Specialist based in Gujarat, India. Specializing in elegant UX, production MERN apps, and GenAI integrations." />
@@ -2698,6 +2774,39 @@ export default function App() {
             style={{ scaleX }}
           />
         </div>
+
+        {/* Custom premium cursor with lagging effect */}
+        {!isTouchDevice && showCursor && (
+          <>
+            {/* Lagging outer ring */}
+            <motion.div
+              style={{
+                x: cursorOuterX,
+                y: cursorOuterY,
+                translateX: "-50%",
+                translateY: "-50%",
+              }}
+              className={cn(
+                "fixed top-0 left-0 rounded-full border border-emerald-500/80 pointer-events-none z-[9999] transition-[width,height,background-color] duration-300 ease-out",
+                isHoveringLink ? "w-12 h-12 bg-emerald-500/8 dark:bg-emerald-400/[0.05] border-emerald-400" : "w-7 h-7",
+                isClicking ? "scale-90 bg-emerald-500/15" : "scale-100"
+              )}
+            />
+            {/* Focal inner dot */}
+            <motion.div
+              style={{
+                x: cursorInnerX,
+                y: cursorInnerY,
+                translateX: "-50%",
+                translateY: "-50%",
+              }}
+              className={cn(
+                "fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-emerald-500 pointer-events-none z-[9999] transition-transform duration-200",
+                isHoveringLink ? "scale-125 bg-emerald-400" : "scale-100"
+              )}
+            />
+          </>
+        )}
       </div>
     </HelmetProvider>
   );
