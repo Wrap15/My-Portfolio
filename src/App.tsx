@@ -73,9 +73,9 @@ const Navbar = ({ theme, toggleTheme }: { theme: string, toggleTheme: (e?: React
 
   return (
     <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 pt-4 pb-5 md:py-4",
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 sm:px-10 pt-4 pb-8 mb-5 md:mb-0",
       isScrolled 
-        ? "bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200/50 dark:border-white/5 pt-3 pb-5 md:py-3" 
+        ? "bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200/50 dark:border-white/5 pt-3 pb-8" 
         : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
