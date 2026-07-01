@@ -2412,6 +2412,34 @@ const Features = () => {
     }
   ];
 
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      }
+    }
+  } as const;
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 40,
+      scale: 0.96
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: { 
+        type: 'spring' as const,
+        stiffness: 60,
+        damping: 14,
+        mass: 1
+      } 
+    }
+  } as const;
+
   return (
     <section id="why-hire-me" className="py-20 md:py-32 px-4 sm:px-6 relative overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       <div className="absolute inset-0 bg-neutral-50/50 dark:bg-neutral-950/20 pointer-events-none" />
@@ -2419,26 +2447,30 @@ const Features = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16 md:mb-24"
         >
-          <span className="text-[10px] uppercase font-extrabold font-mono tracking-widest text-emerald-500 mb-2 block">Value Proposition</span>
+          <span className="text-[10px] uppercase font-extrabold font-mono tracking-widest text-emerald-500 mb-2 block animate-pulse">Value Proposition</span>
           <h2 className="text-3xl md:text-5xl font-serif font-bold text-neutral-950 dark:text-white">Why Hire Me</h2>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-3 max-w-lg mx-auto">
             Combining rigorous software engineering, clean performance constraints, and UI elegance to build elite digital products.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {competencies.map((comp, i) => (
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        >
+          {competencies.map((comp) => (
             <motion.div
               key={comp.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10px" }}
-              transition={{ duration: 0.6, delay: i * 0.08, ease: "easeOut" }}
+              variants={cardVariants}
               className="relative p-6 rounded-[24px] border border-neutral-200/50 dark:border-white/[0.04] bg-white dark:bg-neutral-900/10 hover:border-emerald-500/20 dark:hover:border-emerald-500/15 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.05)] transition-all group flex flex-col justify-between"
             >
               <div>
@@ -2459,7 +2491,7 @@ const Features = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
