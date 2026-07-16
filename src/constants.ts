@@ -39,6 +39,38 @@ export interface Skill {
 
 export const PROJECTS: Project[] = [
   {
+    id: '6',
+    title: 'Only Profit',
+    category: 'FinTech',
+    date: 'May 2026',
+    description: 'A high-performance financial intelligence platform and stock market tracking simulator for Indian equities. Integrates simulated real-time ticks, thematic baskets, mutual fund CAGR comparisons, and interactive, high-fidelity metrics with zero UI lag and optimized layout stability.',
+    tags: ['Next.js 14', 'React 18', 'Zustand', 'Tailwind CSS', 'Axios', 'TradingView', 'AMFI API', 'Lighthouse Opt.'],
+    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fonlyprofit-stock-analyzer.vercel.app%2F?w=800&h=600',
+    link: 'https://onlyprofit-stock-analyzer.vercel.app/',
+    githubLink: 'https://github.com/Wrap15/OnlyProfit-Stock_Analyzer',
+    metrics: [
+      { label: 'Lighthouse Performance', value: '99', description: 'Zero Cumulative Layout Shift (CLS)' },
+      { label: 'Network Requests Reduced', value: '92%', description: 'Axios auto-deduplication & in-memory caching' },
+      { label: 'Core Web Vital LCP', value: '0.2s', description: 'Optimized server-side data fetching pipelines' }
+    ],
+    problemStatement: 'Public stock queries suffer from aggressive rate limits (AMFI & NSE data clusters). Simultaneous lookup on 20+ tickers caused cascading network blocking, slow page mounting, and severe rendering layover shifts.',
+    solutionProvided: 'Architected an automated query-bundling engine. Developed a dual-tier in-memory caching system inside Zustand mapped with parallel request queues, preventing visual popping and preserving API throughput under rapid-fire client session interaction.',
+    performanceDetails: 'Used granular memoization to avoid redundant charting math renders. Shifted historic dataset calculation into non-blocking render idle loops. Added dynamic CSS aspect-ratio frames for heavy SVG charting containers, bringing CLS metrics down to 0.00.',
+    learnings: 'Built a deep understanding of rate-limiting handling, the value of client-side cache layers as network shock-absorbers, and clean UX loading states like shimmer blocks.',
+    features: [
+      '📊 Real-Time Ticker & Moving Averages — Implements lag-free SMA-20 trend overlays on interactive viewports.',
+      '📦 Curated Thematic Portfolios — Auto-allocates customized company baskets (Green Energy, AI Leaders) with dynamic weights.',
+      '📈 Mutual Fund CAGR Analytics — Runs direct speed-ranked comparison grids across small-cap and flexi-cap benchmarks.',
+      '💰 SIP & Lumpsum Yield Predictor — Formulates precise mathematical growth matrices rendered on native SVG doughnut models.'
+    ],
+    architecture: [
+      'Optimized Request Deduplication: Intercepts and merges concurrent duplicated routes instantly.',
+      'Dual-Layer Persistence: Synchronizes local state maps with an adaptive 15-second memory refresh timer.',
+      'Hardware-Accelerated Plots: Offloads custom visual charts directly to sub-pixel GPU composition paths.'
+    ],
+    challenges: 'Preventing client-side UI lockups when evaluating massive historical price trends in real-time. Handled by creating sliding-window mathematical reductions, only feeding active plot points to rendering vectors.'
+  },
+  {
     id: '5',
     title: 'Keshav Restro',
     category: 'Web Application',
@@ -71,36 +103,40 @@ export const PROJECTS: Project[] = [
     challenges: 'Handling large-scale lists (150+ items) without causing mobile redraw lag. Resolved by building light SVG placeholder shimmers and offloading complex filter triggers into isolated render loops.'
   },
   {
-    id: '6',
-    title: 'OnlyProfit',
-    category: 'FinTech',
-    date: 'May 2026',
-    description: 'A high-performance financial intelligence platform and stock market tracking simulator for Indian equities. Integrates simulated real-time ticks, thematic baskets, mutual fund CAGR comparisons, and interactive, high-fidelity metrics with zero UI lag and optimized layout stability.',
-    tags: ['Next.js 14', 'React 18', 'Zustand', 'Tailwind CSS', 'Axios', 'TradingView', 'AMFI API', 'Lighthouse Opt.'],
-    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fonlyprofit-stock-analyzer.vercel.app%2F?w=800&h=600',
-    link: 'https://onlyprofit-stock-analyzer.vercel.app/',
-    githubLink: 'https://github.com/Wrap15/OnlyProfit-Stock_Analyzer',
+    id: '2',
+    title: 'CineVault',
+    category: 'Web Application',
+    date: 'July 2026',
+    description: 'A high-performance, client-side cinematic discovery and digital asset management platform. CineVault is engineered with zero-latency in-memory caching, multi-tiered fuzzy query routing, active API abort pipelines, and adaptive CSS layouts. It represents a masterclass in modern vanilla JavaScript optimization, ensuring reliable, fluid, desktop-grade performances across all standard user devices and varied network conditions.',
+    tags: ['JavaScript', 'HTML5', 'CSS3', 'OMDb API', 'LRU Cache', 'AbortController', 'Fuzzy Search', 'Deep Linking', 'User Experience', 'Performance Optimization'],
+    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwrap15.github.io%2FCineVault%2F?w=800&h=600',
+    link: 'https://wrap15.github.io/CineVault/',
+    githubLink: 'https://github.com/Wrap15/CineVault',
     metrics: [
-      { label: 'Lighthouse Performance', value: '99', description: 'Zero Cumulative Layout Shift (CLS)' },
-      { label: 'Network Requests Reduced', value: '92%', description: 'Axios auto-deduplication & in-memory caching' },
-      { label: 'Core Web Vital LCP', value: '0.2s', description: 'Optimized server-side data fetching pipelines' }
+      { label: 'In-Memory Cache', value: '50 Items', description: 'Native Map-driven LRU cache providing instantaneous query retrievals' },
+      { label: 'Debounce Threshold', value: '260ms', description: 'Intelligent keystroke throttling that reduces API flooding by up to 80%' },
+      { label: 'Query Fallback Rate', value: '4-Tier', description: 'Advanced spelling/parsing router ensuring zero-error search precision' },
+      { label: 'Layout Shift Index', value: '0.00 CLS', description: 'Strict layout geometry frames with animated skeleton shimmers' }
     ],
-    problemStatement: 'Public stock queries suffer from aggressive rate limits (AMFI & NSE data clusters). Simultaneous lookup on 20+ tickers caused cascading network blocking, slow page mounting, and severe rendering layover shifts.',
-    solutionProvided: 'Architected an automated query-bundling engine. Developed a dual-tier in-memory caching system inside Zustand mapped with parallel request queues, preventing visual popping and preserving API throughput under rapid-fire client session interaction.',
-    performanceDetails: 'Used granular memoization to avoid redundant charting math renders. Shifted historic dataset calculation into non-blocking render idle loops. Added dynamic CSS aspect-ratio frames for heavy SVG charting containers, bringing CLS metrics down to 0.00.',
-    learnings: 'Built a deep understanding of rate-limiting handling, the value of client-side cache layers as network shock-absorbers, and clean UX loading states like shimmer blocks.',
+    problemStatement: 'Standard public search tools suffer from high input-field API flooding, network race conditions from fast typing speeds, lookup failures due to regional accents or minor subtitle spelling mismatches, and severe performance bottlenecks on resource-constrained mobile devices running continuous graphics or particle loops.',
+    solutionProvided: 'Designed and deployed a highly integrated, client-only search optimization suite. It features an active 260ms debouncing handler, an AbortController instance manager to aggressively cancel redundant queries, a 4-level query fallback search router (Exact Match ➔ First Word Tokenization ➔ Special Character Strip ➔ Suffix Token Fallback), and an auto-evicting 50-item in-memory LRU cache alongside CPU-aware rendering schedules.',
+    performanceDetails: 'Features CPU-aware drawing lifecycles where active background animations and canvas-based ambient particle fields enter sleep states automatically when the user blurs the browser tab (via visibilitychange listeners), conserving up to 95% of standby GPU and battery resources. Achieved absolute Cumulative Layout Shift (CLS) scores of zero by implementing robust skeleton placeholder cards and aspect-ratio locked media containers.',
+    learnings: 'Mastered the mechanics of JavaScript event cancellation and AbortSignal bindings, designed custom cache eviction strategies (Least Recently Used) utilizing key-ordering in ES6 Maps, structured deep-linking state machines via URLSearchParams synchronization, and achieved fluid DOM renders with zero library overhead.',
     features: [
-      '📊 Real-Time Ticker & Moving Averages — Implements lag-free SMA-20 trend overlays on interactive viewports.',
-      '📦 Curated Thematic Portfolios — Auto-allocates customized company baskets (Green Energy, AI Leaders) with dynamic weights.',
-      '📈 Mutual Fund CAGR Analytics — Runs direct speed-ranked comparison grids across small-cap and flexi-cap benchmarks.',
-      '💰 SIP & Lumpsum Yield Predictor — Formulates precise mathematical growth matrices rendered on native SVG doughnut models.'
+      '🎬 4-Tier Fuzzy Fallback Engine — Resolves complex, Hinglish, or mistyped query entries with multi-stage tokenization backups.',
+      '📦 Zero-Latency LRU Cache — Bypasses active network roundtrips for recently viewed search indexes with an auto-evicting 50-item Map.',
+      '🔗 Deep Linking & Share Sync — Syncs movie selection state into URL query strings (`?id=tt...`) with single-click clipboard copying.',
+      '🌓 Adaptive Lighting System — Transitions across highly tailored dark and light viewport aesthetics, persisting user style selection locally.',
+      '✨ Responsive Shimmer Layouts — Delivers immediate visual feedback via hardware-accelerated CSS shimmer skeletons during data fetch events.',
+      '🟢 Score Color-Coding — Highlights ratings dynamically (Green >= 8.0, Gold 6.0-7.9, Red < 6.0) for visual decision-making.'
     ],
     architecture: [
-      'Optimized Request Deduplication: Intercepts and merges concurrent duplicated routes instantly.',
-      'Dual-Layer Persistence: Synchronizes local state maps with an adaptive 15-second memory refresh timer.',
-      'Hardware-Accelerated Plots: Offloads custom visual charts directly to sub-pixel GPU composition paths.'
+      'LRU Cache Engine: High-speed native Map structure with active item capping.',
+      'Query Cancellation Loop: AbortController hooks destroying incomplete fetch streams.',
+      'Battery Saver Routine: GPU loop sleep mode triggered by page visibility signals.',
+      'State Route Manager: Two-way dynamic synchronization of view states with URL parameter objects.'
     ],
-    challenges: 'Preventing client-side UI lockups when evaluating massive historical price trends in real-time. Handled by creating sliding-window mathematical reductions, only feeding active plot points to rendering vectors.'
+    challenges: 'Preventing async race conditions where an older, delayed network fetch resolves after a newer query, causing severe search UI flickering and incorrect listings. Resolved by binding a unique tracking token and an active AbortController signal to each keystroke event, instantly terminating stale requests and resolving the latest query with absolute precision.'
   },
   {
     id: '1',
@@ -133,39 +169,8 @@ export const PROJECTS: Project[] = [
     challenges: 'Coordinating staggered transition steps across deep grid layout changes. Solved by standardizing layout-id propagation in Framer Motion to animate items naturally as they move.'
   },
   {
-    id: '2',
-    title: 'IMDB Movie Intelligence',
-    category: 'Web Application',
-    date: 'March 2025',
-    description: 'An immersive cinematic search engine and ratings comparison center. Leverages real-time API integrations and persistent query caching to deliver instant reviews, metadata, and playlist tools.',
-    tags: ['HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS', 'OMDB API', 'LocalStorage'],
-    image: 'https://s.wordpress.com/mshots/v1/https%3A%2F%2Fvishaal98.github.io%2FIMDBClone%2F?w=800&h=600',
-    link: 'https://vishaal98.github.io/IMDBClone/',
-    githubLink: 'https://github.com/Wrap15/IMDBClone',
-    metrics: [
-      { label: 'Fetch Debouncing', value: '300ms', description: 'Prevents redundant keypress network calls' },
-      { label: 'Cache Hit Ratio', value: '98%', description: 'Persistent LocalStorage favorites room' },
-      { label: 'Average Query Latency', value: '110ms', description: 'Direct API endpoints proxy' }
-    ],
-    problemStatement: 'Typing letters into search inputs fired excessive back-to-back API queries, invoking rate warnings and causing old responses to clobber newer ones.',
-    solutionProvided: 'Build an elegant asynchronous debounce handler that safely cancels redundant queries and resolves the latest relevant promise matching the current search input.',
-    performanceDetails: 'Designed a lightweight vanilla state store that syncs directly with LocalStorage, satisfying requirements for instant bookmark access without triggering remote server delays.',
-    learnings: 'Mastered JavaScript promise resolutions, proper input throttling/debouncing techniques, and memory cleanup patterns.',
-    features: [
-      '🎥 Predictive Keyword Indexing — Suggests corresponding movie titles fluidly while typing.',
-      '🍿 Favorites Room — Bookmark and organize lists persistently with an offline-first cache.',
-      '📊 Deep Metadata Display — Renders precise screen durations, cast directories, and ratings comparisons.'
-    ],
-    architecture: [
-      'Vanilla State Handlers: Simplifies DOM modifications to eliminate layout-reflow overhead.',
-      'Error Interceptors: Captures empty search states or network errors, rendering fallback indicators.'
-    ],
-    challenges: 'Handling out-of-order asynchronous responses. Solved by binding an incrementing transaction ID to active queries so the client rejects stale returns.'
-  },
-
-  {
     id: '3',
-    title: 'BuyBusy Cloud Commerce',
+    title: 'BuyBusy',
     category: 'Web Application',
     date: 'January 2025',
     description: 'A cloud-synchronized retail platform. Integrates authenticated checkout procedures, real-time catalog snapshots, and robust transactional shopping carts with zero loss of state.',
