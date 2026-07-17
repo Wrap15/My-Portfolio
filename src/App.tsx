@@ -2823,10 +2823,7 @@ export default function App() {
 
   return (
     <HelmetProvider>
-      <div className={cn(
-        "min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300",
-        !isTouchDevice && showCursor && "cursor-none"
-      )}>
+      <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors duration-300">
         <Helmet>
           <title>Dhaval Panchal | Full-Time FullStack Developer &amp; React Specialist</title>
           <meta name="description" content="Portfolio of Dhaval Panchal, an ambitious FullStack Developer and React Specialist based in Gujarat, India. Specializing in elegant UX, production MERN apps, and GenAI integrations." />
@@ -2875,38 +2872,6 @@ export default function App() {
           />
         </div>
 
-        {/* Custom premium cursor with lagging effect */}
-        {!isTouchDevice && showCursor && (
-          <>
-            {/* Lagging outer ring */}
-            <motion.div
-              style={{
-                x: cursorOuterX,
-                y: cursorOuterY,
-                translateX: "-50%",
-                translateY: "-50%",
-              }}
-              className={cn(
-                "fixed top-0 left-0 rounded-full border border-emerald-500/80 pointer-events-none z-[9999] transition-[width,height,background-color] duration-300 ease-out",
-                isHoveringLink ? "w-12 h-12 bg-emerald-500/8 dark:bg-emerald-400/[0.05] border-emerald-400" : "w-7 h-7",
-                isClicking ? "scale-90 bg-emerald-500/15" : "scale-100"
-              )}
-            />
-            {/* Focal inner dot */}
-            <motion.div
-              style={{
-                x: cursorInnerX,
-                y: cursorInnerY,
-                translateX: "-50%",
-                translateY: "-50%",
-              }}
-              className={cn(
-                "fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-emerald-500 pointer-events-none z-[9999] transition-transform duration-200",
-                isHoveringLink ? "scale-125 bg-emerald-400" : "scale-100"
-              )}
-            />
-          </>
-        )}
       </div>
     </HelmetProvider>
   );
